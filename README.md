@@ -16,12 +16,9 @@ The REST API documentation can be found on [benchify.com](https://benchify.com/s
 ## Installation
 
 ```sh
-# install from the production repo
-pip install git+ssh://git@github.com/Benchify/benchify-sdk-python.git
+# install from PyPI
+pip install benchify
 ```
-
-> [!NOTE]
-> Once this package is [published to PyPI](https://www.stainless.com/docs/guides/publish), this will become: `pip install benchify`
 
 ## Usage
 
@@ -89,8 +86,8 @@ By default, the async client uses `httpx` for HTTP requests. However, for improv
 You can enable this by installing `aiohttp`:
 
 ```sh
-# install from the production repo
-pip install 'benchify[aiohttp] @ git+ssh://git@github.com/Benchify/benchify-sdk-python.git'
+# install from PyPI
+pip install benchify[aiohttp]
 ```
 
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
