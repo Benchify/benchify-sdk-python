@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Iterable, Optional
+from typing import List, Iterable, Optional
 from typing_extensions import Literal
 
 import httpx
@@ -48,6 +48,12 @@ class FixerResource(SyncAPIResource):
         self,
         *,
         files: Iterable[fixer_run_params.File],
+        fix_types: List[
+            Literal[
+                "import_export", "string_literals", "ts_suggestions", "css", "tailwind", "react", "ai_fallback", "types"
+            ]
+        ]
+        | NotGiven = NOT_GIVEN,
         fixes: Optional[fixer_run_params.Fixes] | NotGiven = NOT_GIVEN,
         meta: Optional[fixer_run_params.Meta] | NotGiven = NOT_GIVEN,
         response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"] | NotGiven = NOT_GIVEN,
@@ -65,7 +71,9 @@ class FixerResource(SyncAPIResource):
         Args:
           files: List of files to process
 
-          fixes: Configuration object for specifying which fixes to apply
+          fix_types: Configuration for which fix types to apply
+
+          fixes: DEPRECATED: legacy boolean flags for which fixes to apply.
 
           meta: Meta information for API requests
 
@@ -86,6 +94,7 @@ class FixerResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "files": files,
+                    "fix_types": fix_types,
                     "fixes": fixes,
                     "meta": meta,
                     "response_format": response_format,
@@ -124,6 +133,12 @@ class AsyncFixerResource(AsyncAPIResource):
         self,
         *,
         files: Iterable[fixer_run_params.File],
+        fix_types: List[
+            Literal[
+                "import_export", "string_literals", "ts_suggestions", "css", "tailwind", "react", "ai_fallback", "types"
+            ]
+        ]
+        | NotGiven = NOT_GIVEN,
         fixes: Optional[fixer_run_params.Fixes] | NotGiven = NOT_GIVEN,
         meta: Optional[fixer_run_params.Meta] | NotGiven = NOT_GIVEN,
         response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"] | NotGiven = NOT_GIVEN,
@@ -141,7 +156,9 @@ class AsyncFixerResource(AsyncAPIResource):
         Args:
           files: List of files to process
 
-          fixes: Configuration object for specifying which fixes to apply
+          fix_types: Configuration for which fix types to apply
+
+          fixes: DEPRECATED: legacy boolean flags for which fixes to apply.
 
           meta: Meta information for API requests
 
@@ -162,6 +179,7 @@ class AsyncFixerResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "files": files,
+                    "fix_types": fix_types,
                     "fixes": fixes,
                     "meta": meta,
                     "response_format": response_format,
