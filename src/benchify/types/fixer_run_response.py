@@ -45,14 +45,11 @@ DataSuggestedChanges: TypeAlias = Union[
 
 
 class Data(BaseModel):
-    files_processed: int
-    """Number of files processed"""
-
     status: DataStatus
     """Final per-file status after fixing"""
 
-    fixed_files: Optional[Dict[str, object]] = None
-    """Information about fixed files"""
+    bundled_files: Optional[List[FileChange]] = None
+    """Bundled files"""
 
     suggested_changes: Optional[DataSuggestedChanges] = None
     """Changes made by the fixer in the requested format"""

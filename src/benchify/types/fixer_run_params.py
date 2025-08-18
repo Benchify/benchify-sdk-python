@@ -14,11 +14,10 @@ class FixerRunParams(TypedDict, total=False):
     files: Required[Iterable[File]]
     """List of files to process"""
 
-    fix_types: List[
-        Literal[
-            "import_export", "string_literals", "ts_suggestions", "css", "tailwind", "react", "ai_fallback", "types"
-        ]
-    ]
+    bundle: bool
+    """Whether to bundle the project (experimental)"""
+
+    fix_types: List[Literal["import_export", "string_literals", "css", "tailwind", "ai_fallback", "types"]]
     """Configuration for which fix types to apply"""
 
     fixes: Optional[Fixes]

@@ -48,11 +48,8 @@ class FixerResource(SyncAPIResource):
         self,
         *,
         files: Iterable[fixer_run_params.File],
-        fix_types: List[
-            Literal[
-                "import_export", "string_literals", "ts_suggestions", "css", "tailwind", "react", "ai_fallback", "types"
-            ]
-        ]
+        bundle: bool | NotGiven = NOT_GIVEN,
+        fix_types: List[Literal["import_export", "string_literals", "css", "tailwind", "ai_fallback", "types"]]
         | NotGiven = NOT_GIVEN,
         fixes: Optional[fixer_run_params.Fixes] | NotGiven = NOT_GIVEN,
         meta: Optional[fixer_run_params.Meta] | NotGiven = NOT_GIVEN,
@@ -70,6 +67,8 @@ class FixerResource(SyncAPIResource):
 
         Args:
           files: List of files to process
+
+          bundle: Whether to bundle the project (experimental)
 
           fix_types: Configuration for which fix types to apply
 
@@ -94,6 +93,7 @@ class FixerResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "files": files,
+                    "bundle": bundle,
                     "fix_types": fix_types,
                     "fixes": fixes,
                     "meta": meta,
@@ -133,11 +133,8 @@ class AsyncFixerResource(AsyncAPIResource):
         self,
         *,
         files: Iterable[fixer_run_params.File],
-        fix_types: List[
-            Literal[
-                "import_export", "string_literals", "ts_suggestions", "css", "tailwind", "react", "ai_fallback", "types"
-            ]
-        ]
+        bundle: bool | NotGiven = NOT_GIVEN,
+        fix_types: List[Literal["import_export", "string_literals", "css", "tailwind", "ai_fallback", "types"]]
         | NotGiven = NOT_GIVEN,
         fixes: Optional[fixer_run_params.Fixes] | NotGiven = NOT_GIVEN,
         meta: Optional[fixer_run_params.Meta] | NotGiven = NOT_GIVEN,
@@ -155,6 +152,8 @@ class AsyncFixerResource(AsyncAPIResource):
 
         Args:
           files: List of files to process
+
+          bundle: Whether to bundle the project (experimental)
 
           fix_types: Configuration for which fix types to apply
 
@@ -179,6 +178,7 @@ class AsyncFixerResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "files": files,
+                    "bundle": bundle,
                     "fix_types": fix_types,
                     "fixes": fixes,
                     "meta": meta,
