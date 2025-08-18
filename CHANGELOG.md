@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.2.0 (2025-08-18)
+
+Full Changelog: [v0.1.3...v0.2.0](https://github.com/Benchify/benchify-sdk-python/compare/v0.1.3...v0.2.0)
+
+### Features
+
+* **api:** api update ([d02ae03](https://github.com/Benchify/benchify-sdk-python/commit/d02ae03649ef0970a556c301f03279fcce34768a))
+* **api:** api update ([429df1a](https://github.com/Benchify/benchify-sdk-python/commit/429df1a7e793d18ca7160acb424ef0f95d0fea54))
+* **api:** api update ([d1e52a2](https://github.com/Benchify/benchify-sdk-python/commit/d1e52a2d248db65cfaea5e1f330043d71def9ab2))
+
+
+### Chores
+
+* **internal:** codegen related update ([3d981f1](https://github.com/Benchify/benchify-sdk-python/commit/3d981f1e780b2cf74fbe5c9244b3488c923d5518))
+
 ## 0.1.3 (2025-08-11)
 
 Full Changelog: [v0.0.1...v0.1.3](https://github.com/Benchify/benchify-sdk-python/compare/v0.0.1...v0.1.3)
