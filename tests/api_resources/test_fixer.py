@@ -40,6 +40,7 @@ class TestFixer:
                     "path": "x",
                 }
             ],
+            bundle=True,
             fix_types=["import_export"],
             fixes={
                 "css": True,
@@ -120,6 +121,7 @@ class TestAsyncFixer:
                     "path": "x",
                 }
             ],
+            bundle=True,
             fix_types=["import_export"],
             fixes={
                 "css": True,
