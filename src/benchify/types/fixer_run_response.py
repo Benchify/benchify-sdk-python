@@ -51,6 +51,11 @@ class Data(BaseModel):
     bundled_files: Optional[List[FileChange]] = None
     """Bundled files"""
 
+    fix_types_used: Optional[
+        List[Literal["import_export", "string_literals", "css", "tailwind", "ai_fallback", "types"]]
+    ] = None
+    """List of fix types that were actually applied during the fixer run"""
+
     suggested_changes: Optional[DataSuggestedChanges] = None
     """Changes made by the fixer in the requested format"""
 
