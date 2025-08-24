@@ -52,7 +52,7 @@ class Data(BaseModel):
     """Bundled files"""
 
     fix_types_used: Optional[
-        List[Literal["import_export", "string_literals", "css", "tailwind", "ai_fallback", "types"]]
+        List[Literal["import_export", "string_literals", "css", "tailwind", "ai_fallback", "types", "sql"]]
     ] = None
     """List of fix types that were actually applied during the fixer run"""
 
