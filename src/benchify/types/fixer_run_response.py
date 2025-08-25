@@ -20,6 +20,20 @@ __all__ = [
 
 
 class DataStatus(BaseModel):
+    composite_status: Literal[
+        "FIXED_EVERYTHING", "FIXED_REQUESTED", "PARTIALLY_FIXED", "NO_REQUESTED_ISSUES", "NO_ISSUES", "FAILED"
+    ]
+
+    file_to_composite_status: Optional[
+        Dict[
+            str,
+            Literal[
+                "FIXED_EVERYTHING", "FIXED_REQUESTED", "PARTIALLY_FIXED", "NO_REQUESTED_ISSUES", "NO_ISSUES", "FAILED"
+            ],
+        ]
+    ] = None
+    """Status of each file."""
+
     file_to_status: Optional[Dict[str, Literal["FIXED", "PARTIALLY_FIXED", "FAILED", "NO_ISSUES_FOUND"]]] = None
     """Fix status of each file sent."""
 
