@@ -11,6 +11,7 @@ __all__ = [
     "FixerRunResponse",
     "Data",
     "DataStatus",
+    "DataBundle",
     "DataSuggestedChanges",
     "DataSuggestedChangesDiffFormat",
     "DataSuggestedChangesChangedFilesFormat",
@@ -34,8 +35,21 @@ class DataStatus(BaseModel):
     ] = None
     """Status of each file."""
 
-    file_to_status: Optional[Dict[str, Literal["FIXED", "PARTIALLY_FIXED", "FAILED", "NO_ISSUES_FOUND"]]] = None
-    """Fix status of each file sent."""
+
+class DataBundle(BaseModel):
+    build_system: Literal[
+        "OLIVE_TEMPLATE", "VITE_SUBDIR", "VITE_ROOT", "NEXT", "ESBUILD", "WEBPACK", "PARCEL", "UNKNOWN"
+    ]
+    """The detected project/build system type"""
+
+    status: Literal["SUCCESS", "FAILED", "NOT_ATTEMPTED", "PARTIAL_SUCCESS"]
+    """Overall status of the bundling operation"""
+
+    template_path: str
+    """Template path used for bundling"""
+
+    files: Optional[List[FileChange]] = None
+    """Successfully bundled files"""
 
 
 class DataSuggestedChangesDiffFormat(BaseModel):
@@ -62,8 +76,8 @@ class Data(BaseModel):
     status: DataStatus
     """Final per-file status after fixing"""
 
-    bundled_files: Optional[List[FileChange]] = None
-    """Bundled files"""
+    bundle: Optional[DataBundle] = None
+    """Information about the bundling process and results"""
 
     fix_types_used: Optional[
         List[Literal["import_export", "string_literals", "css", "ai_fallback", "types", "sql"]]
