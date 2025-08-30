@@ -16,12 +16,9 @@ The REST API documentation can be found on [benchify.com](https://benchify.com/s
 ## Installation
 
 ```sh
-# install from the production repo
-pip install git+ssh://git@github.com/Benchify/benchify-sdk-python.git
+# install from PyPI
+pip install benchify
 ```
-
-> [!NOTE]
-> Once this package is [published to PyPI](https://www.stainless.com/docs/guides/publish), this will become: `pip install benchify`
 
 ## Usage
 
@@ -35,7 +32,7 @@ client = Benchify(
     api_key=os.environ.get("BENCHIFY_API_KEY"),  # This is the default and can be omitted
 )
 
-fixer = client.fixer.create(
+response = client.fixer.run(
     files=[
         {
             "contents": "contents",
@@ -43,7 +40,7 @@ fixer = client.fixer.create(
         }
     ],
 )
-print(fixer.data)
+print(response.data)
 ```
 
 While you can provide an `api_key` keyword argument,
@@ -66,7 +63,7 @@ client = AsyncBenchify(
 
 
 async def main() -> None:
-    fixer = await client.fixer.create(
+    response = await client.fixer.run(
         files=[
             {
                 "contents": "contents",
@@ -74,7 +71,7 @@ async def main() -> None:
             }
         ],
     )
-    print(fixer.data)
+    print(response.data)
 
 
 asyncio.run(main())
@@ -89,8 +86,8 @@ By default, the async client uses `httpx` for HTTP requests. However, for improv
 You can enable this by installing `aiohttp`:
 
 ```sh
-# install from the production repo
-pip install 'benchify[aiohttp] @ git+ssh://git@github.com/Benchify/benchify-sdk-python.git'
+# install from PyPI
+pip install benchify[aiohttp]
 ```
 
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
@@ -106,7 +103,7 @@ async def main() -> None:
         api_key="My API Key",
         http_client=DefaultAioHttpClient(),
     ) as client:
-        fixer = await client.fixer.create(
+        response = await client.fixer.run(
             files=[
                 {
                     "contents": "contents",
@@ -114,7 +111,7 @@ async def main() -> None:
                 }
             ],
         )
-        print(fixer.data)
+        print(response.data)
 
 
 asyncio.run(main())
@@ -138,7 +135,7 @@ from benchify import Benchify
 
 client = Benchify()
 
-fixer = client.fixer.create(
+response = client.fixer.run(
     files=[
         {
             "contents": "contents",
@@ -147,7 +144,7 @@ fixer = client.fixer.create(
     ],
     fixes={},
 )
-print(fixer.fixes)
+print(response.fixes)
 ```
 
 ## Handling errors
@@ -166,7 +163,7 @@ from benchify import Benchify
 client = Benchify()
 
 try:
-    client.fixer.create(
+    client.fixer.run(
         files=[
             {
                 "contents": "contents",
@@ -216,7 +213,7 @@ client = Benchify(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).fixer.create(
+client.with_options(max_retries=5).fixer.run(
     files=[
         {
             "contents": "contents",
@@ -246,7 +243,7 @@ client = Benchify(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).fixer.create(
+client.with_options(timeout=5.0).fixer.run(
     files=[
         {
             "contents": "contents",
@@ -294,7 +291,7 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 from benchify import Benchify
 
 client = Benchify()
-response = client.fixer.with_raw_response.create(
+response = client.fixer.with_raw_response.run(
     files=[{
         "contents": "contents",
         "path": "x",
@@ -302,7 +299,7 @@ response = client.fixer.with_raw_response.create(
 )
 print(response.headers.get('X-My-Header'))
 
-fixer = response.parse()  # get the object that `fixer.create()` would have returned
+fixer = response.parse()  # get the object that `fixer.run()` would have returned
 print(fixer.data)
 ```
 
@@ -317,7 +314,7 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.fixer.with_streaming_response.create(
+with client.fixer.with_streaming_response.run(
     files=[
         {
             "contents": "contents",
