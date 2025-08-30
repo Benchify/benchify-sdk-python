@@ -7,7 +7,7 @@ from typing_extensions import Literal
 
 import httpx
 
-from ..types import fixer_create_params
+from ..types import fixer_run_params
 from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
@@ -19,8 +19,7 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
-from ..types.fix_type_name import FixTypeName
-from ..types.fixer_create_response import FixerCreateResponse
+from ..types.fixer_run_response import FixerRunResponse
 
 __all__ = ["FixerResource", "AsyncFixerResource"]
 
@@ -45,14 +44,15 @@ class FixerResource(SyncAPIResource):
         """
         return FixerResourceWithStreamingResponse(self)
 
-    def create(
+    def run(
         self,
         *,
-        files: Iterable[fixer_create_params.File],
+        files: Iterable[fixer_run_params.File],
         bundle: bool | NotGiven = NOT_GIVEN,
-        fix_types: List[FixTypeName] | NotGiven = NOT_GIVEN,
-        fixes: Optional[fixer_create_params.Fixes] | NotGiven = NOT_GIVEN,
-        meta: Optional[fixer_create_params.Meta] | NotGiven = NOT_GIVEN,
+        fix_types: List[Literal["import_export", "string_literals", "css", "ai_fallback", "types", "sql"]]
+        | NotGiven = NOT_GIVEN,
+        fixes: Optional[fixer_run_params.Fixes] | NotGiven = NOT_GIVEN,
+        meta: Optional[fixer_run_params.Meta] | NotGiven = NOT_GIVEN,
         response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"] | NotGiven = NOT_GIVEN,
         template_id: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -61,7 +61,7 @@ class FixerResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FixerCreateResponse:
+    ) -> FixerRunResponse:
         """
         Handle fixer requests to process and fix TypeScript files.
 
@@ -100,12 +100,12 @@ class FixerResource(SyncAPIResource):
                     "response_format": response_format,
                     "template_id": template_id,
                 },
-                fixer_create_params.FixerCreateParams,
+                fixer_run_params.FixerRunParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FixerCreateResponse,
+            cast_to=FixerRunResponse,
         )
 
 
@@ -129,14 +129,15 @@ class AsyncFixerResource(AsyncAPIResource):
         """
         return AsyncFixerResourceWithStreamingResponse(self)
 
-    async def create(
+    async def run(
         self,
         *,
-        files: Iterable[fixer_create_params.File],
+        files: Iterable[fixer_run_params.File],
         bundle: bool | NotGiven = NOT_GIVEN,
-        fix_types: List[FixTypeName] | NotGiven = NOT_GIVEN,
-        fixes: Optional[fixer_create_params.Fixes] | NotGiven = NOT_GIVEN,
-        meta: Optional[fixer_create_params.Meta] | NotGiven = NOT_GIVEN,
+        fix_types: List[Literal["import_export", "string_literals", "css", "ai_fallback", "types", "sql"]]
+        | NotGiven = NOT_GIVEN,
+        fixes: Optional[fixer_run_params.Fixes] | NotGiven = NOT_GIVEN,
+        meta: Optional[fixer_run_params.Meta] | NotGiven = NOT_GIVEN,
         response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"] | NotGiven = NOT_GIVEN,
         template_id: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -145,7 +146,7 @@ class AsyncFixerResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FixerCreateResponse:
+    ) -> FixerRunResponse:
         """
         Handle fixer requests to process and fix TypeScript files.
 
@@ -184,12 +185,12 @@ class AsyncFixerResource(AsyncAPIResource):
                     "response_format": response_format,
                     "template_id": template_id,
                 },
-                fixer_create_params.FixerCreateParams,
+                fixer_run_params.FixerRunParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FixerCreateResponse,
+            cast_to=FixerRunResponse,
         )
 
 
@@ -197,8 +198,8 @@ class FixerResourceWithRawResponse:
     def __init__(self, fixer: FixerResource) -> None:
         self._fixer = fixer
 
-        self.create = to_raw_response_wrapper(
-            fixer.create,
+        self.run = to_raw_response_wrapper(
+            fixer.run,
         )
 
 
@@ -206,8 +207,8 @@ class AsyncFixerResourceWithRawResponse:
     def __init__(self, fixer: AsyncFixerResource) -> None:
         self._fixer = fixer
 
-        self.create = async_to_raw_response_wrapper(
-            fixer.create,
+        self.run = async_to_raw_response_wrapper(
+            fixer.run,
         )
 
 
@@ -215,8 +216,8 @@ class FixerResourceWithStreamingResponse:
     def __init__(self, fixer: FixerResource) -> None:
         self._fixer = fixer
 
-        self.create = to_streamed_response_wrapper(
-            fixer.create,
+        self.run = to_streamed_response_wrapper(
+            fixer.run,
         )
 
 
@@ -224,6 +225,6 @@ class AsyncFixerResourceWithStreamingResponse:
     def __init__(self, fixer: AsyncFixerResource) -> None:
         self._fixer = fixer
 
-        self.create = async_to_streamed_response_wrapper(
-            fixer.create,
+        self.run = async_to_streamed_response_wrapper(
+            fixer.run,
         )
