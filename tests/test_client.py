@@ -717,7 +717,7 @@ class TestBenchify:
         respx_mock.post("/v1/fixer").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            client.fixer.with_streaming_response.run(
+            client.fixer.with_streaming_response.create(
                 files=[
                     {
                         "contents": "contents",
@@ -734,7 +734,7 @@ class TestBenchify:
         respx_mock.post("/v1/fixer").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            client.fixer.with_streaming_response.run(
+            client.fixer.with_streaming_response.create(
                 files=[
                     {
                         "contents": "contents",
@@ -770,7 +770,7 @@ class TestBenchify:
 
         respx_mock.post("/v1/fixer").mock(side_effect=retry_handler)
 
-        response = client.fixer.with_raw_response.run(
+        response = client.fixer.with_raw_response.create(
             files=[
                 {
                     "contents": "contents",
@@ -801,7 +801,7 @@ class TestBenchify:
 
         respx_mock.post("/v1/fixer").mock(side_effect=retry_handler)
 
-        response = client.fixer.with_raw_response.run(
+        response = client.fixer.with_raw_response.create(
             files=[
                 {
                     "contents": "contents",
@@ -832,7 +832,7 @@ class TestBenchify:
 
         respx_mock.post("/v1/fixer").mock(side_effect=retry_handler)
 
-        response = client.fixer.with_raw_response.run(
+        response = client.fixer.with_raw_response.create(
             files=[
                 {
                     "contents": "contents",
@@ -1571,7 +1571,7 @@ class TestAsyncBenchify:
         respx_mock.post("/v1/fixer").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            await async_client.fixer.with_streaming_response.run(
+            await async_client.fixer.with_streaming_response.create(
                 files=[
                     {
                         "contents": "contents",
@@ -1590,7 +1590,7 @@ class TestAsyncBenchify:
         respx_mock.post("/v1/fixer").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            await async_client.fixer.with_streaming_response.run(
+            await async_client.fixer.with_streaming_response.create(
                 files=[
                     {
                         "contents": "contents",
@@ -1627,7 +1627,7 @@ class TestAsyncBenchify:
 
         respx_mock.post("/v1/fixer").mock(side_effect=retry_handler)
 
-        response = await client.fixer.with_raw_response.run(
+        response = await client.fixer.with_raw_response.create(
             files=[
                 {
                     "contents": "contents",
@@ -1659,7 +1659,7 @@ class TestAsyncBenchify:
 
         respx_mock.post("/v1/fixer").mock(side_effect=retry_handler)
 
-        response = await client.fixer.with_raw_response.run(
+        response = await client.fixer.with_raw_response.create(
             files=[
                 {
                     "contents": "contents",
@@ -1691,7 +1691,7 @@ class TestAsyncBenchify:
 
         respx_mock.post("/v1/fixer").mock(side_effect=retry_handler)
 
-        response = await client.fixer.with_raw_response.run(
+        response = await client.fixer.with_raw_response.create(
             files=[
                 {
                     "contents": "contents",

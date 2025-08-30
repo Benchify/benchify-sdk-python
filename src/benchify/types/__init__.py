@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from .shared import ResponseMeta as ResponseMeta
 from .file_change import FileChange as FileChange
-from .fixer_run_params import FixerRunParams as FixerRunParams
-from .fixer_run_response import FixerRunResponse as FixerRunResponse
+from .fix_type_name import FixTypeName as FixTypeName
+from .fixer_create_params import FixerCreateParams as FixerCreateParams
+from .fixer_create_response import FixerCreateResponse as FixerCreateResponse
