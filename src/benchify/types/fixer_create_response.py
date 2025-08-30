@@ -5,10 +5,10 @@ from typing_extensions import Literal, TypeAlias
 
 from .._models import BaseModel
 from .file_change import FileChange
-from .shared.response_meta import ResponseMeta
+from .fix_type_name import FixTypeName
 
 __all__ = [
-    "FixerRunResponse",
+    "FixerCreateResponse",
     "Data",
     "DataStatus",
     "DataBundle",
@@ -17,6 +17,7 @@ __all__ = [
     "DataSuggestedChangesChangedFilesFormat",
     "DataSuggestedChangesAllFilesFormat",
     "Error",
+    "Meta",
 ]
 
 
@@ -79,9 +80,7 @@ class Data(BaseModel):
     bundle: Optional[DataBundle] = None
     """Information about the bundling process and results"""
 
-    fix_types_used: Optional[
-        List[Literal["import_export", "string_literals", "css", "ai_fallback", "types", "sql"]]
-    ] = None
+    fix_types_used: Optional[List[FixTypeName]] = None
     """List of fix types that were actually applied during the fixer run"""
 
     suggested_changes: Optional[DataSuggestedChanges] = None
@@ -102,12 +101,20 @@ class Error(BaseModel):
     """Potential suggestions about how to fix the error, if applicable"""
 
 
-class FixerRunResponse(BaseModel):
+class Meta(BaseModel):
+    external_id: Optional[str] = None
+    """Customer tracking identifier"""
+
+    trace_id: Optional[str] = None
+    """Unique trace identifier for the request"""
+
+
+class FixerCreateResponse(BaseModel):
     data: Data
     """The actual response data"""
 
     error: Optional[Error] = None
     """The error from the API query"""
 
-    meta: Optional[ResponseMeta] = None
+    meta: Optional[Meta] = None
     """Meta information"""

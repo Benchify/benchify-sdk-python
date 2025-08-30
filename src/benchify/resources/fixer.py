@@ -7,7 +7,7 @@ from typing_extensions import Literal
 
 import httpx
 
-from ..types import fixer_run_params
+from ..types import fixer_create_params
 from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
 from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
@@ -19,7 +19,8 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
-from ..types.fixer_run_response import FixerRunResponse
+from ..types.fix_type_name import FixTypeName
+from ..types.fixer_create_response import FixerCreateResponse
 
 __all__ = ["FixerResource", "AsyncFixerResource"]
 
@@ -31,7 +32,7 @@ class FixerResource(SyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/Benchify/benchify-sdk-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/stainless-sdks/benchify-python#accessing-raw-response-data-eg-headers
         """
         return FixerResourceWithRawResponse(self)
 
@@ -40,19 +41,18 @@ class FixerResource(SyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/Benchify/benchify-sdk-python#with_streaming_response
+        For more information, see https://www.github.com/stainless-sdks/benchify-python#with_streaming_response
         """
         return FixerResourceWithStreamingResponse(self)
 
-    def run(
+    def create(
         self,
         *,
-        files: Iterable[fixer_run_params.File],
+        files: Iterable[fixer_create_params.File],
         bundle: bool | NotGiven = NOT_GIVEN,
-        fix_types: List[Literal["import_export", "string_literals", "css", "ai_fallback", "types", "sql"]]
-        | NotGiven = NOT_GIVEN,
-        fixes: Optional[fixer_run_params.Fixes] | NotGiven = NOT_GIVEN,
-        meta: Optional[fixer_run_params.Meta] | NotGiven = NOT_GIVEN,
+        fix_types: List[FixTypeName] | NotGiven = NOT_GIVEN,
+        fixes: Optional[fixer_create_params.Fixes] | NotGiven = NOT_GIVEN,
+        meta: Optional[fixer_create_params.Meta] | NotGiven = NOT_GIVEN,
         response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"] | NotGiven = NOT_GIVEN,
         template_id: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -61,7 +61,7 @@ class FixerResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FixerRunResponse:
+    ) -> FixerCreateResponse:
         """
         Handle fixer requests to process and fix TypeScript files.
 
@@ -100,12 +100,12 @@ class FixerResource(SyncAPIResource):
                     "response_format": response_format,
                     "template_id": template_id,
                 },
-                fixer_run_params.FixerRunParams,
+                fixer_create_params.FixerCreateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FixerRunResponse,
+            cast_to=FixerCreateResponse,
         )
 
 
@@ -116,7 +116,7 @@ class AsyncFixerResource(AsyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/Benchify/benchify-sdk-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/stainless-sdks/benchify-python#accessing-raw-response-data-eg-headers
         """
         return AsyncFixerResourceWithRawResponse(self)
 
@@ -125,19 +125,18 @@ class AsyncFixerResource(AsyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/Benchify/benchify-sdk-python#with_streaming_response
+        For more information, see https://www.github.com/stainless-sdks/benchify-python#with_streaming_response
         """
         return AsyncFixerResourceWithStreamingResponse(self)
 
-    async def run(
+    async def create(
         self,
         *,
-        files: Iterable[fixer_run_params.File],
+        files: Iterable[fixer_create_params.File],
         bundle: bool | NotGiven = NOT_GIVEN,
-        fix_types: List[Literal["import_export", "string_literals", "css", "ai_fallback", "types", "sql"]]
-        | NotGiven = NOT_GIVEN,
-        fixes: Optional[fixer_run_params.Fixes] | NotGiven = NOT_GIVEN,
-        meta: Optional[fixer_run_params.Meta] | NotGiven = NOT_GIVEN,
+        fix_types: List[FixTypeName] | NotGiven = NOT_GIVEN,
+        fixes: Optional[fixer_create_params.Fixes] | NotGiven = NOT_GIVEN,
+        meta: Optional[fixer_create_params.Meta] | NotGiven = NOT_GIVEN,
         response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"] | NotGiven = NOT_GIVEN,
         template_id: Optional[str] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -146,7 +145,7 @@ class AsyncFixerResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FixerRunResponse:
+    ) -> FixerCreateResponse:
         """
         Handle fixer requests to process and fix TypeScript files.
 
@@ -185,12 +184,12 @@ class AsyncFixerResource(AsyncAPIResource):
                     "response_format": response_format,
                     "template_id": template_id,
                 },
-                fixer_run_params.FixerRunParams,
+                fixer_create_params.FixerCreateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FixerRunResponse,
+            cast_to=FixerCreateResponse,
         )
 
 
@@ -198,8 +197,8 @@ class FixerResourceWithRawResponse:
     def __init__(self, fixer: FixerResource) -> None:
         self._fixer = fixer
 
-        self.run = to_raw_response_wrapper(
-            fixer.run,
+        self.create = to_raw_response_wrapper(
+            fixer.create,
         )
 
 
@@ -207,8 +206,8 @@ class AsyncFixerResourceWithRawResponse:
     def __init__(self, fixer: AsyncFixerResource) -> None:
         self._fixer = fixer
 
-        self.run = async_to_raw_response_wrapper(
-            fixer.run,
+        self.create = async_to_raw_response_wrapper(
+            fixer.create,
         )
 
 
@@ -216,8 +215,8 @@ class FixerResourceWithStreamingResponse:
     def __init__(self, fixer: FixerResource) -> None:
         self._fixer = fixer
 
-        self.run = to_streamed_response_wrapper(
-            fixer.run,
+        self.create = to_streamed_response_wrapper(
+            fixer.create,
         )
 
 
@@ -225,6 +224,6 @@ class AsyncFixerResourceWithStreamingResponse:
     def __init__(self, fixer: AsyncFixerResource) -> None:
         self._fixer = fixer
 
-        self.run = async_to_streamed_response_wrapper(
-            fixer.run,
+        self.create = async_to_streamed_response_wrapper(
+            fixer.create,
         )

@@ -6,18 +6,19 @@ from typing import List, Iterable, Optional
 from typing_extensions import Literal, Required, Annotated, TypedDict
 
 from .._utils import PropertyInfo
+from .fix_type_name import FixTypeName
 
-__all__ = ["FixerRunParams", "File", "Fixes", "Meta"]
+__all__ = ["FixerCreateParams", "File", "Fixes", "Meta"]
 
 
-class FixerRunParams(TypedDict, total=False):
+class FixerCreateParams(TypedDict, total=False):
     files: Required[Iterable[File]]
     """List of files to process"""
 
     bundle: bool
     """Whether to bundle the project (experimental)"""
 
-    fix_types: List[Literal["import_export", "string_literals", "css", "ai_fallback", "types", "sql"]]
+    fix_types: List[FixTypeName]
     """Configuration for which fix types to apply"""
 
     fixes: Optional[Fixes]
