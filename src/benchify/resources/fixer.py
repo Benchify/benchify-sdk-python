@@ -49,7 +49,7 @@ class FixerResource(SyncAPIResource):
         *,
         files: Iterable[fixer_run_params.File],
         bundle: bool | NotGiven = NOT_GIVEN,
-        fix_types: List[Literal["import_export", "string_literals", "css", "ai_fallback", "types", "sql"]]
+        fix_types: List[Literal["import_export", "string_literals", "css", "ai_fallback", "types", "ui_rules", "sql"]]
         | NotGiven = NOT_GIVEN,
         fixes: Optional[fixer_run_params.Fixes] | NotGiven = NOT_GIVEN,
         meta: Optional[fixer_run_params.Meta] | NotGiven = NOT_GIVEN,
@@ -134,7 +134,7 @@ class AsyncFixerResource(AsyncAPIResource):
         *,
         files: Iterable[fixer_run_params.File],
         bundle: bool | NotGiven = NOT_GIVEN,
-        fix_types: List[Literal["import_export", "string_literals", "css", "ai_fallback", "types", "sql"]]
+        fix_types: List[Literal["import_export", "string_literals", "css", "ai_fallback", "types", "ui_rules", "sql"]]
         | NotGiven = NOT_GIVEN,
         fixes: Optional[fixer_run_params.Fixes] | NotGiven = NOT_GIVEN,
         meta: Optional[fixer_run_params.Meta] | NotGiven = NOT_GIVEN,
