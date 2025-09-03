@@ -80,7 +80,7 @@ class Data(BaseModel):
     """Information about the bundling process and results"""
 
     fix_types_used: Optional[
-        List[Literal["import_export", "string_literals", "css", "ai_fallback", "types", "ui_rules", "sql"]]
+        List[Literal["import_export", "string_literals", "css", "ai_fallback", "types", "ui", "sql"]]
     ] = None
     """List of fix types that were actually applied during the fixer run"""
 
