@@ -9,7 +9,7 @@ from benchify.types import ResponseMeta
 Types:
 
 ```python
-from benchify.types import DiagnosticResponse, FileChange, FixerRunResponse
+from benchify.types import DiagnosticResponse, FixerRunResponse
 ```
 
 Methods:

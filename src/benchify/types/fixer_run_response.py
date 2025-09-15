@@ -4,7 +4,6 @@ from typing import Dict, List, Union, Optional
 from typing_extensions import Literal, TypeAlias
 
 from .._models import BaseModel
-from .file_change import FileChange
 from .shared.response_meta import ResponseMeta
 
 __all__ = [
@@ -12,10 +11,13 @@ __all__ = [
     "Data",
     "DataStatus",
     "DataBundle",
+    "DataBundleFile",
     "DataSuggestedChanges",
     "DataSuggestedChangesDiffFormat",
     "DataSuggestedChangesChangedFilesFormat",
+    "DataSuggestedChangesChangedFilesFormatChangedFile",
     "DataSuggestedChangesAllFilesFormat",
+    "DataSuggestedChangesAllFilesFormatAllFile",
     "Error",
 ]
 
@@ -36,6 +38,14 @@ class DataStatus(BaseModel):
     """Status of each file."""
 
 
+class DataBundleFile(BaseModel):
+    contents: str
+    """Contents of the file"""
+
+    path: str
+    """Path of the file"""
+
+
 class DataBundle(BaseModel):
     build_system: Literal[
         "OLIVE_TEMPLATE", "VITE_SUBDIR", "VITE_ROOT", "NEXT", "ESBUILD", "WEBPACK", "PARCEL", "UNKNOWN"
@@ -48,7 +58,7 @@ class DataBundle(BaseModel):
     template_path: str
     """Template path used for bundling"""
 
-    files: Optional[List[FileChange]] = None
+    files: Optional[List[DataBundleFile]] = None
     """Successfully bundled files"""
 
 
@@ -57,13 +67,29 @@ class DataSuggestedChangesDiffFormat(BaseModel):
     """Git diff of changes made"""
 
 
+class DataSuggestedChangesChangedFilesFormatChangedFile(BaseModel):
+    contents: str
+    """Contents of the file"""
+
+    path: str
+    """Path of the file"""
+
+
 class DataSuggestedChangesChangedFilesFormat(BaseModel):
-    changed_files: Optional[List[FileChange]] = None
+    changed_files: Optional[List[DataSuggestedChangesChangedFilesFormatChangedFile]] = None
     """List of changed files with their new contents"""
 
 
+class DataSuggestedChangesAllFilesFormatAllFile(BaseModel):
+    contents: str
+    """Contents of the file"""
+
+    path: str
+    """Path of the file"""
+
+
 class DataSuggestedChangesAllFilesFormat(BaseModel):
-    all_files: Optional[List[FileChange]] = None
+    all_files: Optional[List[DataSuggestedChangesAllFilesFormatAllFile]] = None
     """List of all files with their current contents"""
 
 
