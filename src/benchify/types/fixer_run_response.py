@@ -4,6 +4,7 @@ from typing import Dict, List, Union, Optional
 from typing_extensions import Literal, TypeAlias
 
 from .._models import BaseModel
+from .fixer_file import FixerFile
 from .shared.response_meta import ResponseMeta
 
 __all__ = [
@@ -11,13 +12,10 @@ __all__ = [
     "Data",
     "DataStatus",
     "DataBundle",
-    "DataBundleFile",
     "DataSuggestedChanges",
     "DataSuggestedChangesDiffFormat",
     "DataSuggestedChangesChangedFilesFormat",
-    "DataSuggestedChangesChangedFilesFormatChangedFile",
     "DataSuggestedChangesAllFilesFormat",
-    "DataSuggestedChangesAllFilesFormatAllFile",
     "Error",
 ]
 
@@ -38,19 +36,11 @@ class DataStatus(BaseModel):
     """Status of each file."""
 
 
-class DataBundleFile(BaseModel):
-    contents: str
-    """Contents of the file"""
-
-    path: str
-    """Path of the file"""
-
-
 class DataBundle(BaseModel):
     status: Literal["SUCCESS", "FAILED", "NOT_ATTEMPTED", "PARTIAL_SUCCESS"]
     """Overall status of the bundling operation"""
 
-    files: Optional[List[DataBundleFile]] = None
+    files: Optional[List[FixerFile]] = None
     """Successfully bundled files"""
 
 
@@ -59,29 +49,13 @@ class DataSuggestedChangesDiffFormat(BaseModel):
     """Git diff of changes made"""
 
 
-class DataSuggestedChangesChangedFilesFormatChangedFile(BaseModel):
-    contents: str
-    """Contents of the file"""
-
-    path: str
-    """Path of the file"""
-
-
 class DataSuggestedChangesChangedFilesFormat(BaseModel):
-    changed_files: Optional[List[DataSuggestedChangesChangedFilesFormatChangedFile]] = None
+    changed_files: Optional[List[FixerFile]] = None
     """List of changed files with their new contents"""
 
 
-class DataSuggestedChangesAllFilesFormatAllFile(BaseModel):
-    contents: str
-    """Contents of the file"""
-
-    path: str
-    """Path of the file"""
-
-
 class DataSuggestedChangesAllFilesFormat(BaseModel):
-    all_files: Optional[List[DataSuggestedChangesAllFilesFormatAllFile]] = None
+    all_files: Optional[List[FixerFile]] = None
     """List of all files with their current contents"""
 
 
