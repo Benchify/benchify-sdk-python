@@ -47,16 +47,8 @@ class DataBundleFile(BaseModel):
 
 
 class DataBundle(BaseModel):
-    build_system: Literal[
-        "OLIVE_TEMPLATE", "VITE_SUBDIR", "VITE_ROOT", "NEXT", "ESBUILD", "WEBPACK", "PARCEL", "UNKNOWN"
-    ]
-    """The detected project/build system type"""
-
     status: Literal["SUCCESS", "FAILED", "NOT_ATTEMPTED", "PARTIAL_SUCCESS"]
     """Overall status of the bundling operation"""
-
-    template_path: str
-    """Template path used for bundling"""
 
     files: Optional[List[DataBundleFile]] = None
     """Successfully bundled files"""
