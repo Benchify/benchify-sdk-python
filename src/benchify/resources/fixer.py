@@ -8,7 +8,7 @@ from typing_extensions import Literal
 import httpx
 
 from ..types import fixer_run_params
-from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -48,19 +48,19 @@ class FixerResource(SyncAPIResource):
         self,
         *,
         files: Iterable[fixer_run_params.File],
-        bundle: bool | NotGiven = NOT_GIVEN,
+        bundle: bool | Omit = omit,
         fix_types: List[Literal["import_export", "string_literals", "css", "ai_fallback", "types", "ui", "sql"]]
-        | NotGiven = NOT_GIVEN,
-        fixes: Optional[fixer_run_params.Fixes] | NotGiven = NOT_GIVEN,
-        meta: Optional[fixer_run_params.Meta] | NotGiven = NOT_GIVEN,
-        response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"] | NotGiven = NOT_GIVEN,
-        template_id: Optional[str] | NotGiven = NOT_GIVEN,
+        | Omit = omit,
+        fixes: Optional[fixer_run_params.Fixes] | Omit = omit,
+        meta: Optional[fixer_run_params.Meta] | Omit = omit,
+        response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"] | Omit = omit,
+        template_id: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FixerRunResponse:
         """
         Handle fixer requests to process and fix TypeScript files.
@@ -133,19 +133,19 @@ class AsyncFixerResource(AsyncAPIResource):
         self,
         *,
         files: Iterable[fixer_run_params.File],
-        bundle: bool | NotGiven = NOT_GIVEN,
+        bundle: bool | Omit = omit,
         fix_types: List[Literal["import_export", "string_literals", "css", "ai_fallback", "types", "ui", "sql"]]
-        | NotGiven = NOT_GIVEN,
-        fixes: Optional[fixer_run_params.Fixes] | NotGiven = NOT_GIVEN,
-        meta: Optional[fixer_run_params.Meta] | NotGiven = NOT_GIVEN,
-        response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"] | NotGiven = NOT_GIVEN,
-        template_id: Optional[str] | NotGiven = NOT_GIVEN,
+        | Omit = omit,
+        fixes: Optional[fixer_run_params.Fixes] | Omit = omit,
+        meta: Optional[fixer_run_params.Meta] | Omit = omit,
+        response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"] | Omit = omit,
+        template_id: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FixerRunResponse:
         """
         Handle fixer requests to process and fix TypeScript files.
