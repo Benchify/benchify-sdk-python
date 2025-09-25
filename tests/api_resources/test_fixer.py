@@ -41,7 +41,7 @@ class TestFixer:
                 }
             ],
             bundle=True,
-            fix_types=["import_export"],
+            fix_types=["dependency"],
             fixes={
                 "css": True,
                 "imports": True,
@@ -122,7 +122,7 @@ class TestAsyncFixer:
                 }
             ],
             bundle=True,
-            fix_types=["import_export"],
+            fix_types=["dependency"],
             fixes={
                 "css": True,
                 "imports": True,
