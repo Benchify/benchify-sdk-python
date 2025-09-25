@@ -17,7 +17,7 @@ class FixerRunParams(TypedDict, total=False):
     bundle: bool
     """Whether to bundle the project (experimental)"""
 
-    fix_types: List[Literal["import_export", "string_literals", "css", "ai_fallback", "types", "ui", "sql"]]
+    fix_types: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]]
     """Configuration for which fix types to apply"""
 
     fixes: Optional[Fixes]

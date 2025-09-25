@@ -49,8 +49,7 @@ class FixerResource(SyncAPIResource):
         *,
         files: Iterable[fixer_run_params.File],
         bundle: bool | Omit = omit,
-        fix_types: List[Literal["import_export", "string_literals", "css", "ai_fallback", "types", "ui", "sql"]]
-        | Omit = omit,
+        fix_types: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]] | Omit = omit,
         fixes: Optional[fixer_run_params.Fixes] | Omit = omit,
         meta: Optional[fixer_run_params.Meta] | Omit = omit,
         response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"] | Omit = omit,
@@ -134,8 +133,7 @@ class AsyncFixerResource(AsyncAPIResource):
         *,
         files: Iterable[fixer_run_params.File],
         bundle: bool | Omit = omit,
-        fix_types: List[Literal["import_export", "string_literals", "css", "ai_fallback", "types", "ui", "sql"]]
-        | Omit = omit,
+        fix_types: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]] | Omit = omit,
         fixes: Optional[fixer_run_params.Fixes] | Omit = omit,
         meta: Optional[fixer_run_params.Meta] | Omit = omit,
         response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"] | Omit = omit,
