@@ -41,15 +41,7 @@ class TestFixer:
                 }
             ],
             bundle=True,
-            fix_types=["dependency"],
-            fixes={
-                "css": True,
-                "imports": True,
-                "react": True,
-                "string_literals": True,
-                "tailwind": True,
-                "ts_suggestions": True,
-            },
+            fixes=["dependency"],
             meta={"external_id": "external_id"},
             response_format="DIFF",
             template_id="template_id",
@@ -122,15 +114,7 @@ class TestAsyncFixer:
                 }
             ],
             bundle=True,
-            fix_types=["dependency"],
-            fixes={
-                "css": True,
-                "imports": True,
-                "react": True,
-                "string_literals": True,
-                "tailwind": True,
-                "ts_suggestions": True,
-            },
+            fixes=["dependency"],
             meta={"external_id": "external_id"},
             response_format="DIFF",
             template_id="template_id",
