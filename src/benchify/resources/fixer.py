@@ -49,8 +49,7 @@ class FixerResource(SyncAPIResource):
         *,
         files: Iterable[fixer_run_params.File],
         bundle: bool | Omit = omit,
-        fix_types: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]] | Omit = omit,
-        fixes: Optional[fixer_run_params.Fixes] | Omit = omit,
+        fixes: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]] | Omit = omit,
         meta: Optional[fixer_run_params.Meta] | Omit = omit,
         response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"] | Omit = omit,
         template_id: Optional[str] | Omit = omit,
@@ -69,9 +68,7 @@ class FixerResource(SyncAPIResource):
 
           bundle: Whether to bundle the project (experimental)
 
-          fix_types: Configuration for which fix types to apply
-
-          fixes: DEPRECATED: legacy boolean flags for which fixes to apply.
+          fixes: Configuration for which fix types to apply
 
           meta: Meta information for API requests
 
@@ -93,7 +90,6 @@ class FixerResource(SyncAPIResource):
                 {
                     "files": files,
                     "bundle": bundle,
-                    "fix_types": fix_types,
                     "fixes": fixes,
                     "meta": meta,
                     "response_format": response_format,
@@ -133,8 +129,7 @@ class AsyncFixerResource(AsyncAPIResource):
         *,
         files: Iterable[fixer_run_params.File],
         bundle: bool | Omit = omit,
-        fix_types: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]] | Omit = omit,
-        fixes: Optional[fixer_run_params.Fixes] | Omit = omit,
+        fixes: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]] | Omit = omit,
         meta: Optional[fixer_run_params.Meta] | Omit = omit,
         response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"] | Omit = omit,
         template_id: Optional[str] | Omit = omit,
@@ -153,9 +148,7 @@ class AsyncFixerResource(AsyncAPIResource):
 
           bundle: Whether to bundle the project (experimental)
 
-          fix_types: Configuration for which fix types to apply
-
-          fixes: DEPRECATED: legacy boolean flags for which fixes to apply.
+          fixes: Configuration for which fix types to apply
 
           meta: Meta information for API requests
 
@@ -177,7 +170,6 @@ class AsyncFixerResource(AsyncAPIResource):
                 {
                     "files": files,
                     "bundle": bundle,
-                    "fix_types": fix_types,
                     "fixes": fixes,
                     "meta": meta,
                     "response_format": response_format,

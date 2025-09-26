@@ -142,9 +142,9 @@ response = client.fixer.run(
             "path": "x",
         }
     ],
-    fixes={},
+    meta={},
 )
-print(response.fixes)
+print(response.meta)
 ```
 
 ## Handling errors

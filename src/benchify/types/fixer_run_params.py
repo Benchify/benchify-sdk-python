@@ -3,11 +3,9 @@
 from __future__ import annotations
 
 from typing import List, Iterable, Optional
-from typing_extensions import Literal, Required, Annotated, TypedDict
+from typing_extensions import Literal, Required, TypedDict
 
-from .._utils import PropertyInfo
-
-__all__ = ["FixerRunParams", "File", "Fixes", "Meta"]
+__all__ = ["FixerRunParams", "File", "Meta"]
 
 
 class FixerRunParams(TypedDict, total=False):
@@ -17,11 +15,8 @@ class FixerRunParams(TypedDict, total=False):
     bundle: bool
     """Whether to bundle the project (experimental)"""
 
-    fix_types: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]]
+    fixes: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]]
     """Configuration for which fix types to apply"""
-
-    fixes: Optional[Fixes]
-    """DEPRECATED: legacy boolean flags for which fixes to apply."""
 
     meta: Optional[Meta]
     """Meta information for API requests"""
@@ -39,26 +34,6 @@ class File(TypedDict, total=False):
 
     path: Required[str]
     """Path to the file"""
-
-
-class Fixes(TypedDict, total=False):
-    css: Optional[bool]
-    """Whether to fix CSS issues"""
-
-    imports: Optional[bool]
-    """Whether to fix import issues"""
-
-    react: Optional[bool]
-    """Whether to fix React issues"""
-
-    string_literals: Annotated[Optional[bool], PropertyInfo(alias="stringLiterals")]
-    """Whether to fix string literal issues"""
-
-    tailwind: Optional[bool]
-    """Whether to fix Tailwind issues"""
-
-    ts_suggestions: Annotated[Optional[bool], PropertyInfo(alias="tsSuggestions")]
-    """Whether to fix TypeScript suggestions"""
 
 
 class Meta(TypedDict, total=False):
