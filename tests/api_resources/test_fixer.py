@@ -43,6 +43,7 @@ class TestFixer:
             bundle=True,
             fixes=["dependency"],
             meta={"external_id": "external_id"},
+            mode="project",
             response_format="DIFF",
             template_id="template_id",
         )
@@ -116,6 +117,7 @@ class TestAsyncFixer:
             bundle=True,
             fixes=["dependency"],
             meta={"external_id": "external_id"},
+            mode="project",
             response_format="DIFF",
             template_id="template_id",
         )

@@ -51,6 +51,7 @@ class FixerResource(SyncAPIResource):
         bundle: bool | Omit = omit,
         fixes: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]] | Omit = omit,
         meta: Optional[fixer_run_params.Meta] | Omit = omit,
+        mode: Literal["project", "files"] | Omit = omit,
         response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"] | Omit = omit,
         template_id: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -72,6 +73,8 @@ class FixerResource(SyncAPIResource):
 
           meta: Meta information for API requests
 
+          mode: Fixer operating mode: 'project' expects full project, 'files' expects subset
+
           response_format: Format for the response (diff, changed_files, or all_files)
 
           template_id: ID of the template to use for the fixer process
@@ -92,6 +95,7 @@ class FixerResource(SyncAPIResource):
                     "bundle": bundle,
                     "fixes": fixes,
                     "meta": meta,
+                    "mode": mode,
                     "response_format": response_format,
                     "template_id": template_id,
                 },
@@ -131,6 +135,7 @@ class AsyncFixerResource(AsyncAPIResource):
         bundle: bool | Omit = omit,
         fixes: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]] | Omit = omit,
         meta: Optional[fixer_run_params.Meta] | Omit = omit,
+        mode: Literal["project", "files"] | Omit = omit,
         response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"] | Omit = omit,
         template_id: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -152,6 +157,8 @@ class AsyncFixerResource(AsyncAPIResource):
 
           meta: Meta information for API requests
 
+          mode: Fixer operating mode: 'project' expects full project, 'files' expects subset
+
           response_format: Format for the response (diff, changed_files, or all_files)
 
           template_id: ID of the template to use for the fixer process
@@ -172,6 +179,7 @@ class AsyncFixerResource(AsyncAPIResource):
                     "bundle": bundle,
                     "fixes": fixes,
                     "meta": meta,
+                    "mode": mode,
                     "response_format": response_format,
                     "template_id": template_id,
                 },
