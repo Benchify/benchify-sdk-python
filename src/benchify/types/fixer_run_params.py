@@ -21,6 +21,9 @@ class FixerRunParams(TypedDict, total=False):
     meta: Optional[Meta]
     """Meta information for API requests"""
 
+    mode: Literal["project", "files"]
+    """Fixer operating mode: 'project' expects full project, 'files' expects subset"""
+
     response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"]
     """Format for the response (diff, changed_files, or all_files)"""
 
