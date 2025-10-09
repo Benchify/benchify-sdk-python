@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import List, Iterable, Optional
+from typing import Dict, List, Iterable, Optional
 from typing_extensions import Literal
 
 import httpx
@@ -47,8 +47,10 @@ class FixerResource(SyncAPIResource):
     def run(
         self,
         *,
-        files: Iterable[fixer_run_params.File],
         bundle: bool | Omit = omit,
+        files: Optional[Iterable[fixer_run_params.File]] | Omit = omit,
+        files_data: Optional[str] | Omit = omit,
+        files_manifest: Optional[Iterable[Dict[str, object]]] | Omit = omit,
         fixes: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]] | Omit = omit,
         meta: Optional[fixer_run_params.Meta] | Omit = omit,
         mode: Literal["project", "files"] | Omit = omit,
@@ -62,12 +64,17 @@ class FixerResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FixerRunResponse:
         """
-        Handle fixer requests to process and fix TypeScript files.
+        Handle fixer requests - supports both legacy (embedded files) and new
+        (manifest+blobs) formats.
 
         Args:
-          files: List of files to process
-
           bundle: Whether to bundle the project (experimental)
+
+          files: List of files to process (legacy format)
+
+          files_data: Base64-encoded compressed file contents (packed format)
+
+          files_manifest: File manifest for packed format: [{"path": "app.tsx", "size": 1024}, ...]
 
           fixes: Configuration for which fix types to apply
 
@@ -91,8 +98,10 @@ class FixerResource(SyncAPIResource):
             "/v1/fixer",
             body=maybe_transform(
                 {
-                    "files": files,
                     "bundle": bundle,
+                    "files": files,
+                    "files_data": files_data,
+                    "files_manifest": files_manifest,
                     "fixes": fixes,
                     "meta": meta,
                     "mode": mode,
@@ -131,8 +140,10 @@ class AsyncFixerResource(AsyncAPIResource):
     async def run(
         self,
         *,
-        files: Iterable[fixer_run_params.File],
         bundle: bool | Omit = omit,
+        files: Optional[Iterable[fixer_run_params.File]] | Omit = omit,
+        files_data: Optional[str] | Omit = omit,
+        files_manifest: Optional[Iterable[Dict[str, object]]] | Omit = omit,
         fixes: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]] | Omit = omit,
         meta: Optional[fixer_run_params.Meta] | Omit = omit,
         mode: Literal["project", "files"] | Omit = omit,
@@ -146,12 +157,17 @@ class AsyncFixerResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FixerRunResponse:
         """
-        Handle fixer requests to process and fix TypeScript files.
+        Handle fixer requests - supports both legacy (embedded files) and new
+        (manifest+blobs) formats.
 
         Args:
-          files: List of files to process
-
           bundle: Whether to bundle the project (experimental)
+
+          files: List of files to process (legacy format)
+
+          files_data: Base64-encoded compressed file contents (packed format)
+
+          files_manifest: File manifest for packed format: [{"path": "app.tsx", "size": 1024}, ...]
 
           fixes: Configuration for which fix types to apply
 
@@ -175,8 +191,10 @@ class AsyncFixerResource(AsyncAPIResource):
             "/v1/fixer",
             body=await async_maybe_transform(
                 {
-                    "files": files,
                     "bundle": bundle,
+                    "files": files,
+                    "files_data": files_data,
+                    "files_manifest": files_manifest,
                     "fixes": fixes,
                     "meta": meta,
                     "mode": mode,

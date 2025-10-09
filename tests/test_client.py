@@ -717,14 +717,7 @@ class TestBenchify:
         respx_mock.post("/v1/fixer").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            client.fixer.with_streaming_response.run(
-                files=[
-                    {
-                        "contents": "contents",
-                        "path": "x",
-                    }
-                ]
-            ).__enter__()
+            client.fixer.with_streaming_response.run().__enter__()
 
         assert _get_open_connections(self.client) == 0
 
@@ -734,14 +727,7 @@ class TestBenchify:
         respx_mock.post("/v1/fixer").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            client.fixer.with_streaming_response.run(
-                files=[
-                    {
-                        "contents": "contents",
-                        "path": "x",
-                    }
-                ]
-            ).__enter__()
+            client.fixer.with_streaming_response.run().__enter__()
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -770,14 +756,7 @@ class TestBenchify:
 
         respx_mock.post("/v1/fixer").mock(side_effect=retry_handler)
 
-        response = client.fixer.with_raw_response.run(
-            files=[
-                {
-                    "contents": "contents",
-                    "path": "x",
-                }
-            ]
-        )
+        response = client.fixer.with_raw_response.run()
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -801,15 +780,7 @@ class TestBenchify:
 
         respx_mock.post("/v1/fixer").mock(side_effect=retry_handler)
 
-        response = client.fixer.with_raw_response.run(
-            files=[
-                {
-                    "contents": "contents",
-                    "path": "x",
-                }
-            ],
-            extra_headers={"x-stainless-retry-count": Omit()},
-        )
+        response = client.fixer.with_raw_response.run(extra_headers={"x-stainless-retry-count": Omit()})
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
@@ -832,15 +803,7 @@ class TestBenchify:
 
         respx_mock.post("/v1/fixer").mock(side_effect=retry_handler)
 
-        response = client.fixer.with_raw_response.run(
-            files=[
-                {
-                    "contents": "contents",
-                    "path": "x",
-                }
-            ],
-            extra_headers={"x-stainless-retry-count": "42"},
-        )
+        response = client.fixer.with_raw_response.run(extra_headers={"x-stainless-retry-count": "42"})
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
 
@@ -1571,14 +1534,7 @@ class TestAsyncBenchify:
         respx_mock.post("/v1/fixer").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            await async_client.fixer.with_streaming_response.run(
-                files=[
-                    {
-                        "contents": "contents",
-                        "path": "x",
-                    }
-                ]
-            ).__aenter__()
+            await async_client.fixer.with_streaming_response.run().__aenter__()
 
         assert _get_open_connections(self.client) == 0
 
@@ -1590,14 +1546,7 @@ class TestAsyncBenchify:
         respx_mock.post("/v1/fixer").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            await async_client.fixer.with_streaming_response.run(
-                files=[
-                    {
-                        "contents": "contents",
-                        "path": "x",
-                    }
-                ]
-            ).__aenter__()
+            await async_client.fixer.with_streaming_response.run().__aenter__()
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -1627,14 +1576,7 @@ class TestAsyncBenchify:
 
         respx_mock.post("/v1/fixer").mock(side_effect=retry_handler)
 
-        response = await client.fixer.with_raw_response.run(
-            files=[
-                {
-                    "contents": "contents",
-                    "path": "x",
-                }
-            ]
-        )
+        response = await client.fixer.with_raw_response.run()
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -1659,15 +1601,7 @@ class TestAsyncBenchify:
 
         respx_mock.post("/v1/fixer").mock(side_effect=retry_handler)
 
-        response = await client.fixer.with_raw_response.run(
-            files=[
-                {
-                    "contents": "contents",
-                    "path": "x",
-                }
-            ],
-            extra_headers={"x-stainless-retry-count": Omit()},
-        )
+        response = await client.fixer.with_raw_response.run(extra_headers={"x-stainless-retry-count": Omit()})
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
@@ -1691,15 +1625,7 @@ class TestAsyncBenchify:
 
         respx_mock.post("/v1/fixer").mock(side_effect=retry_handler)
 
-        response = await client.fixer.with_raw_response.run(
-            files=[
-                {
-                    "contents": "contents",
-                    "path": "x",
-                }
-            ],
-            extra_headers={"x-stainless-retry-count": "42"},
-        )
+        response = await client.fixer.with_raw_response.run(extra_headers={"x-stainless-retry-count": "42"})
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
 
