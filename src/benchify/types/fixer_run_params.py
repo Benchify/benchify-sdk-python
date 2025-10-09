@@ -2,18 +2,24 @@
 
 from __future__ import annotations
 
-from typing import List, Iterable, Optional
+from typing import Dict, List, Iterable, Optional
 from typing_extensions import Literal, Required, TypedDict
 
 __all__ = ["FixerRunParams", "File", "Meta"]
 
 
 class FixerRunParams(TypedDict, total=False):
-    files: Required[Iterable[File]]
-    """List of files to process"""
-
     bundle: bool
     """Whether to bundle the project (experimental)"""
+
+    files: Optional[Iterable[File]]
+    """List of files to process (legacy format)"""
+
+    files_data: Optional[str]
+    """Base64-encoded compressed file contents (packed format)"""
+
+    files_manifest: Optional[Iterable[Dict[str, object]]]
+    """File manifest for packed format: [{"path": "app.tsx", "size": 1024}, ...]"""
 
     fixes: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]]
     """Configuration for which fix types to apply"""
@@ -33,7 +39,7 @@ class FixerRunParams(TypedDict, total=False):
 
 class File(TypedDict, total=False):
     contents: Required[str]
-    """Original contents of the file before any modifications"""
+    """File contents"""
 
     path: Required[str]
     """Path to the file"""
