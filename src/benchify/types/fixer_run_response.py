@@ -43,6 +43,12 @@ class DataBundle(BaseModel):
     files: Optional[List[FixerFile]] = None
     """Successfully bundled files"""
 
+    files_data: Optional[str] = None
+    """Base64-encoded compressed file contents (blob format)"""
+
+    files_manifest: Optional[List[Dict[str, object]]] = None
+    """File manifest for blob format: [{"path": "app.tsx", "size": 1024}, ...]"""
+
 
 class DataSuggestedChangesDiffFormat(BaseModel):
     diff: Optional[str] = None
@@ -53,10 +59,22 @@ class DataSuggestedChangesChangedFilesFormat(BaseModel):
     changed_files: Optional[List[FixerFile]] = None
     """List of changed files with their new contents"""
 
+    changed_files_data: Optional[str] = None
+    """Base64-encoded compressed file contents (blob format)"""
+
+    changed_files_manifest: Optional[List[Dict[str, object]]] = None
+    """File manifest for blob format: [{"path": "app.tsx", "size": 1024}, ...]"""
+
 
 class DataSuggestedChangesAllFilesFormat(BaseModel):
     all_files: Optional[List[FixerFile]] = None
     """List of all files with their current contents"""
+
+    all_files_data: Optional[str] = None
+    """Base64-encoded compressed file contents (blob format)"""
+
+    all_files_manifest: Optional[List[Dict[str, object]]] = None
+    """File manifest for blob format: [{"path": "app.tsx", "size": 1024}, ...]"""
 
 
 DataSuggestedChanges: TypeAlias = Union[

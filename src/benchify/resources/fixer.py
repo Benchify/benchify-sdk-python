@@ -54,6 +54,7 @@ class FixerResource(SyncAPIResource):
         fixes: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]] | Omit = omit,
         meta: Optional[fixer_run_params.Meta] | Omit = omit,
         mode: Literal["project", "files"] | Omit = omit,
+        response_encoding: Literal["json", "blob"] | Omit = omit,
         response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"] | Omit = omit,
         template_id: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -82,6 +83,8 @@ class FixerResource(SyncAPIResource):
 
           mode: Fixer operating mode: 'project' expects full project, 'files' expects subset
 
+          response_encoding: Response encoding format: 'json' (default) or 'blob'
+
           response_format: Format for the response (diff, changed_files, or all_files)
 
           template_id: ID of the template to use for the fixer process
@@ -105,6 +108,7 @@ class FixerResource(SyncAPIResource):
                     "fixes": fixes,
                     "meta": meta,
                     "mode": mode,
+                    "response_encoding": response_encoding,
                     "response_format": response_format,
                     "template_id": template_id,
                 },
@@ -147,6 +151,7 @@ class AsyncFixerResource(AsyncAPIResource):
         fixes: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]] | Omit = omit,
         meta: Optional[fixer_run_params.Meta] | Omit = omit,
         mode: Literal["project", "files"] | Omit = omit,
+        response_encoding: Literal["json", "blob"] | Omit = omit,
         response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"] | Omit = omit,
         template_id: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -175,6 +180,8 @@ class AsyncFixerResource(AsyncAPIResource):
 
           mode: Fixer operating mode: 'project' expects full project, 'files' expects subset
 
+          response_encoding: Response encoding format: 'json' (default) or 'blob'
+
           response_format: Format for the response (diff, changed_files, or all_files)
 
           template_id: ID of the template to use for the fixer process
@@ -198,6 +205,7 @@ class AsyncFixerResource(AsyncAPIResource):
                     "fixes": fixes,
                     "meta": meta,
                     "mode": mode,
+                    "response_encoding": response_encoding,
                     "response_format": response_format,
                     "template_id": template_id,
                 },

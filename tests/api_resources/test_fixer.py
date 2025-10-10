@@ -39,6 +39,7 @@ class TestFixer:
             fixes=["dependency"],
             meta={"external_id": "external_id"},
             mode="project",
+            response_encoding="json",
             response_format="DIFF",
             template_id="template_id",
         )
@@ -94,6 +95,7 @@ class TestAsyncFixer:
             fixes=["dependency"],
             meta={"external_id": "external_id"},
             mode="project",
+            response_encoding="json",
             response_format="DIFF",
             template_id="template_id",
         )
