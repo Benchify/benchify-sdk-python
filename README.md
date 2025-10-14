@@ -25,34 +25,28 @@ pip install benchify
 The full API of this library can be found in [api.md](api.md).
 
 ```python
-import os
 from benchify import Benchify
 
-client = Benchify(
-    api_key=os.environ.get("BENCHIFY_API_KEY"),  # This is the default and can be omitted
-)
+client = Benchify()
 
 response = client.fixer.run()
 print(response.data)
 ```
 
-While you can provide an `api_key` keyword argument,
+While you can provide a `bearer_token` keyword argument,
 we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `BENCHIFY_API_KEY="My API Key"` to your `.env` file
-so that your API Key is not stored in source control.
+to add `BENCHIFY_BEARER_TOKEN="My Bearer Token"` to your `.env` file
+so that your Bearer Token is not stored in source control.
 
 ## Async usage
 
 Simply import `AsyncBenchify` instead of `Benchify` and use `await` with each API call:
 
 ```python
-import os
 import asyncio
 from benchify import AsyncBenchify
 
-client = AsyncBenchify(
-    api_key=os.environ.get("BENCHIFY_API_KEY"),  # This is the default and can be omitted
-)
+client = AsyncBenchify()
 
 
 async def main() -> None:
@@ -86,7 +80,6 @@ from benchify import AsyncBenchify
 
 async def main() -> None:
     async with AsyncBenchify(
-        api_key="My API Key",
         http_client=DefaultAioHttpClient(),
     ) as client:
         response = await client.fixer.run()
