@@ -51,13 +51,11 @@ class Benchify(SyncAPIClient):
 
     # client options
     api_key: str | None
-    bearer_token: str | None
 
     def __init__(
         self,
         *,
         api_key: str | None = None,
-        bearer_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -79,17 +77,11 @@ class Benchify(SyncAPIClient):
     ) -> None:
         """Construct a new synchronous Benchify client instance.
 
-        This automatically infers the following arguments from their corresponding environment variables if they are not provided:
-        - `api_key` from `BENCHIFY_API_KEY`
-        - `bearer_token` from `BENCHIFY_BEARER_TOKEN`
+        This automatically infers the `api_key` argument from the `BENCHIFY_API_KEY` environment variable if it is not provided.
         """
         if api_key is None:
             api_key = os.environ.get("BENCHIFY_API_KEY")
         self.api_key = api_key
-
-        if bearer_token is None:
-            bearer_token = os.environ.get("BENCHIFY_BEARER_TOKEN")
-        self.bearer_token = bearer_token
 
         if base_url is None:
             base_url = os.environ.get("BENCHIFY_BASE_URL")
@@ -149,7 +141,6 @@ class Benchify(SyncAPIClient):
         self,
         *,
         api_key: str | None = None,
-        bearer_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.Client | None = None,
@@ -184,7 +175,6 @@ class Benchify(SyncAPIClient):
         http_client = http_client or self._client
         return self.__class__(
             api_key=api_key or self.api_key,
-            bearer_token=bearer_token or self.bearer_token,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
@@ -240,13 +230,11 @@ class AsyncBenchify(AsyncAPIClient):
 
     # client options
     api_key: str | None
-    bearer_token: str | None
 
     def __init__(
         self,
         *,
         api_key: str | None = None,
-        bearer_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -268,17 +256,11 @@ class AsyncBenchify(AsyncAPIClient):
     ) -> None:
         """Construct a new async AsyncBenchify client instance.
 
-        This automatically infers the following arguments from their corresponding environment variables if they are not provided:
-        - `api_key` from `BENCHIFY_API_KEY`
-        - `bearer_token` from `BENCHIFY_BEARER_TOKEN`
+        This automatically infers the `api_key` argument from the `BENCHIFY_API_KEY` environment variable if it is not provided.
         """
         if api_key is None:
             api_key = os.environ.get("BENCHIFY_API_KEY")
         self.api_key = api_key
-
-        if bearer_token is None:
-            bearer_token = os.environ.get("BENCHIFY_BEARER_TOKEN")
-        self.bearer_token = bearer_token
 
         if base_url is None:
             base_url = os.environ.get("BENCHIFY_BASE_URL")
@@ -338,7 +320,6 @@ class AsyncBenchify(AsyncAPIClient):
         self,
         *,
         api_key: str | None = None,
-        bearer_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.AsyncClient | None = None,
@@ -373,7 +354,6 @@ class AsyncBenchify(AsyncAPIClient):
         http_client = http_client or self._client
         return self.__class__(
             api_key=api_key or self.api_key,
-            bearer_token=bearer_token or self.bearer_token,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
