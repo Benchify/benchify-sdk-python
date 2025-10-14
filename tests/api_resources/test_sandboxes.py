@@ -26,6 +26,8 @@ class TestSandboxes:
     def test_method_create(self, client: Benchify) -> None:
         sandbox = client.sandboxes.create(
             packed=b"raw file contents",
+            content_hash="sha256:210b9798eb53baa4e69d31c1071cf03d212b8ad0ca30cf321e0ea82e120aac26",
+            idempotency_key="xxxxxxxx",
         )
         assert_matches_type(SandboxCreateResponse, sandbox, path=["response"])
 
@@ -34,9 +36,10 @@ class TestSandboxes:
     def test_method_create_with_all_params(self, client: Benchify) -> None:
         sandbox = client.sandboxes.create(
             packed=b"raw file contents",
-            options='{"timeout": 300, "subdomain": "my-app"}',
-            content_hash="210b9798eb53baa4e69d31c1071cf03d212b8ad0ca30cf321e0ea82e120aac26",
-            idempotency_key="Idempotency-Key",
+            content_hash="sha256:210b9798eb53baa4e69d31c1071cf03d212b8ad0ca30cf321e0ea82e120aac26",
+            idempotency_key="xxxxxxxx",
+            manifest="manifest",
+            options="options",
         )
         assert_matches_type(SandboxCreateResponse, sandbox, path=["response"])
 
@@ -45,6 +48,8 @@ class TestSandboxes:
     def test_raw_response_create(self, client: Benchify) -> None:
         response = client.sandboxes.with_raw_response.create(
             packed=b"raw file contents",
+            content_hash="sha256:210b9798eb53baa4e69d31c1071cf03d212b8ad0ca30cf321e0ea82e120aac26",
+            idempotency_key="xxxxxxxx",
         )
 
         assert response.is_closed is True
@@ -57,6 +62,8 @@ class TestSandboxes:
     def test_streaming_response_create(self, client: Benchify) -> None:
         with client.sandboxes.with_streaming_response.create(
             packed=b"raw file contents",
+            content_hash="sha256:210b9798eb53baa4e69d31c1071cf03d212b8ad0ca30cf321e0ea82e120aac26",
+            idempotency_key="xxxxxxxx",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -113,6 +120,7 @@ class TestSandboxes:
     def test_method_update(self, client: Benchify) -> None:
         sandbox = client.sandboxes.update(
             id="id",
+            idempotency_key="xxxxxxxx",
         )
         assert_matches_type(SandboxUpdateResponse, sandbox, path=["response"])
 
@@ -121,10 +129,12 @@ class TestSandboxes:
     def test_method_update_with_all_params(self, client: Benchify) -> None:
         sandbox = client.sandboxes.update(
             id="id",
-            ops='[{"path": "src/file.ts", "op": "delete"}]',
+            idempotency_key="xxxxxxxx",
+            manifest="manifest",
+            ops="ops",
             packed=b"raw file contents",
-            base_etag="sha256:26f1cbdf5713",
-            idempotency_key="Idempotency-Key",
+            base_commit="sha256:210b9798eb53baa4e69d31c1071cf03d212b8ad0ca30cf321e0ea82e120aac26",
+            base_etag="sha256:210b9798eb53baa4e69d31c1071cf03d212b8ad0ca30cf321e0ea82e120aac26",
         )
         assert_matches_type(SandboxUpdateResponse, sandbox, path=["response"])
 
@@ -133,6 +143,7 @@ class TestSandboxes:
     def test_raw_response_update(self, client: Benchify) -> None:
         response = client.sandboxes.with_raw_response.update(
             id="id",
+            idempotency_key="xxxxxxxx",
         )
 
         assert response.is_closed is True
@@ -145,6 +156,7 @@ class TestSandboxes:
     def test_streaming_response_update(self, client: Benchify) -> None:
         with client.sandboxes.with_streaming_response.update(
             id="id",
+            idempotency_key="xxxxxxxx",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -160,6 +172,7 @@ class TestSandboxes:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.sandboxes.with_raw_response.update(
                 id="",
+                idempotency_key="xxxxxxxx",
             )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
@@ -215,6 +228,8 @@ class TestAsyncSandboxes:
     async def test_method_create(self, async_client: AsyncBenchify) -> None:
         sandbox = await async_client.sandboxes.create(
             packed=b"raw file contents",
+            content_hash="sha256:210b9798eb53baa4e69d31c1071cf03d212b8ad0ca30cf321e0ea82e120aac26",
+            idempotency_key="xxxxxxxx",
         )
         assert_matches_type(SandboxCreateResponse, sandbox, path=["response"])
 
@@ -223,9 +238,10 @@ class TestAsyncSandboxes:
     async def test_method_create_with_all_params(self, async_client: AsyncBenchify) -> None:
         sandbox = await async_client.sandboxes.create(
             packed=b"raw file contents",
-            options='{"timeout": 300, "subdomain": "my-app"}',
-            content_hash="210b9798eb53baa4e69d31c1071cf03d212b8ad0ca30cf321e0ea82e120aac26",
-            idempotency_key="Idempotency-Key",
+            content_hash="sha256:210b9798eb53baa4e69d31c1071cf03d212b8ad0ca30cf321e0ea82e120aac26",
+            idempotency_key="xxxxxxxx",
+            manifest="manifest",
+            options="options",
         )
         assert_matches_type(SandboxCreateResponse, sandbox, path=["response"])
 
@@ -234,6 +250,8 @@ class TestAsyncSandboxes:
     async def test_raw_response_create(self, async_client: AsyncBenchify) -> None:
         response = await async_client.sandboxes.with_raw_response.create(
             packed=b"raw file contents",
+            content_hash="sha256:210b9798eb53baa4e69d31c1071cf03d212b8ad0ca30cf321e0ea82e120aac26",
+            idempotency_key="xxxxxxxx",
         )
 
         assert response.is_closed is True
@@ -246,6 +264,8 @@ class TestAsyncSandboxes:
     async def test_streaming_response_create(self, async_client: AsyncBenchify) -> None:
         async with async_client.sandboxes.with_streaming_response.create(
             packed=b"raw file contents",
+            content_hash="sha256:210b9798eb53baa4e69d31c1071cf03d212b8ad0ca30cf321e0ea82e120aac26",
+            idempotency_key="xxxxxxxx",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -302,6 +322,7 @@ class TestAsyncSandboxes:
     async def test_method_update(self, async_client: AsyncBenchify) -> None:
         sandbox = await async_client.sandboxes.update(
             id="id",
+            idempotency_key="xxxxxxxx",
         )
         assert_matches_type(SandboxUpdateResponse, sandbox, path=["response"])
 
@@ -310,10 +331,12 @@ class TestAsyncSandboxes:
     async def test_method_update_with_all_params(self, async_client: AsyncBenchify) -> None:
         sandbox = await async_client.sandboxes.update(
             id="id",
-            ops='[{"path": "src/file.ts", "op": "delete"}]',
+            idempotency_key="xxxxxxxx",
+            manifest="manifest",
+            ops="ops",
             packed=b"raw file contents",
-            base_etag="sha256:26f1cbdf5713",
-            idempotency_key="Idempotency-Key",
+            base_commit="sha256:210b9798eb53baa4e69d31c1071cf03d212b8ad0ca30cf321e0ea82e120aac26",
+            base_etag="sha256:210b9798eb53baa4e69d31c1071cf03d212b8ad0ca30cf321e0ea82e120aac26",
         )
         assert_matches_type(SandboxUpdateResponse, sandbox, path=["response"])
 
@@ -322,6 +345,7 @@ class TestAsyncSandboxes:
     async def test_raw_response_update(self, async_client: AsyncBenchify) -> None:
         response = await async_client.sandboxes.with_raw_response.update(
             id="id",
+            idempotency_key="xxxxxxxx",
         )
 
         assert response.is_closed is True
@@ -334,6 +358,7 @@ class TestAsyncSandboxes:
     async def test_streaming_response_update(self, async_client: AsyncBenchify) -> None:
         async with async_client.sandboxes.with_streaming_response.update(
             id="id",
+            idempotency_key="xxxxxxxx",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -349,6 +374,7 @@ class TestAsyncSandboxes:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.sandboxes.with_raw_response.update(
                 id="",
+                idempotency_key="xxxxxxxx",
             )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
