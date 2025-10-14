@@ -25,9 +25,12 @@ pip install benchify
 The full API of this library can be found in [api.md](api.md).
 
 ```python
+import os
 from benchify import Benchify
 
-client = Benchify()
+client = Benchify(
+    api_key=os.environ.get("BENCHIFY_API_KEY"),  # This is the default and can be omitted
+)
 
 response = client.fixer.run()
 print(response.data)
@@ -43,10 +46,13 @@ so that your API Key is not stored in source control.
 Simply import `AsyncBenchify` instead of `Benchify` and use `await` with each API call:
 
 ```python
+import os
 import asyncio
 from benchify import AsyncBenchify
 
-client = AsyncBenchify()
+client = AsyncBenchify(
+    api_key=os.environ.get("BENCHIFY_API_KEY"),  # This is the default and can be omitted
+)
 
 
 async def main() -> None:
@@ -80,6 +86,7 @@ from benchify import AsyncBenchify
 
 async def main() -> None:
     async with AsyncBenchify(
+        api_key="My API Key",
         http_client=DefaultAioHttpClient(),
     ) as client:
         response = await client.fixer.run()
