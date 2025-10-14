@@ -22,7 +22,7 @@ from benchify import Benchify, AsyncBenchify, APIResponseValidationError
 from benchify._types import Omit
 from benchify._utils import asyncify
 from benchify._models import BaseModel, FinalRequestOptions
-from benchify._exceptions import BenchifyError, APIStatusError, APITimeoutError, APIResponseValidationError
+from benchify._exceptions import APIStatusError, APITimeoutError, APIResponseValidationError
 from benchify._base_client import (
     DEFAULT_TIMEOUT,
     HTTPX_DEFAULT_TIMEOUT,
@@ -341,10 +341,19 @@ class TestBenchify:
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("Authorization") == f"Bearer {api_key}"
 
-        with pytest.raises(BenchifyError):
-            with update_env(**{"BENCHIFY_API_KEY": Omit()}):
-                client2 = Benchify(base_url=base_url, api_key=None, _strict_response_validation=True)
-            _ = client2
+        with update_env(**{"BENCHIFY_API_KEY": Omit()}):
+            client2 = Benchify(base_url=base_url, api_key=None, _strict_response_validation=True)
+
+        with pytest.raises(
+            TypeError,
+            match="Could not resolve authentication method. Expected either api_key or bearer_token to be set. Or for one of the `Authorization` or `Authorization` headers to be explicitly omitted",
+        ):
+            client2._build_request(FinalRequestOptions(method="get", url="/foo"))
+
+        request2 = client2._build_request(
+            FinalRequestOptions(method="get", url="/foo", headers={"Authorization": Omit()})
+        )
+        assert request2.headers.get("Authorization") is None
 
     def test_default_query_option(self) -> None:
         client = Benchify(
@@ -1142,10 +1151,19 @@ class TestAsyncBenchify:
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("Authorization") == f"Bearer {api_key}"
 
-        with pytest.raises(BenchifyError):
-            with update_env(**{"BENCHIFY_API_KEY": Omit()}):
-                client2 = AsyncBenchify(base_url=base_url, api_key=None, _strict_response_validation=True)
-            _ = client2
+        with update_env(**{"BENCHIFY_API_KEY": Omit()}):
+            client2 = AsyncBenchify(base_url=base_url, api_key=None, _strict_response_validation=True)
+
+        with pytest.raises(
+            TypeError,
+            match="Could not resolve authentication method. Expected either api_key or bearer_token to be set. Or for one of the `Authorization` or `Authorization` headers to be explicitly omitted",
+        ):
+            client2._build_request(FinalRequestOptions(method="get", url="/foo"))
+
+        request2 = client2._build_request(
+            FinalRequestOptions(method="get", url="/foo", headers={"Authorization": Omit()})
+        )
+        assert request2.headers.get("Authorization") is None
 
     def test_default_query_option(self) -> None:
         client = AsyncBenchify(
