@@ -130,8 +130,7 @@ from benchify import Benchify
 
 client = Benchify()
 
-client.sandboxes.update(
-    id="id",
+client.sandboxes.create(
     packed=Path("/path/to/file"),
 )
 ```

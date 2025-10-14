@@ -24,40 +24,17 @@ class TestSandboxes:
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_create(self, client: Benchify) -> None:
-        sandbox = client.sandboxes.create()
+        sandbox = client.sandboxes.create(
+            packed=b"raw file contents",
+        )
         assert_matches_type(SandboxCreateResponse, sandbox, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_create_with_all_params(self, client: Benchify) -> None:
         sandbox = client.sandboxes.create(
-            blob={
-                "files_data": "files_data",
-                "files_manifest": [
-                    {
-                        "path": "path",
-                        "size": 0,
-                    }
-                ],
-                "compressed_size": 0,
-                "format": "gzip-base64",
-            },
-            files=[b"raw file contents"],
-            options={
-                "options": {
-                    "build_command": "buildCommand",
-                    "environment": {"foo": "string"},
-                    "name": "name",
-                    "port": 0,
-                    "runtime": {
-                        "framework": "react",
-                        "node_version": "nodeVersion",
-                        "package_manager": "npm",
-                    },
-                    "start_command": "startCommand",
-                    "subdomain": "subdomain",
-                }
-            },
+            packed=b"raw file contents",
+            options='{"timeout": 300, "subdomain": "my-app"}',
             content_hash="210b9798eb53baa4e69d31c1071cf03d212b8ad0ca30cf321e0ea82e120aac26",
             idempotency_key="Idempotency-Key",
         )
@@ -66,7 +43,9 @@ class TestSandboxes:
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_create(self, client: Benchify) -> None:
-        response = client.sandboxes.with_raw_response.create()
+        response = client.sandboxes.with_raw_response.create(
+            packed=b"raw file contents",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -76,7 +55,9 @@ class TestSandboxes:
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_create(self, client: Benchify) -> None:
-        with client.sandboxes.with_streaming_response.create() as response:
+        with client.sandboxes.with_streaming_response.create(
+            packed=b"raw file contents",
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
@@ -232,40 +213,17 @@ class TestAsyncSandboxes:
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_create(self, async_client: AsyncBenchify) -> None:
-        sandbox = await async_client.sandboxes.create()
+        sandbox = await async_client.sandboxes.create(
+            packed=b"raw file contents",
+        )
         assert_matches_type(SandboxCreateResponse, sandbox, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncBenchify) -> None:
         sandbox = await async_client.sandboxes.create(
-            blob={
-                "files_data": "files_data",
-                "files_manifest": [
-                    {
-                        "path": "path",
-                        "size": 0,
-                    }
-                ],
-                "compressed_size": 0,
-                "format": "gzip-base64",
-            },
-            files=[b"raw file contents"],
-            options={
-                "options": {
-                    "build_command": "buildCommand",
-                    "environment": {"foo": "string"},
-                    "name": "name",
-                    "port": 0,
-                    "runtime": {
-                        "framework": "react",
-                        "node_version": "nodeVersion",
-                        "package_manager": "npm",
-                    },
-                    "start_command": "startCommand",
-                    "subdomain": "subdomain",
-                }
-            },
+            packed=b"raw file contents",
+            options='{"timeout": 300, "subdomain": "my-app"}',
             content_hash="210b9798eb53baa4e69d31c1071cf03d212b8ad0ca30cf321e0ea82e120aac26",
             idempotency_key="Idempotency-Key",
         )
@@ -274,7 +232,9 @@ class TestAsyncSandboxes:
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncBenchify) -> None:
-        response = await async_client.sandboxes.with_raw_response.create()
+        response = await async_client.sandboxes.with_raw_response.create(
+            packed=b"raw file contents",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -284,7 +244,9 @@ class TestAsyncSandboxes:
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncBenchify) -> None:
-        async with async_client.sandboxes.with_streaming_response.create() as response:
+        async with async_client.sandboxes.with_streaming_response.create(
+            packed=b"raw file contents",
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 

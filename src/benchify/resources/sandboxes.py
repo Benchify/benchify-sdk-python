@@ -7,7 +7,7 @@ from typing import Mapping, cast
 import httpx
 
 from ..types import sandbox_create_params, sandbox_update_params
-from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, FileTypes, SequenceNotStr, omit, not_given
+from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, FileTypes, omit, not_given
 from .._utils import extract_files, maybe_transform, strip_not_given, deepcopy_minimal, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -48,9 +48,8 @@ class SandboxesResource(SyncAPIResource):
     def create(
         self,
         *,
-        blob: sandbox_create_params.Blob | Omit = omit,
-        files: SequenceNotStr[FileTypes] | Omit = omit,
-        options: sandbox_create_params.Options | Omit = omit,
+        packed: FileTypes,
+        options: str | Omit = omit,
         content_hash: str | Omit = omit,
         idempotency_key: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -60,13 +59,15 @@ class SandboxesResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SandboxCreateResponse:
-        """Upload files or blob to create a new stack environment.
-
-        For multi-service
-        stacks, automatically detects and orchestrates multiple services.
+        """
+        Upload a binary packed file (tar+gz or tar+zstd) to create a new stack
+        environment. For multi-service stacks, automatically detects and orchestrates
+        multiple services.
 
         Args:
-          files: Files to upload
+          packed: Binary packed file (tar+gz or tar+zstd) containing project files
+
+          options: JSON string with sandbox options (optional)
 
           extra_headers: Send extra headers
 
@@ -87,12 +88,11 @@ class SandboxesResource(SyncAPIResource):
         }
         body = deepcopy_minimal(
             {
-                "blob": blob,
-                "files": files,
+                "packed": packed,
                 "options": options,
             }
         )
-        extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
+        files = extract_files(cast(Mapping[str, object], body), paths=[["packed"]])
         # It should be noted that the actual Content-Type header that will be
         # sent to the server will contain a `boundary` parameter, e.g.
         # multipart/form-data; boundary=---abc--
@@ -100,7 +100,7 @@ class SandboxesResource(SyncAPIResource):
         return self._post(
             "/sandboxes",
             body=maybe_transform(body, sandbox_create_params.SandboxCreateParams),
-            files=extracted_files,
+            files=files,
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -263,9 +263,8 @@ class AsyncSandboxesResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        blob: sandbox_create_params.Blob | Omit = omit,
-        files: SequenceNotStr[FileTypes] | Omit = omit,
-        options: sandbox_create_params.Options | Omit = omit,
+        packed: FileTypes,
+        options: str | Omit = omit,
         content_hash: str | Omit = omit,
         idempotency_key: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -275,13 +274,15 @@ class AsyncSandboxesResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SandboxCreateResponse:
-        """Upload files or blob to create a new stack environment.
-
-        For multi-service
-        stacks, automatically detects and orchestrates multiple services.
+        """
+        Upload a binary packed file (tar+gz or tar+zstd) to create a new stack
+        environment. For multi-service stacks, automatically detects and orchestrates
+        multiple services.
 
         Args:
-          files: Files to upload
+          packed: Binary packed file (tar+gz or tar+zstd) containing project files
+
+          options: JSON string with sandbox options (optional)
 
           extra_headers: Send extra headers
 
@@ -302,12 +303,11 @@ class AsyncSandboxesResource(AsyncAPIResource):
         }
         body = deepcopy_minimal(
             {
-                "blob": blob,
-                "files": files,
+                "packed": packed,
                 "options": options,
             }
         )
-        extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files", "<array>"]])
+        files = extract_files(cast(Mapping[str, object], body), paths=[["packed"]])
         # It should be noted that the actual Content-Type header that will be
         # sent to the server will contain a `boundary` parameter, e.g.
         # multipart/form-data; boundary=---abc--
@@ -315,7 +315,7 @@ class AsyncSandboxesResource(AsyncAPIResource):
         return await self._post(
             "/sandboxes",
             body=await async_maybe_transform(body, sandbox_create_params.SandboxCreateParams),
-            files=extracted_files,
+            files=files,
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
