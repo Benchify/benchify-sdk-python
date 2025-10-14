@@ -49,9 +49,10 @@ class SandboxesResource(SyncAPIResource):
         self,
         *,
         packed: FileTypes,
+        content_hash: str,
+        idempotency_key: str,
+        manifest: str | Omit = omit,
         options: str | Omit = omit,
-        content_hash: str | Omit = omit,
-        idempotency_key: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -59,15 +60,17 @@ class SandboxesResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SandboxCreateResponse:
-        """
-        Upload a binary packed file (tar+gz or tar+zstd) to create a new stack
-        environment. For multi-service stacks, automatically detects and orchestrates
-        multiple services.
+        """Upload a binary tar.gz file to create a new stack environment.
+
+        For multi-service
+        stacks, automatically detects and orchestrates multiple services.
 
         Args:
-          packed: Binary packed file (tar+gz or tar+zstd) containing project files
+          packed: Binary gzipped tar archive containing project files
 
-          options: JSON string with sandbox options (optional)
+          manifest: Optional JSON metadata as string
+
+          options: Optional JSON configuration as string
 
           extra_headers: Send extra headers
 
@@ -77,18 +80,11 @@ class SandboxesResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {
-            **strip_not_given(
-                {
-                    "Content-Hash": content_hash,
-                    "Idempotency-Key": idempotency_key,
-                }
-            ),
-            **(extra_headers or {}),
-        }
+        extra_headers = {"Content-Hash": content_hash, "Idempotency-Key": idempotency_key, **(extra_headers or {})}
         body = deepcopy_minimal(
             {
                 "packed": packed,
+                "manifest": manifest,
                 "options": options,
             }
         )
@@ -96,7 +92,7 @@ class SandboxesResource(SyncAPIResource):
         # It should be noted that the actual Content-Type header that will be
         # sent to the server will contain a `boundary` parameter, e.g.
         # multipart/form-data; boundary=---abc--
-        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
+        extra_headers["Content-Type"] = "multipart/form-data"
         return self._post(
             "/sandboxes",
             body=maybe_transform(body, sandbox_create_params.SandboxCreateParams),
@@ -144,10 +140,12 @@ class SandboxesResource(SyncAPIResource):
         self,
         id: str,
         *,
+        idempotency_key: str,
+        manifest: str | Omit = omit,
         ops: str | Omit = omit,
         packed: FileTypes | Omit = omit,
+        base_commit: str | Omit = omit,
         base_etag: str | Omit = omit,
-        idempotency_key: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -155,15 +153,18 @@ class SandboxesResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SandboxUpdateResponse:
-        """Update stack files using packed blobs and/or individual operations.
+        """Update stack files using tar.gz blobs and/or individual operations.
 
         For
         multi-service stacks, changes are routed to appropriate services.
 
         Args:
-          ops: JSON array of patch operations
+          manifest: JSON string containing patch metadata: { base, proposed, files: {...changed
+              hashes...} }. Required when packed is present.
 
-          packed: tar+zstd or tar+gz containing changed/added files
+          ops: Optional JSON string containing array of patch operations
+
+          packed: Optional gzipped tar archive containing changed/added files
 
           extra_headers: Send extra headers
 
@@ -178,14 +179,16 @@ class SandboxesResource(SyncAPIResource):
         extra_headers = {
             **strip_not_given(
                 {
-                    "Base-Etag": base_etag,
                     "Idempotency-Key": idempotency_key,
+                    "Base-Commit": base_commit,
+                    "Base-Etag": base_etag,
                 }
             ),
             **(extra_headers or {}),
         }
         body = deepcopy_minimal(
             {
+                "manifest": manifest,
                 "ops": ops,
                 "packed": packed,
             }
@@ -264,9 +267,10 @@ class AsyncSandboxesResource(AsyncAPIResource):
         self,
         *,
         packed: FileTypes,
+        content_hash: str,
+        idempotency_key: str,
+        manifest: str | Omit = omit,
         options: str | Omit = omit,
-        content_hash: str | Omit = omit,
-        idempotency_key: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -274,15 +278,17 @@ class AsyncSandboxesResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SandboxCreateResponse:
-        """
-        Upload a binary packed file (tar+gz or tar+zstd) to create a new stack
-        environment. For multi-service stacks, automatically detects and orchestrates
-        multiple services.
+        """Upload a binary tar.gz file to create a new stack environment.
+
+        For multi-service
+        stacks, automatically detects and orchestrates multiple services.
 
         Args:
-          packed: Binary packed file (tar+gz or tar+zstd) containing project files
+          packed: Binary gzipped tar archive containing project files
 
-          options: JSON string with sandbox options (optional)
+          manifest: Optional JSON metadata as string
+
+          options: Optional JSON configuration as string
 
           extra_headers: Send extra headers
 
@@ -292,18 +298,11 @@ class AsyncSandboxesResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {
-            **strip_not_given(
-                {
-                    "Content-Hash": content_hash,
-                    "Idempotency-Key": idempotency_key,
-                }
-            ),
-            **(extra_headers or {}),
-        }
+        extra_headers = {"Content-Hash": content_hash, "Idempotency-Key": idempotency_key, **(extra_headers or {})}
         body = deepcopy_minimal(
             {
                 "packed": packed,
+                "manifest": manifest,
                 "options": options,
             }
         )
@@ -311,7 +310,7 @@ class AsyncSandboxesResource(AsyncAPIResource):
         # It should be noted that the actual Content-Type header that will be
         # sent to the server will contain a `boundary` parameter, e.g.
         # multipart/form-data; boundary=---abc--
-        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
+        extra_headers["Content-Type"] = "multipart/form-data"
         return await self._post(
             "/sandboxes",
             body=await async_maybe_transform(body, sandbox_create_params.SandboxCreateParams),
@@ -359,10 +358,12 @@ class AsyncSandboxesResource(AsyncAPIResource):
         self,
         id: str,
         *,
+        idempotency_key: str,
+        manifest: str | Omit = omit,
         ops: str | Omit = omit,
         packed: FileTypes | Omit = omit,
+        base_commit: str | Omit = omit,
         base_etag: str | Omit = omit,
-        idempotency_key: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -370,15 +371,18 @@ class AsyncSandboxesResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SandboxUpdateResponse:
-        """Update stack files using packed blobs and/or individual operations.
+        """Update stack files using tar.gz blobs and/or individual operations.
 
         For
         multi-service stacks, changes are routed to appropriate services.
 
         Args:
-          ops: JSON array of patch operations
+          manifest: JSON string containing patch metadata: { base, proposed, files: {...changed
+              hashes...} }. Required when packed is present.
 
-          packed: tar+zstd or tar+gz containing changed/added files
+          ops: Optional JSON string containing array of patch operations
+
+          packed: Optional gzipped tar archive containing changed/added files
 
           extra_headers: Send extra headers
 
@@ -393,14 +397,16 @@ class AsyncSandboxesResource(AsyncAPIResource):
         extra_headers = {
             **strip_not_given(
                 {
-                    "Base-Etag": base_etag,
                     "Idempotency-Key": idempotency_key,
+                    "Base-Commit": base_commit,
+                    "Base-Etag": base_etag,
                 }
             ),
             **(extra_headers or {}),
         }
         body = deepcopy_minimal(
             {
+                "manifest": manifest,
                 "ops": ops,
                 "packed": packed,
             }

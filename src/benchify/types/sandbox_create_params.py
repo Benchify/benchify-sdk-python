@@ -12,11 +12,14 @@ __all__ = ["SandboxCreateParams"]
 
 class SandboxCreateParams(TypedDict, total=False):
     packed: Required[FileTypes]
-    """Binary packed file (tar+gz or tar+zstd) containing project files"""
+    """Binary gzipped tar archive containing project files"""
+
+    content_hash: Required[Annotated[str, PropertyInfo(alias="Content-Hash")]]
+
+    idempotency_key: Required[Annotated[str, PropertyInfo(alias="Idempotency-Key")]]
+
+    manifest: str
+    """Optional JSON metadata as string"""
 
     options: str
-    """JSON string with sandbox options (optional)"""
-
-    content_hash: Annotated[str, PropertyInfo(alias="Content-Hash")]
-
-    idempotency_key: Annotated[str, PropertyInfo(alias="Idempotency-Key")]
+    """Optional JSON configuration as string"""

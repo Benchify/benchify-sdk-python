@@ -132,6 +132,8 @@ client = Benchify()
 
 client.sandboxes.create(
     packed=Path("/path/to/file"),
+    content_hash="sha256:210b9798eb53baa4e69d31c1071cf03d212b8ad0ca30cf321e0ea82e120aac26",
+    idempotency_key="xxxxxxxx",
 )
 ```
 
