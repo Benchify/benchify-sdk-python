@@ -37,6 +37,7 @@ from benchify._base_client import (
 from .utils import update_env
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
+api_key = "My API Key"
 bearer_token = "My Bearer Token"
 
 
@@ -59,7 +60,7 @@ def _get_open_connections(client: Benchify | AsyncBenchify) -> int:
 
 
 class TestBenchify:
-    client = Benchify(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+    client = Benchify(base_url=base_url, api_key=api_key, bearer_token=bearer_token, _strict_response_validation=True)
 
     @pytest.mark.respx(base_url=base_url)
     def test_raw_response(self, respx_mock: MockRouter) -> None:
@@ -85,6 +86,10 @@ class TestBenchify:
         copied = self.client.copy()
         assert id(copied) != id(self.client)
 
+        copied = self.client.copy(api_key="another My API Key")
+        assert copied.api_key == "another My API Key"
+        assert self.client.api_key == "My API Key"
+
         copied = self.client.copy(bearer_token="another My Bearer Token")
         assert copied.bearer_token == "another My Bearer Token"
         assert self.client.bearer_token == "My Bearer Token"
@@ -108,6 +113,7 @@ class TestBenchify:
     def test_copy_default_headers(self) -> None:
         client = Benchify(
             base_url=base_url,
+            api_key=api_key,
             bearer_token=bearer_token,
             _strict_response_validation=True,
             default_headers={"X-Foo": "bar"},
@@ -144,7 +150,11 @@ class TestBenchify:
 
     def test_copy_default_query(self) -> None:
         client = Benchify(
-            base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, default_query={"foo": "bar"}
+            base_url=base_url,
+            api_key=api_key,
+            bearer_token=bearer_token,
+            _strict_response_validation=True,
+            default_query={"foo": "bar"},
         )
         assert _get_params(client)["foo"] == "bar"
 
@@ -270,7 +280,11 @@ class TestBenchify:
 
     def test_client_timeout_option(self) -> None:
         client = Benchify(
-            base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, timeout=httpx.Timeout(0)
+            base_url=base_url,
+            api_key=api_key,
+            bearer_token=bearer_token,
+            _strict_response_validation=True,
+            timeout=httpx.Timeout(0),
         )
 
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -281,7 +295,11 @@ class TestBenchify:
         # custom timeout given to the httpx client should be used
         with httpx.Client(timeout=None) as http_client:
             client = Benchify(
-                base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, http_client=http_client
+                base_url=base_url,
+                api_key=api_key,
+                bearer_token=bearer_token,
+                _strict_response_validation=True,
+                http_client=http_client,
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -291,7 +309,11 @@ class TestBenchify:
         # no timeout given to the httpx client should not use the httpx default
         with httpx.Client() as http_client:
             client = Benchify(
-                base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, http_client=http_client
+                base_url=base_url,
+                api_key=api_key,
+                bearer_token=bearer_token,
+                _strict_response_validation=True,
+                http_client=http_client,
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -301,7 +323,11 @@ class TestBenchify:
         # explicitly passing the default timeout currently results in it being ignored
         with httpx.Client(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
             client = Benchify(
-                base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, http_client=http_client
+                base_url=base_url,
+                api_key=api_key,
+                bearer_token=bearer_token,
+                _strict_response_validation=True,
+                http_client=http_client,
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -313,6 +339,7 @@ class TestBenchify:
             async with httpx.AsyncClient() as http_client:
                 Benchify(
                     base_url=base_url,
+                    api_key=api_key,
                     bearer_token=bearer_token,
                     _strict_response_validation=True,
                     http_client=cast(Any, http_client),
@@ -321,6 +348,7 @@ class TestBenchify:
     def test_default_headers_option(self) -> None:
         client = Benchify(
             base_url=base_url,
+            api_key=api_key,
             bearer_token=bearer_token,
             _strict_response_validation=True,
             default_headers={"X-Foo": "bar"},
@@ -331,6 +359,7 @@ class TestBenchify:
 
         client2 = Benchify(
             base_url=base_url,
+            api_key=api_key,
             bearer_token=bearer_token,
             _strict_response_validation=True,
             default_headers={
@@ -343,16 +372,20 @@ class TestBenchify:
         assert request.headers.get("x-stainless-lang") == "my-overriding-header"
 
     def test_validate_headers(self) -> None:
-        client = Benchify(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        client = Benchify(
+            base_url=base_url, api_key=api_key, bearer_token=bearer_token, _strict_response_validation=True
+        )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-        assert request.headers.get("Authorization") == f"Bearer {bearer_token}"
+        assert request.headers.get("Authorization") == f"Bearer {api_key}"
 
-        with update_env(**{"BENCHIFY_BEARER_TOKEN": Omit()}):
-            client2 = Benchify(base_url=base_url, bearer_token=None, _strict_response_validation=True)
+        with update_env(**{"BENCHIFY_API_KEY": Omit()}):
+            client2 = Benchify(
+                base_url=base_url, api_key=None, bearer_token=bearer_token, _strict_response_validation=True
+            )
 
         with pytest.raises(
             TypeError,
-            match="Could not resolve authentication method. Expected the bearer_token to be set. Or for the `Authorization` headers to be explicitly omitted",
+            match="Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted",
         ):
             client2._build_request(FinalRequestOptions(method="get", url="/foo"))
 
@@ -364,6 +397,7 @@ class TestBenchify:
     def test_default_query_option(self) -> None:
         client = Benchify(
             base_url=base_url,
+            api_key=api_key,
             bearer_token=bearer_token,
             _strict_response_validation=True,
             default_query={"query_param": "bar"},
@@ -567,7 +601,10 @@ class TestBenchify:
 
     def test_base_url_setter(self) -> None:
         client = Benchify(
-            base_url="https://example.com/from_init", bearer_token=bearer_token, _strict_response_validation=True
+            base_url="https://example.com/from_init",
+            api_key=api_key,
+            bearer_token=bearer_token,
+            _strict_response_validation=True,
         )
         assert client.base_url == "https://example.com/from_init/"
 
@@ -577,7 +614,7 @@ class TestBenchify:
 
     def test_base_url_env(self) -> None:
         with update_env(BENCHIFY_BASE_URL="http://localhost:5000/from/env"):
-            client = Benchify(bearer_token=bearer_token, _strict_response_validation=True)
+            client = Benchify(api_key=api_key, bearer_token=bearer_token, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
     @pytest.mark.parametrize(
@@ -585,11 +622,13 @@ class TestBenchify:
         [
             Benchify(
                 base_url="http://localhost:5000/custom/path/",
+                api_key=api_key,
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
             ),
             Benchify(
                 base_url="http://localhost:5000/custom/path/",
+                api_key=api_key,
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
                 http_client=httpx.Client(),
@@ -612,11 +651,13 @@ class TestBenchify:
         [
             Benchify(
                 base_url="http://localhost:5000/custom/path/",
+                api_key=api_key,
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
             ),
             Benchify(
                 base_url="http://localhost:5000/custom/path/",
+                api_key=api_key,
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
                 http_client=httpx.Client(),
@@ -639,11 +680,13 @@ class TestBenchify:
         [
             Benchify(
                 base_url="http://localhost:5000/custom/path/",
+                api_key=api_key,
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
             ),
             Benchify(
                 base_url="http://localhost:5000/custom/path/",
+                api_key=api_key,
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
                 http_client=httpx.Client(),
@@ -662,7 +705,9 @@ class TestBenchify:
         assert request.url == "https://myapi.com/foo"
 
     def test_copied_client_does_not_close_http(self) -> None:
-        client = Benchify(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        client = Benchify(
+            base_url=base_url, api_key=api_key, bearer_token=bearer_token, _strict_response_validation=True
+        )
         assert not client.is_closed()
 
         copied = client.copy()
@@ -673,7 +718,9 @@ class TestBenchify:
         assert not client.is_closed()
 
     def test_client_context_manager(self) -> None:
-        client = Benchify(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        client = Benchify(
+            base_url=base_url, api_key=api_key, bearer_token=bearer_token, _strict_response_validation=True
+        )
         with client as c2:
             assert c2 is client
             assert not c2.is_closed()
@@ -696,6 +743,7 @@ class TestBenchify:
         with pytest.raises(TypeError, match=r"max_retries cannot be None"):
             Benchify(
                 base_url=base_url,
+                api_key=api_key,
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
                 max_retries=cast(Any, None),
@@ -708,12 +756,16 @@ class TestBenchify:
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
 
-        strict_client = Benchify(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        strict_client = Benchify(
+            base_url=base_url, api_key=api_key, bearer_token=bearer_token, _strict_response_validation=True
+        )
 
         with pytest.raises(APIResponseValidationError):
             strict_client.get("/foo", cast_to=Model)
 
-        client = Benchify(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=False)
+        client = Benchify(
+            base_url=base_url, api_key=api_key, bearer_token=bearer_token, _strict_response_validation=False
+        )
 
         response = client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -741,7 +793,9 @@ class TestBenchify:
     )
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
     def test_parse_retry_after_header(self, remaining_retries: int, retry_after: str, timeout: float) -> None:
-        client = Benchify(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        client = Benchify(
+            base_url=base_url, api_key=api_key, bearer_token=bearer_token, _strict_response_validation=True
+        )
 
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
@@ -895,7 +949,9 @@ class TestBenchify:
 
 
 class TestAsyncBenchify:
-    client = AsyncBenchify(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+    client = AsyncBenchify(
+        base_url=base_url, api_key=api_key, bearer_token=bearer_token, _strict_response_validation=True
+    )
 
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
@@ -923,6 +979,10 @@ class TestAsyncBenchify:
         copied = self.client.copy()
         assert id(copied) != id(self.client)
 
+        copied = self.client.copy(api_key="another My API Key")
+        assert copied.api_key == "another My API Key"
+        assert self.client.api_key == "My API Key"
+
         copied = self.client.copy(bearer_token="another My Bearer Token")
         assert copied.bearer_token == "another My Bearer Token"
         assert self.client.bearer_token == "My Bearer Token"
@@ -946,6 +1006,7 @@ class TestAsyncBenchify:
     def test_copy_default_headers(self) -> None:
         client = AsyncBenchify(
             base_url=base_url,
+            api_key=api_key,
             bearer_token=bearer_token,
             _strict_response_validation=True,
             default_headers={"X-Foo": "bar"},
@@ -982,7 +1043,11 @@ class TestAsyncBenchify:
 
     def test_copy_default_query(self) -> None:
         client = AsyncBenchify(
-            base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, default_query={"foo": "bar"}
+            base_url=base_url,
+            api_key=api_key,
+            bearer_token=bearer_token,
+            _strict_response_validation=True,
+            default_query={"foo": "bar"},
         )
         assert _get_params(client)["foo"] == "bar"
 
@@ -1108,7 +1173,11 @@ class TestAsyncBenchify:
 
     async def test_client_timeout_option(self) -> None:
         client = AsyncBenchify(
-            base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, timeout=httpx.Timeout(0)
+            base_url=base_url,
+            api_key=api_key,
+            bearer_token=bearer_token,
+            _strict_response_validation=True,
+            timeout=httpx.Timeout(0),
         )
 
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -1119,7 +1188,11 @@ class TestAsyncBenchify:
         # custom timeout given to the httpx client should be used
         async with httpx.AsyncClient(timeout=None) as http_client:
             client = AsyncBenchify(
-                base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, http_client=http_client
+                base_url=base_url,
+                api_key=api_key,
+                bearer_token=bearer_token,
+                _strict_response_validation=True,
+                http_client=http_client,
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -1129,7 +1202,11 @@ class TestAsyncBenchify:
         # no timeout given to the httpx client should not use the httpx default
         async with httpx.AsyncClient() as http_client:
             client = AsyncBenchify(
-                base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, http_client=http_client
+                base_url=base_url,
+                api_key=api_key,
+                bearer_token=bearer_token,
+                _strict_response_validation=True,
+                http_client=http_client,
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -1139,7 +1216,11 @@ class TestAsyncBenchify:
         # explicitly passing the default timeout currently results in it being ignored
         async with httpx.AsyncClient(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
             client = AsyncBenchify(
-                base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, http_client=http_client
+                base_url=base_url,
+                api_key=api_key,
+                bearer_token=bearer_token,
+                _strict_response_validation=True,
+                http_client=http_client,
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -1151,6 +1232,7 @@ class TestAsyncBenchify:
             with httpx.Client() as http_client:
                 AsyncBenchify(
                     base_url=base_url,
+                    api_key=api_key,
                     bearer_token=bearer_token,
                     _strict_response_validation=True,
                     http_client=cast(Any, http_client),
@@ -1159,6 +1241,7 @@ class TestAsyncBenchify:
     def test_default_headers_option(self) -> None:
         client = AsyncBenchify(
             base_url=base_url,
+            api_key=api_key,
             bearer_token=bearer_token,
             _strict_response_validation=True,
             default_headers={"X-Foo": "bar"},
@@ -1169,6 +1252,7 @@ class TestAsyncBenchify:
 
         client2 = AsyncBenchify(
             base_url=base_url,
+            api_key=api_key,
             bearer_token=bearer_token,
             _strict_response_validation=True,
             default_headers={
@@ -1181,16 +1265,20 @@ class TestAsyncBenchify:
         assert request.headers.get("x-stainless-lang") == "my-overriding-header"
 
     def test_validate_headers(self) -> None:
-        client = AsyncBenchify(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        client = AsyncBenchify(
+            base_url=base_url, api_key=api_key, bearer_token=bearer_token, _strict_response_validation=True
+        )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-        assert request.headers.get("Authorization") == f"Bearer {bearer_token}"
+        assert request.headers.get("Authorization") == f"Bearer {api_key}"
 
-        with update_env(**{"BENCHIFY_BEARER_TOKEN": Omit()}):
-            client2 = AsyncBenchify(base_url=base_url, bearer_token=None, _strict_response_validation=True)
+        with update_env(**{"BENCHIFY_API_KEY": Omit()}):
+            client2 = AsyncBenchify(
+                base_url=base_url, api_key=None, bearer_token=bearer_token, _strict_response_validation=True
+            )
 
         with pytest.raises(
             TypeError,
-            match="Could not resolve authentication method. Expected the bearer_token to be set. Or for the `Authorization` headers to be explicitly omitted",
+            match="Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted",
         ):
             client2._build_request(FinalRequestOptions(method="get", url="/foo"))
 
@@ -1202,6 +1290,7 @@ class TestAsyncBenchify:
     def test_default_query_option(self) -> None:
         client = AsyncBenchify(
             base_url=base_url,
+            api_key=api_key,
             bearer_token=bearer_token,
             _strict_response_validation=True,
             default_query={"query_param": "bar"},
@@ -1405,7 +1494,10 @@ class TestAsyncBenchify:
 
     def test_base_url_setter(self) -> None:
         client = AsyncBenchify(
-            base_url="https://example.com/from_init", bearer_token=bearer_token, _strict_response_validation=True
+            base_url="https://example.com/from_init",
+            api_key=api_key,
+            bearer_token=bearer_token,
+            _strict_response_validation=True,
         )
         assert client.base_url == "https://example.com/from_init/"
 
@@ -1415,7 +1507,7 @@ class TestAsyncBenchify:
 
     def test_base_url_env(self) -> None:
         with update_env(BENCHIFY_BASE_URL="http://localhost:5000/from/env"):
-            client = AsyncBenchify(bearer_token=bearer_token, _strict_response_validation=True)
+            client = AsyncBenchify(api_key=api_key, bearer_token=bearer_token, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
     @pytest.mark.parametrize(
@@ -1423,11 +1515,13 @@ class TestAsyncBenchify:
         [
             AsyncBenchify(
                 base_url="http://localhost:5000/custom/path/",
+                api_key=api_key,
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
             ),
             AsyncBenchify(
                 base_url="http://localhost:5000/custom/path/",
+                api_key=api_key,
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
                 http_client=httpx.AsyncClient(),
@@ -1450,11 +1544,13 @@ class TestAsyncBenchify:
         [
             AsyncBenchify(
                 base_url="http://localhost:5000/custom/path/",
+                api_key=api_key,
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
             ),
             AsyncBenchify(
                 base_url="http://localhost:5000/custom/path/",
+                api_key=api_key,
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
                 http_client=httpx.AsyncClient(),
@@ -1477,11 +1573,13 @@ class TestAsyncBenchify:
         [
             AsyncBenchify(
                 base_url="http://localhost:5000/custom/path/",
+                api_key=api_key,
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
             ),
             AsyncBenchify(
                 base_url="http://localhost:5000/custom/path/",
+                api_key=api_key,
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
                 http_client=httpx.AsyncClient(),
@@ -1500,7 +1598,9 @@ class TestAsyncBenchify:
         assert request.url == "https://myapi.com/foo"
 
     async def test_copied_client_does_not_close_http(self) -> None:
-        client = AsyncBenchify(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        client = AsyncBenchify(
+            base_url=base_url, api_key=api_key, bearer_token=bearer_token, _strict_response_validation=True
+        )
         assert not client.is_closed()
 
         copied = client.copy()
@@ -1512,7 +1612,9 @@ class TestAsyncBenchify:
         assert not client.is_closed()
 
     async def test_client_context_manager(self) -> None:
-        client = AsyncBenchify(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        client = AsyncBenchify(
+            base_url=base_url, api_key=api_key, bearer_token=bearer_token, _strict_response_validation=True
+        )
         async with client as c2:
             assert c2 is client
             assert not c2.is_closed()
@@ -1536,6 +1638,7 @@ class TestAsyncBenchify:
         with pytest.raises(TypeError, match=r"max_retries cannot be None"):
             AsyncBenchify(
                 base_url=base_url,
+                api_key=api_key,
                 bearer_token=bearer_token,
                 _strict_response_validation=True,
                 max_retries=cast(Any, None),
@@ -1549,12 +1652,16 @@ class TestAsyncBenchify:
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
 
-        strict_client = AsyncBenchify(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        strict_client = AsyncBenchify(
+            base_url=base_url, api_key=api_key, bearer_token=bearer_token, _strict_response_validation=True
+        )
 
         with pytest.raises(APIResponseValidationError):
             await strict_client.get("/foo", cast_to=Model)
 
-        client = AsyncBenchify(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=False)
+        client = AsyncBenchify(
+            base_url=base_url, api_key=api_key, bearer_token=bearer_token, _strict_response_validation=False
+        )
 
         response = await client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -1583,7 +1690,9 @@ class TestAsyncBenchify:
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
     @pytest.mark.asyncio
     async def test_parse_retry_after_header(self, remaining_retries: int, retry_after: str, timeout: float) -> None:
-        client = AsyncBenchify(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        client = AsyncBenchify(
+            base_url=base_url, api_key=api_key, bearer_token=bearer_token, _strict_response_validation=True
+        )
 
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)

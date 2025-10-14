@@ -33,10 +33,10 @@ response = client.fixer.run()
 print(response.data)
 ```
 
-While you can provide a `bearer_token` keyword argument,
+While you can provide an `api_key` keyword argument,
 we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `BENCHIFY_BEARER_TOKEN="My Bearer Token"` to your `.env` file
-so that your Bearer Token is not stored in source control.
+to add `BENCHIFY_API_KEY="My API Key"` to your `.env` file
+so that your API Key is not stored in source control.
 
 ## Async usage
 
