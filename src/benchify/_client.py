@@ -12,6 +12,7 @@ from . import _exceptions
 from ._qs import Querystring
 from ._types import (
     Omit,
+    Headers,
     Timeout,
     NotGiven,
     Transport,
@@ -23,7 +24,7 @@ from ._utils import is_given, get_async_library
 from ._version import __version__
 from .resources import fixer, sandboxes
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
-from ._exceptions import BenchifyError, APIStatusError
+from ._exceptions import APIStatusError
 from ._base_client import (
     DEFAULT_MAX_RETRIES,
     SyncAPIClient,
@@ -49,12 +50,14 @@ class Benchify(SyncAPIClient):
     with_streaming_response: BenchifyWithStreamedResponse
 
     # client options
-    api_key: str
+    api_key: str | None
+    bearer_token: str | None
 
     def __init__(
         self,
         *,
         api_key: str | None = None,
+        bearer_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -76,15 +79,17 @@ class Benchify(SyncAPIClient):
     ) -> None:
         """Construct a new synchronous Benchify client instance.
 
-        This automatically infers the `api_key` argument from the `BENCHIFY_API_KEY` environment variable if it is not provided.
+        This automatically infers the following arguments from their corresponding environment variables if they are not provided:
+        - `api_key` from `BENCHIFY_API_KEY`
+        - `bearer_token` from `BENCHIFY_BEARER_TOKEN`
         """
         if api_key is None:
             api_key = os.environ.get("BENCHIFY_API_KEY")
-        if api_key is None:
-            raise BenchifyError(
-                "The api_key client option must be set either by passing api_key to the client or by setting the BENCHIFY_API_KEY environment variable"
-            )
         self.api_key = api_key
+
+        if bearer_token is None:
+            bearer_token = os.environ.get("BENCHIFY_BEARER_TOKEN")
+        self.bearer_token = bearer_token
 
         if base_url is None:
             base_url = os.environ.get("BENCHIFY_BASE_URL")
@@ -115,8 +120,21 @@ class Benchify(SyncAPIClient):
     @property
     @override
     def auth_headers(self) -> dict[str, str]:
+        return {**self._api_key_auth, **self._bearer_auth}
+
+    @property
+    def _api_key_auth(self) -> dict[str, str]:
         api_key = self.api_key
+        if api_key is None:
+            return {}
         return {"Authorization": f"Bearer {api_key}"}
+
+    @property
+    def _bearer_auth(self) -> dict[str, str]:
+        bearer_token = self.bearer_token
+        if bearer_token is None:
+            return {}
+        return {"Authorization": f"Bearer {bearer_token}"}
 
     @property
     @override
@@ -127,10 +145,27 @@ class Benchify(SyncAPIClient):
             **self._custom_headers,
         }
 
+    @override
+    def _validate_headers(self, headers: Headers, custom_headers: Headers) -> None:
+        if self.api_key and headers.get("Authorization"):
+            return
+        if isinstance(custom_headers.get("Authorization"), Omit):
+            return
+
+        if self.bearer_token and headers.get("Authorization"):
+            return
+        if isinstance(custom_headers.get("Authorization"), Omit):
+            return
+
+        raise TypeError(
+            '"Could not resolve authentication method. Expected either api_key or bearer_token to be set. Or for one of the `Authorization` or `Authorization` headers to be explicitly omitted"'
+        )
+
     def copy(
         self,
         *,
         api_key: str | None = None,
+        bearer_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.Client | None = None,
@@ -165,6 +200,7 @@ class Benchify(SyncAPIClient):
         http_client = http_client or self._client
         return self.__class__(
             api_key=api_key or self.api_key,
+            bearer_token=bearer_token or self.bearer_token,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
@@ -219,12 +255,14 @@ class AsyncBenchify(AsyncAPIClient):
     with_streaming_response: AsyncBenchifyWithStreamedResponse
 
     # client options
-    api_key: str
+    api_key: str | None
+    bearer_token: str | None
 
     def __init__(
         self,
         *,
         api_key: str | None = None,
+        bearer_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -246,15 +284,17 @@ class AsyncBenchify(AsyncAPIClient):
     ) -> None:
         """Construct a new async AsyncBenchify client instance.
 
-        This automatically infers the `api_key` argument from the `BENCHIFY_API_KEY` environment variable if it is not provided.
+        This automatically infers the following arguments from their corresponding environment variables if they are not provided:
+        - `api_key` from `BENCHIFY_API_KEY`
+        - `bearer_token` from `BENCHIFY_BEARER_TOKEN`
         """
         if api_key is None:
             api_key = os.environ.get("BENCHIFY_API_KEY")
-        if api_key is None:
-            raise BenchifyError(
-                "The api_key client option must be set either by passing api_key to the client or by setting the BENCHIFY_API_KEY environment variable"
-            )
         self.api_key = api_key
+
+        if bearer_token is None:
+            bearer_token = os.environ.get("BENCHIFY_BEARER_TOKEN")
+        self.bearer_token = bearer_token
 
         if base_url is None:
             base_url = os.environ.get("BENCHIFY_BASE_URL")
@@ -285,8 +325,21 @@ class AsyncBenchify(AsyncAPIClient):
     @property
     @override
     def auth_headers(self) -> dict[str, str]:
+        return {**self._api_key_auth, **self._bearer_auth}
+
+    @property
+    def _api_key_auth(self) -> dict[str, str]:
         api_key = self.api_key
+        if api_key is None:
+            return {}
         return {"Authorization": f"Bearer {api_key}"}
+
+    @property
+    def _bearer_auth(self) -> dict[str, str]:
+        bearer_token = self.bearer_token
+        if bearer_token is None:
+            return {}
+        return {"Authorization": f"Bearer {bearer_token}"}
 
     @property
     @override
@@ -297,10 +350,27 @@ class AsyncBenchify(AsyncAPIClient):
             **self._custom_headers,
         }
 
+    @override
+    def _validate_headers(self, headers: Headers, custom_headers: Headers) -> None:
+        if self.api_key and headers.get("Authorization"):
+            return
+        if isinstance(custom_headers.get("Authorization"), Omit):
+            return
+
+        if self.bearer_token and headers.get("Authorization"):
+            return
+        if isinstance(custom_headers.get("Authorization"), Omit):
+            return
+
+        raise TypeError(
+            '"Could not resolve authentication method. Expected either api_key or bearer_token to be set. Or for one of the `Authorization` or `Authorization` headers to be explicitly omitted"'
+        )
+
     def copy(
         self,
         *,
         api_key: str | None = None,
+        bearer_token: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.AsyncClient | None = None,
@@ -335,6 +405,7 @@ class AsyncBenchify(AsyncAPIClient):
         http_client = http_client or self._client
         return self.__class__(
             api_key=api_key or self.api_key,
+            bearer_token=bearer_token or self.bearer_token,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
