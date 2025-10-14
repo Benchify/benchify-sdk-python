@@ -22,7 +22,7 @@ from ._types import (
 )
 from ._utils import is_given, get_async_library
 from ._version import __version__
-from .resources import fixer, sandboxes
+from .resources import fixer
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import APIStatusError
 from ._base_client import (
@@ -45,7 +45,6 @@ __all__ = [
 
 class Benchify(SyncAPIClient):
     fixer: fixer.FixerResource
-    sandboxes: sandboxes.SandboxesResource
     with_raw_response: BenchifyWithRawResponse
     with_streaming_response: BenchifyWithStreamedResponse
 
@@ -100,7 +99,6 @@ class Benchify(SyncAPIClient):
         )
 
         self.fixer = fixer.FixerResource(self)
-        self.sandboxes = sandboxes.SandboxesResource(self)
         self.with_raw_response = BenchifyWithRawResponse(self)
         self.with_streaming_response = BenchifyWithStreamedResponse(self)
 
@@ -224,7 +222,6 @@ class Benchify(SyncAPIClient):
 
 class AsyncBenchify(AsyncAPIClient):
     fixer: fixer.AsyncFixerResource
-    sandboxes: sandboxes.AsyncSandboxesResource
     with_raw_response: AsyncBenchifyWithRawResponse
     with_streaming_response: AsyncBenchifyWithStreamedResponse
 
@@ -279,7 +276,6 @@ class AsyncBenchify(AsyncAPIClient):
         )
 
         self.fixer = fixer.AsyncFixerResource(self)
-        self.sandboxes = sandboxes.AsyncSandboxesResource(self)
         self.with_raw_response = AsyncBenchifyWithRawResponse(self)
         self.with_streaming_response = AsyncBenchifyWithStreamedResponse(self)
 
@@ -404,25 +400,21 @@ class AsyncBenchify(AsyncAPIClient):
 class BenchifyWithRawResponse:
     def __init__(self, client: Benchify) -> None:
         self.fixer = fixer.FixerResourceWithRawResponse(client.fixer)
-        self.sandboxes = sandboxes.SandboxesResourceWithRawResponse(client.sandboxes)
 
 
 class AsyncBenchifyWithRawResponse:
     def __init__(self, client: AsyncBenchify) -> None:
         self.fixer = fixer.AsyncFixerResourceWithRawResponse(client.fixer)
-        self.sandboxes = sandboxes.AsyncSandboxesResourceWithRawResponse(client.sandboxes)
 
 
 class BenchifyWithStreamedResponse:
     def __init__(self, client: Benchify) -> None:
         self.fixer = fixer.FixerResourceWithStreamingResponse(client.fixer)
-        self.sandboxes = sandboxes.SandboxesResourceWithStreamingResponse(client.sandboxes)
 
 
 class AsyncBenchifyWithStreamedResponse:
     def __init__(self, client: AsyncBenchify) -> None:
         self.fixer = fixer.AsyncFixerResourceWithStreamingResponse(client.fixer)
-        self.sandboxes = sandboxes.AsyncSandboxesResourceWithStreamingResponse(client.sandboxes)
 
 
 Client = Benchify
