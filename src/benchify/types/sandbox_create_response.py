@@ -23,7 +23,7 @@ class BuildStatus(BaseModel):
 class Runtime(BaseModel):
     node_version: str = FieldInfo(alias="nodeVersion")
 
-    package_manager: Literal["npm", "yarn", "pnpm"] = FieldInfo(alias="packageManager")
+    package_manager: Literal["npm", "yarn", "pnpm", "bun"] = FieldInfo(alias="packageManager")
 
     port: float
 
