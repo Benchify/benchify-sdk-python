@@ -11,9 +11,13 @@ __all__ = [
     "DataStatus",
     "DataSuggestedChanges",
     "DataSuggestedChangesAllFile",
+    "DataSuggestedChangesAllFilesManifest",
     "DataSuggestedChangesChangedFile",
+    "DataSuggestedChangesChangedFilesManifest",
+    "DataSuggestedChangesDiffManifest",
     "DataBundle",
     "DataBundleFile",
+    "DataBundleFilesManifest",
     "DataFileToStrategyStatistic",
     "Error",
     "Meta",
@@ -45,12 +49,45 @@ class DataSuggestedChangesAllFile(BaseModel):
     """Path of the file"""
 
 
+class DataSuggestedChangesAllFilesManifest(BaseModel):
+    path: str
+    """File path relative to project root"""
+
+    size: float
+    """File size in bytes"""
+
+    digest: Optional[str] = None
+    """File content hash (optional)"""
+
+
 class DataSuggestedChangesChangedFile(BaseModel):
     contents: str
     """Contents of the file"""
 
     path: str
     """Path of the file"""
+
+
+class DataSuggestedChangesChangedFilesManifest(BaseModel):
+    path: str
+    """File path relative to project root"""
+
+    size: float
+    """File size in bytes"""
+
+    digest: Optional[str] = None
+    """File content hash (optional)"""
+
+
+class DataSuggestedChangesDiffManifest(BaseModel):
+    path: str
+    """File path relative to project root"""
+
+    size: float
+    """File size in bytes"""
+
+    digest: Optional[str] = None
+    """File content hash (optional)"""
 
 
 class DataSuggestedChanges(BaseModel):
@@ -60,7 +97,7 @@ class DataSuggestedChanges(BaseModel):
     all_files_data: Optional[str] = None
     """Base64-encoded compressed file contents"""
 
-    all_files_manifest: Optional[List[Dict[str, Optional[object]]]] = None
+    all_files_manifest: Optional[List[DataSuggestedChangesAllFilesManifest]] = None
     """File manifest for blob format"""
 
     changed_files: Optional[List[DataSuggestedChangesChangedFile]] = None
@@ -69,7 +106,7 @@ class DataSuggestedChanges(BaseModel):
     changed_files_data: Optional[str] = None
     """Base64-encoded compressed file contents"""
 
-    changed_files_manifest: Optional[List[Dict[str, Optional[object]]]] = None
+    changed_files_manifest: Optional[List[DataSuggestedChangesChangedFilesManifest]] = None
     """File manifest for blob format"""
 
     diff: Optional[str] = None
@@ -78,7 +115,7 @@ class DataSuggestedChanges(BaseModel):
     diff_data: Optional[str] = None
     """Base64-encoded compressed diff data"""
 
-    diff_manifest: Optional[List[Dict[str, Optional[object]]]] = None
+    diff_manifest: Optional[List[DataSuggestedChangesDiffManifest]] = None
     """File manifest for blob format"""
 
 
@@ -88,6 +125,17 @@ class DataBundleFile(BaseModel):
 
     path: str
     """Path of the file"""
+
+
+class DataBundleFilesManifest(BaseModel):
+    path: str
+    """File path relative to project root"""
+
+    size: float
+    """File size in bytes"""
+
+    digest: Optional[str] = None
+    """File content hash (optional)"""
 
 
 class DataBundle(BaseModel):
@@ -105,7 +153,7 @@ class DataBundle(BaseModel):
 
     files_data: Optional[str] = None
 
-    files_manifest: Optional[List[Dict[str, Optional[object]]]] = None
+    files_manifest: Optional[List[DataBundleFilesManifest]] = None
 
 
 class DataFileToStrategyStatistic(BaseModel):
@@ -151,7 +199,7 @@ class Error(BaseModel):
     message: str
     """The error message"""
 
-    details: Optional[Dict[str, Optional[object]]] = None
+    details: Optional[Dict[str, object]] = None
     """Details about what caused the error"""
 
 

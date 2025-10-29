@@ -42,7 +42,7 @@ class Error(BaseModel):
     message: str
     """The error message"""
 
-    details: Optional[Dict[str, Optional[object]]] = None
+    details: Optional[Dict[str, object]] = None
     """Details about what caused the error"""
 
 
