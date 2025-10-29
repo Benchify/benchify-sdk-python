@@ -27,12 +27,17 @@ class TestFixer:
     @parametrize
     def test_method_run_with_all_params(self, client: Benchify) -> None:
         fixer = client.fixer.run(
-            bundle=True,
+            bundle=False,
+            event_id="event_id",
             files=[
                 {
-                    "contents": "contents",
-                    "path": "x",
-                }
+                    "contents": "export const hello = 'world';",
+                    "path": "src/index.ts",
+                },
+                {
+                    "contents": "export function helper() {}",
+                    "path": "src/utils.ts",
+                },
             ],
             files_data="files_data",
             files_manifest=[{"foo": "bar"}],
@@ -40,8 +45,9 @@ class TestFixer:
             meta={"external_id": "external_id"},
             mode="project",
             response_encoding="json",
-            response_format="DIFF",
+            response_format="ALL_FILES",
             template_id="template_id",
+            template_path="template_path",
         )
         assert_matches_type(FixerRunResponse, fixer, path=["response"])
 
@@ -83,12 +89,17 @@ class TestAsyncFixer:
     @parametrize
     async def test_method_run_with_all_params(self, async_client: AsyncBenchify) -> None:
         fixer = await async_client.fixer.run(
-            bundle=True,
+            bundle=False,
+            event_id="event_id",
             files=[
                 {
-                    "contents": "contents",
-                    "path": "x",
-                }
+                    "contents": "export const hello = 'world';",
+                    "path": "src/index.ts",
+                },
+                {
+                    "contents": "export function helper() {}",
+                    "path": "src/utils.ts",
+                },
             ],
             files_data="files_data",
             files_manifest=[{"foo": "bar"}],
@@ -96,8 +107,9 @@ class TestAsyncFixer:
             meta={"external_id": "external_id"},
             mode="project",
             response_encoding="json",
-            response_format="DIFF",
+            response_format="ALL_FILES",
             template_id="template_id",
+            template_path="template_path",
         )
         assert_matches_type(FixerRunResponse, fixer, path=["response"])
 
