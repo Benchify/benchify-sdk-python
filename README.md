@@ -25,23 +25,34 @@ pip install benchify
 The full API of this library can be found in [api.md](api.md).
 
 ```python
+import os
 from benchify import Benchify
 
-client = Benchify()
+client = Benchify(
+    api_key=os.environ.get("BENCHIFY_API_KEY"),  # This is the default and can be omitted
+)
 
 response = client.fixer.run()
 print(response.data)
 ```
+
+While you can provide an `api_key` keyword argument,
+we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
+to add `BENCHIFY_API_KEY="My API Key"` to your `.env` file
+so that your API Key is not stored in source control.
 
 ## Async usage
 
 Simply import `AsyncBenchify` instead of `Benchify` and use `await` with each API call:
 
 ```python
+import os
 import asyncio
 from benchify import AsyncBenchify
 
-client = AsyncBenchify()
+client = AsyncBenchify(
+    api_key=os.environ.get("BENCHIFY_API_KEY"),  # This is the default and can be omitted
+)
 
 
 async def main() -> None:
@@ -75,6 +86,7 @@ from benchify import AsyncBenchify
 
 async def main() -> None:
     async with AsyncBenchify(
+        api_key="My API Key",
         http_client=DefaultAioHttpClient(),
     ) as client:
         response = await client.fixer.run()
@@ -107,6 +119,25 @@ response = client.fixer.run(
 )
 print(response.meta)
 ```
+
+## File uploads
+
+Request parameters that correspond to file uploads can be passed as `bytes`, or a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance or a tuple of `(filename, contents, media type)`.
+
+```python
+from pathlib import Path
+from benchify import Benchify
+
+client = Benchify()
+
+client.stacks.create(
+    bundle=Path("/path/to/file"),
+    manifest=b"raw file contents",
+    idempotency_key="key-12345678",
+)
+```
+
+The async client uses the exact same interface. If you pass a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance, the file contents will be read asynchronously automatically.
 
 ## Handling errors
 

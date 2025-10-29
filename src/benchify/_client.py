@@ -12,6 +12,7 @@ from . import _exceptions
 from ._qs import Querystring
 from ._types import (
     Omit,
+    Headers,
     Timeout,
     NotGiven,
     Transport,
@@ -21,7 +22,7 @@ from ._types import (
 )
 from ._utils import is_given, get_async_library
 from ._version import __version__
-from .resources import fixer
+from .resources import fixer, stacks, validate_template, fix_string_literals
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import APIStatusError
 from ._base_client import (
@@ -44,6 +45,9 @@ __all__ = [
 
 class Benchify(SyncAPIClient):
     fixer: fixer.FixerResource
+    stacks: stacks.StacksResource
+    fix_string_literals: fix_string_literals.FixStringLiteralsResource
+    validate_template: validate_template.ValidateTemplateResource
     with_raw_response: BenchifyWithRawResponse
     with_streaming_response: BenchifyWithStreamedResponse
 
@@ -98,6 +102,9 @@ class Benchify(SyncAPIClient):
         )
 
         self.fixer = fixer.FixerResource(self)
+        self.stacks = stacks.StacksResource(self)
+        self.fix_string_literals = fix_string_literals.FixStringLiteralsResource(self)
+        self.validate_template = validate_template.ValidateTemplateResource(self)
         self.with_raw_response = BenchifyWithRawResponse(self)
         self.with_streaming_response = BenchifyWithStreamedResponse(self)
 
@@ -108,12 +115,31 @@ class Benchify(SyncAPIClient):
 
     @property
     @override
+    def auth_headers(self) -> dict[str, str]:
+        api_key = self.api_key
+        if api_key is None:
+            return {}
+        return {"Authorization": f"Bearer {api_key}"}
+
+    @property
+    @override
     def default_headers(self) -> dict[str, str | Omit]:
         return {
             **super().default_headers,
             "X-Stainless-Async": "false",
             **self._custom_headers,
         }
+
+    @override
+    def _validate_headers(self, headers: Headers, custom_headers: Headers) -> None:
+        if self.api_key and headers.get("Authorization"):
+            return
+        if isinstance(custom_headers.get("Authorization"), Omit):
+            return
+
+        raise TypeError(
+            '"Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted"'
+        )
 
     def copy(
         self,
@@ -202,6 +228,9 @@ class Benchify(SyncAPIClient):
 
 class AsyncBenchify(AsyncAPIClient):
     fixer: fixer.AsyncFixerResource
+    stacks: stacks.AsyncStacksResource
+    fix_string_literals: fix_string_literals.AsyncFixStringLiteralsResource
+    validate_template: validate_template.AsyncValidateTemplateResource
     with_raw_response: AsyncBenchifyWithRawResponse
     with_streaming_response: AsyncBenchifyWithStreamedResponse
 
@@ -256,6 +285,9 @@ class AsyncBenchify(AsyncAPIClient):
         )
 
         self.fixer = fixer.AsyncFixerResource(self)
+        self.stacks = stacks.AsyncStacksResource(self)
+        self.fix_string_literals = fix_string_literals.AsyncFixStringLiteralsResource(self)
+        self.validate_template = validate_template.AsyncValidateTemplateResource(self)
         self.with_raw_response = AsyncBenchifyWithRawResponse(self)
         self.with_streaming_response = AsyncBenchifyWithStreamedResponse(self)
 
@@ -266,12 +298,31 @@ class AsyncBenchify(AsyncAPIClient):
 
     @property
     @override
+    def auth_headers(self) -> dict[str, str]:
+        api_key = self.api_key
+        if api_key is None:
+            return {}
+        return {"Authorization": f"Bearer {api_key}"}
+
+    @property
+    @override
     def default_headers(self) -> dict[str, str | Omit]:
         return {
             **super().default_headers,
             "X-Stainless-Async": f"async:{get_async_library()}",
             **self._custom_headers,
         }
+
+    @override
+    def _validate_headers(self, headers: Headers, custom_headers: Headers) -> None:
+        if self.api_key and headers.get("Authorization"):
+            return
+        if isinstance(custom_headers.get("Authorization"), Omit):
+            return
+
+        raise TypeError(
+            '"Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted"'
+        )
 
     def copy(
         self,
@@ -361,21 +412,47 @@ class AsyncBenchify(AsyncAPIClient):
 class BenchifyWithRawResponse:
     def __init__(self, client: Benchify) -> None:
         self.fixer = fixer.FixerResourceWithRawResponse(client.fixer)
+        self.stacks = stacks.StacksResourceWithRawResponse(client.stacks)
+        self.fix_string_literals = fix_string_literals.FixStringLiteralsResourceWithRawResponse(
+            client.fix_string_literals
+        )
+        self.validate_template = validate_template.ValidateTemplateResourceWithRawResponse(client.validate_template)
 
 
 class AsyncBenchifyWithRawResponse:
     def __init__(self, client: AsyncBenchify) -> None:
         self.fixer = fixer.AsyncFixerResourceWithRawResponse(client.fixer)
+        self.stacks = stacks.AsyncStacksResourceWithRawResponse(client.stacks)
+        self.fix_string_literals = fix_string_literals.AsyncFixStringLiteralsResourceWithRawResponse(
+            client.fix_string_literals
+        )
+        self.validate_template = validate_template.AsyncValidateTemplateResourceWithRawResponse(
+            client.validate_template
+        )
 
 
 class BenchifyWithStreamedResponse:
     def __init__(self, client: Benchify) -> None:
         self.fixer = fixer.FixerResourceWithStreamingResponse(client.fixer)
+        self.stacks = stacks.StacksResourceWithStreamingResponse(client.stacks)
+        self.fix_string_literals = fix_string_literals.FixStringLiteralsResourceWithStreamingResponse(
+            client.fix_string_literals
+        )
+        self.validate_template = validate_template.ValidateTemplateResourceWithStreamingResponse(
+            client.validate_template
+        )
 
 
 class AsyncBenchifyWithStreamedResponse:
     def __init__(self, client: AsyncBenchify) -> None:
         self.fixer = fixer.AsyncFixerResourceWithStreamingResponse(client.fixer)
+        self.stacks = stacks.AsyncStacksResourceWithStreamingResponse(client.stacks)
+        self.fix_string_literals = fix_string_literals.AsyncFixStringLiteralsResourceWithStreamingResponse(
+            client.fix_string_literals
+        )
+        self.validate_template = validate_template.AsyncValidateTemplateResourceWithStreamingResponse(
+            client.validate_template
+        )
 
 
 Client = Benchify
