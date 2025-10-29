@@ -1,22 +1,22 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Dict, List, Union, Optional
-from typing_extensions import Literal, TypeAlias
+from typing import Dict, List, Optional
+from typing_extensions import Literal
 
 from .._models import BaseModel
-from .fixer_file import FixerFile
-from .shared.response_meta import ResponseMeta
 
 __all__ = [
     "FixerRunResponse",
     "Data",
     "DataStatus",
-    "DataBundle",
     "DataSuggestedChanges",
-    "DataSuggestedChangesDiffFormat",
-    "DataSuggestedChangesChangedFilesFormat",
-    "DataSuggestedChangesAllFilesFormat",
+    "DataSuggestedChangesAllFile",
+    "DataSuggestedChangesChangedFile",
+    "DataBundle",
+    "DataBundleFile",
+    "DataFileToStrategyStatistic",
     "Error",
+    "Meta",
 ]
 
 
@@ -24,6 +24,7 @@ class DataStatus(BaseModel):
     composite_status: Literal[
         "FIXED_EVERYTHING", "FIXED_REQUESTED", "PARTIALLY_FIXED", "NO_REQUESTED_ISSUES", "NO_ISSUES", "FAILED"
     ]
+    """Overall composite status"""
 
     file_to_composite_status: Optional[
         Dict[
@@ -33,67 +34,114 @@ class DataStatus(BaseModel):
             ],
         ]
     ] = None
-    """Status of each file."""
+    """Status of each file"""
 
 
-class DataBundle(BaseModel):
-    status: Literal["SUCCESS", "FAILED", "NOT_ATTEMPTED", "PARTIAL_SUCCESS"]
-    """Overall status of the bundling operation"""
+class DataSuggestedChangesAllFile(BaseModel):
+    contents: str
+    """Contents of the file"""
 
-    files: Optional[List[FixerFile]] = None
-    """Successfully bundled files"""
-
-    files_data: Optional[str] = None
-    """Base64-encoded compressed file contents (blob format)"""
-
-    files_manifest: Optional[List[Dict[str, object]]] = None
-    """File manifest for blob format: [{"path": "app.tsx", "size": 1024}, ...]"""
+    path: str
+    """Path of the file"""
 
 
-class DataSuggestedChangesDiffFormat(BaseModel):
-    diff: Optional[str] = None
-    """Git diff of changes made"""
+class DataSuggestedChangesChangedFile(BaseModel):
+    contents: str
+    """Contents of the file"""
+
+    path: str
+    """Path of the file"""
 
 
-class DataSuggestedChangesChangedFilesFormat(BaseModel):
-    changed_files: Optional[List[FixerFile]] = None
-    """List of changed files with their new contents"""
-
-    changed_files_data: Optional[str] = None
-    """Base64-encoded compressed file contents (blob format)"""
-
-    changed_files_manifest: Optional[List[Dict[str, object]]] = None
-    """File manifest for blob format: [{"path": "app.tsx", "size": 1024}, ...]"""
-
-
-class DataSuggestedChangesAllFilesFormat(BaseModel):
-    all_files: Optional[List[FixerFile]] = None
+class DataSuggestedChanges(BaseModel):
+    all_files: Optional[List[DataSuggestedChangesAllFile]] = None
     """List of all files with their current contents"""
 
     all_files_data: Optional[str] = None
-    """Base64-encoded compressed file contents (blob format)"""
+    """Base64-encoded compressed file contents"""
 
-    all_files_manifest: Optional[List[Dict[str, object]]] = None
-    """File manifest for blob format: [{"path": "app.tsx", "size": 1024}, ...]"""
+    all_files_manifest: Optional[List[Dict[str, Optional[object]]]] = None
+    """File manifest for blob format"""
+
+    changed_files: Optional[List[DataSuggestedChangesChangedFile]] = None
+    """List of changed files with their new contents"""
+
+    changed_files_data: Optional[str] = None
+    """Base64-encoded compressed file contents"""
+
+    changed_files_manifest: Optional[List[Dict[str, Optional[object]]]] = None
+    """File manifest for blob format"""
+
+    diff: Optional[str] = None
+    """Unified diff of changes"""
+
+    diff_data: Optional[str] = None
+    """Base64-encoded compressed diff data"""
+
+    diff_manifest: Optional[List[Dict[str, Optional[object]]]] = None
+    """File manifest for blob format"""
 
 
-DataSuggestedChanges: TypeAlias = Union[
-    DataSuggestedChangesDiffFormat, DataSuggestedChangesChangedFilesFormat, DataSuggestedChangesAllFilesFormat, None
-]
+class DataBundleFile(BaseModel):
+    contents: str
+    """Contents of the file"""
+
+    path: str
+    """Path of the file"""
+
+
+class DataBundle(BaseModel):
+    build_system: str
+
+    status: Literal["SUCCESS", "FAILED", "NOT_ATTEMPTED", "PARTIAL_SUCCESS"]
+
+    template_path: str
+
+    bundle_url: Optional[str] = None
+
+    debug: Optional[Dict[str, str]] = None
+
+    files: Optional[List[DataBundleFile]] = None
+
+    files_data: Optional[str] = None
+
+    files_manifest: Optional[List[Dict[str, Optional[object]]]] = None
+
+
+class DataFileToStrategyStatistic(BaseModel):
+    strategy_name: str
+
+    version_hash: str
+
+    fixes_applied: Optional[bool] = None
+
+    fixes_fired: Optional[bool] = None
 
 
 class Data(BaseModel):
+    fixer_version: str
+    """Version of the fixer"""
+
     status: DataStatus
     """Final per-file status after fixing"""
 
+    suggested_changes: DataSuggestedChanges
+    """Suggested changes to fix the issues"""
+
     bundle: Optional[DataBundle] = None
-    """Information about the bundling process and results"""
+    """Bundle information if bundling was requested"""
+
+    file_to_strategy_statistics: Optional[Dict[str, List[DataFileToStrategyStatistic]]] = None
+    """Per-file strategy statistics"""
+
+    final_diagnostics: Optional[object] = None
+    """Diagnostics after fixing"""
 
     fix_types_used: Optional[List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]]] = None
-    """List of fix types that were actually applied during the fixer run"""
+    """Fix types that were used"""
 
-    suggested_changes: Optional[DataSuggestedChanges] = None
-    """Changes made by the fixer in the requested format"""
+    initial_diagnostics: Optional[object] = None
+    """Diagnostics before fixing"""
 
 
 class Error(BaseModel):
@@ -103,11 +151,16 @@ class Error(BaseModel):
     message: str
     """The error message"""
 
-    details: Optional[str] = None
-    """Details about what caused the error, if available"""
+    details: Optional[Dict[str, Optional[object]]] = None
+    """Details about what caused the error"""
 
-    suggestions: Optional[List[str]] = None
-    """Potential suggestions about how to fix the error, if applicable"""
+
+class Meta(BaseModel):
+    external_id: Optional[str] = None
+    """Customer tracking identifier"""
+
+    trace_id: Optional[str] = None
+    """Unique trace identifier for the request"""
 
 
 class FixerRunResponse(BaseModel):
@@ -117,5 +170,5 @@ class FixerRunResponse(BaseModel):
     error: Optional[Error] = None
     """The error from the API query"""
 
-    meta: Optional[ResponseMeta] = None
+    meta: Optional[Meta] = None
     """Meta information"""

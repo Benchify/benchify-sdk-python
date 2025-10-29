@@ -12,32 +12,38 @@ class FixerRunParams(TypedDict, total=False):
     bundle: bool
     """Whether to bundle the project (experimental)"""
 
+    event_id: str
+    """Unique identifier for the event"""
+
     files: Optional[Iterable[File]]
     """List of files to process (legacy format)"""
 
     files_data: Optional[str]
     """Base64-encoded compressed file contents (packed format)"""
 
-    files_manifest: Optional[Iterable[Dict[str, object]]]
-    """File manifest for packed format: [{"path": "app.tsx", "size": 1024}, ...]"""
+    files_manifest: Optional[Iterable[Dict[str, Optional[object]]]]
+    """File manifest for packed format"""
 
     fixes: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]]
     """Configuration for which fix types to apply"""
 
     meta: Optional[Meta]
-    """Meta information for API requests"""
+    """Meta information for the request"""
 
     mode: Literal["project", "files"]
-    """Fixer operating mode: 'project' expects full project, 'files' expects subset"""
+    """Fixer operating mode"""
 
     response_encoding: Literal["json", "blob"]
-    """Response encoding format: 'json' (default) or 'blob'"""
+    """Response encoding format"""
 
     response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"]
     """Format for the response (diff, changed_files, or all_files)"""
 
     template_id: Optional[str]
-    """ID of the template to use for the fixer process"""
+    """ID of the template to use"""
+
+    template_path: str
+    """Full path to the template"""
 
 
 class File(TypedDict, total=False):
