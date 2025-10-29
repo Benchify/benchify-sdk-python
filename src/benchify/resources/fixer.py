@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Iterable, Optional
+from typing import List, Iterable, Optional
 from typing_extensions import Literal
 
 import httpx
@@ -51,7 +51,7 @@ class FixerResource(SyncAPIResource):
         event_id: str | Omit = omit,
         files: Optional[Iterable[fixer_run_params.File]] | Omit = omit,
         files_data: Optional[str] | Omit = omit,
-        files_manifest: Optional[Iterable[Dict[str, Optional[object]]]] | Omit = omit,
+        files_manifest: Optional[Iterable[fixer_run_params.FilesManifest]] | Omit = omit,
         fixes: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]] | Omit = omit,
         meta: Optional[fixer_run_params.Meta] | Omit = omit,
         mode: Literal["project", "files"] | Omit = omit,
@@ -79,7 +79,7 @@ class FixerResource(SyncAPIResource):
 
           files_data: Base64-encoded compressed file contents (packed format)
 
-          files_manifest: File manifest for packed format
+          files_manifest: File manifest for packed format: [{"path": "app.tsx", "size": 1024}, ...]
 
           fixes: Configuration for which fix types to apply
 
@@ -156,7 +156,7 @@ class AsyncFixerResource(AsyncAPIResource):
         event_id: str | Omit = omit,
         files: Optional[Iterable[fixer_run_params.File]] | Omit = omit,
         files_data: Optional[str] | Omit = omit,
-        files_manifest: Optional[Iterable[Dict[str, Optional[object]]]] | Omit = omit,
+        files_manifest: Optional[Iterable[fixer_run_params.FilesManifest]] | Omit = omit,
         fixes: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]] | Omit = omit,
         meta: Optional[fixer_run_params.Meta] | Omit = omit,
         mode: Literal["project", "files"] | Omit = omit,
@@ -184,7 +184,7 @@ class AsyncFixerResource(AsyncAPIResource):
 
           files_data: Base64-encoded compressed file contents (packed format)
 
-          files_manifest: File manifest for packed format
+          files_manifest: File manifest for packed format: [{"path": "app.tsx", "size": 1024}, ...]
 
           fixes: Configuration for which fix types to apply
 

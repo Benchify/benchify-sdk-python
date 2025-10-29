@@ -40,7 +40,13 @@ class TestFixer:
                 },
             ],
             files_data="files_data",
-            files_manifest=[{"foo": "bar"}],
+            files_manifest=[
+                {
+                    "path": "path",
+                    "size": 0,
+                    "digest": "digest",
+                }
+            ],
             fixes=["dependency"],
             meta={"external_id": "external_id"},
             mode="project",
@@ -102,7 +108,13 @@ class TestAsyncFixer:
                 },
             ],
             files_data="files_data",
-            files_manifest=[{"foo": "bar"}],
+            files_manifest=[
+                {
+                    "path": "path",
+                    "size": 0,
+                    "digest": "digest",
+                }
+            ],
             fixes=["dependency"],
             meta={"external_id": "external_id"},
             mode="project",

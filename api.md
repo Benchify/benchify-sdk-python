@@ -18,7 +18,6 @@ Types:
 from benchify.types import (
     StackCreateResponse,
     StackRetrieveResponse,
-    StackUpdateResponse,
     StackCreateAndRunResponse,
     StackExecuteCommandResponse,
     StackGetLogsResponse,
@@ -30,7 +29,6 @@ Methods:
 
 - <code title="post /v1/stacks">client.stacks.<a href="./src/benchify/resources/stacks.py">create</a>(\*\*<a href="src/benchify/types/stack_create_params.py">params</a>) -> <a href="./src/benchify/types/stack_create_response.py">StackCreateResponse</a></code>
 - <code title="get /v1/stacks/{id}">client.stacks.<a href="./src/benchify/resources/stacks.py">retrieve</a>(id) -> <a href="./src/benchify/types/stack_retrieve_response.py">StackRetrieveResponse</a></code>
-- <code title="post /v1/stacks/{id}:patch">client.stacks.<a href="./src/benchify/resources/stacks.py">update</a>(id, \*\*<a href="src/benchify/types/stack_update_params.py">params</a>) -> <a href="./src/benchify/types/stack_update_response.py">StackUpdateResponse</a></code>
 - <code title="post /v1/stacks/create-and-run">client.stacks.<a href="./src/benchify/resources/stacks.py">create_and_run</a>(\*\*<a href="src/benchify/types/stack_create_and_run_params.py">params</a>) -> <a href="./src/benchify/types/stack_create_and_run_response.py">StackCreateAndRunResponse</a></code>
 - <code title="delete /v1/stacks/{id}">client.stacks.<a href="./src/benchify/resources/stacks.py">destroy</a>(id) -> None</code>
 - <code title="post /v1/stacks/{id}/exec">client.stacks.<a href="./src/benchify/resources/stacks.py">execute_command</a>(id, \*\*<a href="src/benchify/types/stack_execute_command_params.py">params</a>) -> <a href="./src/benchify/types/stack_execute_command_response.py">StackExecuteCommandResponse</a></code>
