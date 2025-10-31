@@ -64,14 +64,15 @@ class DataSuggestedChangesAllFile(BaseModel):
 
 
 class DataSuggestedChangesAllFilesManifest(BaseModel):
+    digest: str
+
     path: str
-    """File path relative to project root"""
 
     size: float
-    """File size in bytes"""
 
-    digest: Optional[str] = None
-    """File content hash (optional)"""
+    type: Literal["file", "dir"]
+
+    mode: Optional[str] = None
 
 
 class DataSuggestedChangesChangedFile(BaseModel):
@@ -83,54 +84,74 @@ class DataSuggestedChangesChangedFile(BaseModel):
 
 
 class DataSuggestedChangesChangedFilesManifest(BaseModel):
+    digest: str
+
     path: str
-    """File path relative to project root"""
 
     size: float
-    """File size in bytes"""
 
-    digest: Optional[str] = None
-    """File content hash (optional)"""
+    type: Literal["file", "dir"]
+
+    mode: Optional[str] = None
 
 
 class DataSuggestedChangesDiffManifest(BaseModel):
+    digest: str
+
     path: str
-    """File path relative to project root"""
 
     size: float
-    """File size in bytes"""
 
-    digest: Optional[str] = None
-    """File content hash (optional)"""
+    type: Literal["file", "dir"]
+
+    mode: Optional[str] = None
 
 
 class DataSuggestedChanges(BaseModel):
     all_files: Optional[List[DataSuggestedChangesAllFile]] = None
-    """List of all files with their current contents"""
+    """List of all files with their current contents (JSON format)"""
 
     all_files_data: Optional[str] = None
-    """Base64-encoded compressed file contents"""
+    """Base64-encoded tar.zst bundle of all files.
+
+    Only present when response_encoding is "blob".
+    """
 
     all_files_manifest: Optional[List[DataSuggestedChangesAllFilesManifest]] = None
-    """File manifest for blob format"""
+    """File manifest when response_encoding is "blob".
+
+    Contains metadata for the tar.zst bundle in all_files_data.
+    """
 
     changed_files: Optional[List[DataSuggestedChangesChangedFile]] = None
-    """List of changed files with their new contents"""
+    """List of changed files with their new contents (JSON format)"""
 
     changed_files_data: Optional[str] = None
-    """Base64-encoded compressed file contents"""
+    """Base64-encoded tar.zst bundle of changed files.
+
+    Only present when response_encoding is "blob".
+    """
 
     changed_files_manifest: Optional[List[DataSuggestedChangesChangedFilesManifest]] = None
-    """File manifest for blob format"""
+    """File manifest when response_encoding is "blob".
+
+    Contains metadata for the tar.zst bundle in changed_files_data.
+    """
 
     diff: Optional[str] = None
-    """Unified diff of changes"""
+    """Unified diff of changes (text format)"""
 
     diff_data: Optional[str] = None
-    """Base64-encoded compressed diff data"""
+    """Base64-encoded tar.zst compressed diff.
+
+    Only present when response_encoding is "blob".
+    """
 
     diff_manifest: Optional[List[DataSuggestedChangesDiffManifest]] = None
-    """File manifest for blob format"""
+    """File manifest when response_encoding is "blob".
+
+    Contains metadata for diff in diff_data.
+    """
 
 
 class DataBundleFile(BaseModel):
@@ -142,14 +163,15 @@ class DataBundleFile(BaseModel):
 
 
 class DataBundleFilesManifest(BaseModel):
+    digest: str
+
     path: str
-    """File path relative to project root"""
 
     size: float
-    """File size in bytes"""
 
-    digest: Optional[str] = None
-    """File content hash (optional)"""
+    type: Literal["file", "dir"]
+
+    mode: Optional[str] = None
 
 
 class DataBundle(BaseModel):
