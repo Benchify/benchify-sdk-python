@@ -39,14 +39,6 @@ class TestFixer:
                     "path": "src/utils.ts",
                 },
             ],
-            files_data="files_data",
-            files_manifest=[
-                {
-                    "path": "path",
-                    "size": 0,
-                    "digest": "digest",
-                }
-            ],
             fixes=["dependency"],
             meta={"external_id": "external_id"},
             mode="project",
@@ -106,14 +98,6 @@ class TestAsyncFixer:
                     "contents": "export function helper() {}",
                     "path": "src/utils.ts",
                 },
-            ],
-            files_data="files_data",
-            files_manifest=[
-                {
-                    "path": "path",
-                    "size": 0,
-                    "digest": "digest",
-                }
             ],
             fixes=["dependency"],
             meta={"external_id": "external_id"},

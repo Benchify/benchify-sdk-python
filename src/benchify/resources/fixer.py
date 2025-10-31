@@ -2,14 +2,14 @@
 
 from __future__ import annotations
 
-from typing import List, Iterable, Optional
+from typing import List, Mapping, Iterable, Optional, cast
 from typing_extensions import Literal
 
 import httpx
 
 from ..types import fixer_run_params
 from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from .._utils import maybe_transform, async_maybe_transform
+from .._utils import extract_files, maybe_transform, deepcopy_minimal, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -50,8 +50,6 @@ class FixerResource(SyncAPIResource):
         bundle: bool | Omit = omit,
         event_id: str | Omit = omit,
         files: Optional[Iterable[fixer_run_params.File]] | Omit = omit,
-        files_data: Optional[str] | Omit = omit,
-        files_manifest: Optional[Iterable[fixer_run_params.FilesManifest]] | Omit = omit,
         fixes: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]] | Omit = omit,
         meta: Optional[fixer_run_params.Meta] | Omit = omit,
         mode: Literal["project", "files"] | Omit = omit,
@@ -67,19 +65,17 @@ class FixerResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FixerRunResponse:
         """
-        Handle fixer requests - supports both legacy (embedded files) and new
-        (manifest+blobs) formats.
+        Handle fixer requests - supports two formats: 1) JSON with inline file contents
+        in files array, 2) multipart/form-data with tar.zst bundle and manifest (same as
+        Sandbox API). Use multipart for better performance with large projects.
 
         Args:
           bundle: Whether to bundle the project (experimental)
 
           event_id: Unique identifier for the event
 
-          files: List of files to process (legacy format)
-
-          files_data: Base64-encoded compressed file contents (packed format)
-
-          files_manifest: File manifest for packed format: [{"path": "app.tsx", "size": 1024}, ...]
+          files: List of files to process (JSON format with inline contents). For large projects,
+              use multipart/form-data with manifest + bundle instead.
 
           fixes: Configuration for which fix types to apply
 
@@ -103,25 +99,30 @@ class FixerResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        body = deepcopy_minimal(
+            {
+                "bundle": bundle,
+                "event_id": event_id,
+                "files": files,
+                "fixes": fixes,
+                "meta": meta,
+                "mode": mode,
+                "response_encoding": response_encoding,
+                "response_format": response_format,
+                "template_id": template_id,
+                "template_path": template_path,
+            }
+        )
+        extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["manifest"], ["bundle"]])
+        if extracted_files:
+            # It should be noted that the actual Content-Type header that will be
+            # sent to the server will contain a `boundary` parameter, e.g.
+            # multipart/form-data; boundary=---abc--
+            extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return self._post(
             "/v1/fixer",
-            body=maybe_transform(
-                {
-                    "bundle": bundle,
-                    "event_id": event_id,
-                    "files": files,
-                    "files_data": files_data,
-                    "files_manifest": files_manifest,
-                    "fixes": fixes,
-                    "meta": meta,
-                    "mode": mode,
-                    "response_encoding": response_encoding,
-                    "response_format": response_format,
-                    "template_id": template_id,
-                    "template_path": template_path,
-                },
-                fixer_run_params.FixerRunParams,
-            ),
+            body=maybe_transform(body, fixer_run_params.FixerRunParams),
+            files=extracted_files,
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -155,8 +156,6 @@ class AsyncFixerResource(AsyncAPIResource):
         bundle: bool | Omit = omit,
         event_id: str | Omit = omit,
         files: Optional[Iterable[fixer_run_params.File]] | Omit = omit,
-        files_data: Optional[str] | Omit = omit,
-        files_manifest: Optional[Iterable[fixer_run_params.FilesManifest]] | Omit = omit,
         fixes: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]] | Omit = omit,
         meta: Optional[fixer_run_params.Meta] | Omit = omit,
         mode: Literal["project", "files"] | Omit = omit,
@@ -172,19 +171,17 @@ class AsyncFixerResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FixerRunResponse:
         """
-        Handle fixer requests - supports both legacy (embedded files) and new
-        (manifest+blobs) formats.
+        Handle fixer requests - supports two formats: 1) JSON with inline file contents
+        in files array, 2) multipart/form-data with tar.zst bundle and manifest (same as
+        Sandbox API). Use multipart for better performance with large projects.
 
         Args:
           bundle: Whether to bundle the project (experimental)
 
           event_id: Unique identifier for the event
 
-          files: List of files to process (legacy format)
-
-          files_data: Base64-encoded compressed file contents (packed format)
-
-          files_manifest: File manifest for packed format: [{"path": "app.tsx", "size": 1024}, ...]
+          files: List of files to process (JSON format with inline contents). For large projects,
+              use multipart/form-data with manifest + bundle instead.
 
           fixes: Configuration for which fix types to apply
 
@@ -208,25 +205,30 @@ class AsyncFixerResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        body = deepcopy_minimal(
+            {
+                "bundle": bundle,
+                "event_id": event_id,
+                "files": files,
+                "fixes": fixes,
+                "meta": meta,
+                "mode": mode,
+                "response_encoding": response_encoding,
+                "response_format": response_format,
+                "template_id": template_id,
+                "template_path": template_path,
+            }
+        )
+        extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["manifest"], ["bundle"]])
+        if extracted_files:
+            # It should be noted that the actual Content-Type header that will be
+            # sent to the server will contain a `boundary` parameter, e.g.
+            # multipart/form-data; boundary=---abc--
+            extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
         return await self._post(
             "/v1/fixer",
-            body=await async_maybe_transform(
-                {
-                    "bundle": bundle,
-                    "event_id": event_id,
-                    "files": files,
-                    "files_data": files_data,
-                    "files_manifest": files_manifest,
-                    "fixes": fixes,
-                    "meta": meta,
-                    "mode": mode,
-                    "response_encoding": response_encoding,
-                    "response_format": response_format,
-                    "template_id": template_id,
-                    "template_path": template_path,
-                },
-                fixer_run_params.FixerRunParams,
-            ),
+            body=await async_maybe_transform(body, fixer_run_params.FixerRunParams),
+            files=extracted_files,
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

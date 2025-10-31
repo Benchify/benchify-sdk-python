@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import List, Iterable, Optional
 from typing_extensions import Literal, Required, TypedDict
 
-__all__ = ["FixerRunParams", "File", "FilesManifest", "Meta"]
+__all__ = ["FixerRunParams", "File", "Meta"]
 
 
 class FixerRunParams(TypedDict, total=False):
@@ -16,13 +16,10 @@ class FixerRunParams(TypedDict, total=False):
     """Unique identifier for the event"""
 
     files: Optional[Iterable[File]]
-    """List of files to process (legacy format)"""
+    """List of files to process (JSON format with inline contents).
 
-    files_data: Optional[str]
-    """Base64-encoded compressed file contents (packed format)"""
-
-    files_manifest: Optional[Iterable[FilesManifest]]
-    """File manifest for packed format: [{"path": "app.tsx", "size": 1024}, ...]"""
+    For large projects, use multipart/form-data with manifest + bundle instead.
+    """
 
     fixes: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]]
     """Configuration for which fix types to apply"""
@@ -52,17 +49,6 @@ class File(TypedDict, total=False):
 
     path: Required[str]
     """Path to the file"""
-
-
-class FilesManifest(TypedDict, total=False):
-    path: Required[str]
-    """File path relative to project root"""
-
-    size: Required[float]
-    """File size in bytes"""
-
-    digest: str
-    """File content hash (optional)"""
 
 
 class Meta(TypedDict, total=False):
