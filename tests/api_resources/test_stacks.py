@@ -42,7 +42,7 @@ class TestStacks:
             manifest=b"raw file contents",
             idempotency_key="key-12345678",
             options="options",
-            content_hash="sha256:abc123...",
+            content_hash="sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         )
         assert_matches_type(StackCreateResponse, stack, path=["response"])
 
@@ -371,7 +371,7 @@ class TestAsyncStacks:
             manifest=b"raw file contents",
             idempotency_key="key-12345678",
             options="options",
-            content_hash="sha256:abc123...",
+            content_hash="sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         )
         assert_matches_type(StackCreateResponse, stack, path=["response"])
 
