@@ -30,8 +30,11 @@ class FixerRunParams(TypedDict, total=False):
     mode: Literal["project", "files"]
     """Fixer operating mode"""
 
-    response_encoding: Literal["json", "blob"]
-    """Response encoding format"""
+    response_encoding: Literal["json", "multipart"]
+    """
+    Response encoding: "json" for inline file contents in JSON, "multipart" for
+    multipart/form-data with tar.zst bundle + manifest
+    """
 
     response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"]
     """Format for the response (diff, changed_files, or all_files)"""

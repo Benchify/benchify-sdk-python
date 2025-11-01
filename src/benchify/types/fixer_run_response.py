@@ -11,13 +11,9 @@ __all__ = [
     "DataStatus",
     "DataSuggestedChanges",
     "DataSuggestedChangesAllFile",
-    "DataSuggestedChangesAllFilesManifest",
     "DataSuggestedChangesChangedFile",
-    "DataSuggestedChangesChangedFilesManifest",
-    "DataSuggestedChangesDiffManifest",
     "DataBundle",
     "DataBundleFile",
-    "DataBundleFilesManifest",
     "DataFileToStrategyStatistic",
     "DataFinalDiagnostics",
     "DataFinalDiagnosticsNotRequested",
@@ -63,18 +59,6 @@ class DataSuggestedChangesAllFile(BaseModel):
     """Path of the file"""
 
 
-class DataSuggestedChangesAllFilesManifest(BaseModel):
-    digest: str
-
-    path: str
-
-    size: float
-
-    type: Literal["file", "dir"]
-
-    mode: Optional[str] = None
-
-
 class DataSuggestedChangesChangedFile(BaseModel):
     contents: str
     """Contents of the file"""
@@ -83,75 +67,21 @@ class DataSuggestedChangesChangedFile(BaseModel):
     """Path of the file"""
 
 
-class DataSuggestedChangesChangedFilesManifest(BaseModel):
-    digest: str
-
-    path: str
-
-    size: float
-
-    type: Literal["file", "dir"]
-
-    mode: Optional[str] = None
-
-
-class DataSuggestedChangesDiffManifest(BaseModel):
-    digest: str
-
-    path: str
-
-    size: float
-
-    type: Literal["file", "dir"]
-
-    mode: Optional[str] = None
-
-
 class DataSuggestedChanges(BaseModel):
     all_files: Optional[List[DataSuggestedChangesAllFile]] = None
-    """List of all files with their current contents (JSON format)"""
+    """List of all files with their current contents.
 
-    all_files_data: Optional[str] = None
-    """Base64-encoded tar.zst bundle of all files.
-
-    Only present when response_encoding is "blob".
-    """
-
-    all_files_manifest: Optional[List[DataSuggestedChangesAllFilesManifest]] = None
-    """File manifest when response_encoding is "blob".
-
-    Contains metadata for the tar.zst bundle in all_files_data.
+    Only present when response_encoding is "json".
     """
 
     changed_files: Optional[List[DataSuggestedChangesChangedFile]] = None
-    """List of changed files with their new contents (JSON format)"""
+    """List of changed files with their new contents.
 
-    changed_files_data: Optional[str] = None
-    """Base64-encoded tar.zst bundle of changed files.
-
-    Only present when response_encoding is "blob".
-    """
-
-    changed_files_manifest: Optional[List[DataSuggestedChangesChangedFilesManifest]] = None
-    """File manifest when response_encoding is "blob".
-
-    Contains metadata for the tar.zst bundle in changed_files_data.
+    Only present when response_encoding is "json".
     """
 
     diff: Optional[str] = None
-    """Unified diff of changes (text format)"""
-
-    diff_data: Optional[str] = None
-    """Base64-encoded tar.zst compressed diff.
-
-    Only present when response_encoding is "blob".
-    """
-
-    diff_manifest: Optional[List[DataSuggestedChangesDiffManifest]] = None
-    """File manifest when response_encoding is "blob".
-
-    Contains metadata for diff in diff_data.
-    """
+    """Unified diff of changes. Only present when response_encoding is "json"."""
 
 
 class DataBundleFile(BaseModel):
@@ -160,18 +90,6 @@ class DataBundleFile(BaseModel):
 
     path: str
     """Path of the file"""
-
-
-class DataBundleFilesManifest(BaseModel):
-    digest: str
-
-    path: str
-
-    size: float
-
-    type: Literal["file", "dir"]
-
-    mode: Optional[str] = None
 
 
 class DataBundle(BaseModel):
@@ -186,10 +104,6 @@ class DataBundle(BaseModel):
     debug: Optional[Dict[str, str]] = None
 
     files: Optional[List[DataBundleFile]] = None
-
-    files_data: Optional[str] = None
-
-    files_manifest: Optional[List[DataBundleFilesManifest]] = None
 
 
 class DataFileToStrategyStatistic(BaseModel):

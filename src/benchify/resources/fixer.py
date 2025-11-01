@@ -53,7 +53,7 @@ class FixerResource(SyncAPIResource):
         fixes: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]] | Omit = omit,
         meta: Optional[fixer_run_params.Meta] | Omit = omit,
         mode: Literal["project", "files"] | Omit = omit,
-        response_encoding: Literal["json", "blob"] | Omit = omit,
+        response_encoding: Literal["json", "multipart"] | Omit = omit,
         response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"] | Omit = omit,
         template_id: Optional[str] | Omit = omit,
         template_path: str | Omit = omit,
@@ -83,7 +83,8 @@ class FixerResource(SyncAPIResource):
 
           mode: Fixer operating mode
 
-          response_encoding: Response encoding format
+          response_encoding: Response encoding: "json" for inline file contents in JSON, "multipart" for
+              multipart/form-data with tar.zst bundle + manifest
 
           response_format: Format for the response (diff, changed_files, or all_files)
 
@@ -159,7 +160,7 @@ class AsyncFixerResource(AsyncAPIResource):
         fixes: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]] | Omit = omit,
         meta: Optional[fixer_run_params.Meta] | Omit = omit,
         mode: Literal["project", "files"] | Omit = omit,
-        response_encoding: Literal["json", "blob"] | Omit = omit,
+        response_encoding: Literal["json", "multipart"] | Omit = omit,
         response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"] | Omit = omit,
         template_id: Optional[str] | Omit = omit,
         template_path: str | Omit = omit,
@@ -189,7 +190,8 @@ class AsyncFixerResource(AsyncAPIResource):
 
           mode: Fixer operating mode
 
-          response_encoding: Response encoding format
+          response_encoding: Response encoding: "json" for inline file contents in JSON, "multipart" for
+              multipart/form-data with tar.zst bundle + manifest
 
           response_format: Format for the response (diff, changed_files, or all_files)
 
