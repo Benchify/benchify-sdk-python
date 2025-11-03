@@ -23,6 +23,7 @@ from benchify.types import (
     StackExecuteCommandResponse,
     StackGetLogsResponse,
     StackGetNetworkInfoResponse,
+    StackWaitForDevServerURLResponse,
 )
 ```
 
@@ -36,6 +37,7 @@ Methods:
 - <code title="post /v1/stacks/{id}/exec">client.stacks.<a href="./src/benchify/resources/stacks.py">execute_command</a>(id, \*\*<a href="src/benchify/types/stack_execute_command_params.py">params</a>) -> <a href="./src/benchify/types/stack_execute_command_response.py">StackExecuteCommandResponse</a></code>
 - <code title="get /v1/stacks/{id}/logs">client.stacks.<a href="./src/benchify/resources/stacks.py">get_logs</a>(id, \*\*<a href="src/benchify/types/stack_get_logs_params.py">params</a>) -> <a href="./src/benchify/types/stack_get_logs_response.py">StackGetLogsResponse</a></code>
 - <code title="get /v1/stacks/{id}/network-info">client.stacks.<a href="./src/benchify/resources/stacks.py">get_network_info</a>(id) -> <a href="./src/benchify/types/stack_get_network_info_response.py">StackGetNetworkInfoResponse</a></code>
+- <code title="get /v1/stacks/{id}/wait-url">client.stacks.<a href="./src/benchify/resources/stacks.py">wait_for_dev_server_url</a>(id, \*\*<a href="src/benchify/types/stack_wait_for_dev_server_url_params.py">params</a>) -> <a href="./src/benchify/types/stack_wait_for_dev_server_url_response.py">StackWaitForDevServerURLResponse</a></code>
 
 # FixStringLiterals
 

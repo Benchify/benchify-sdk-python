@@ -12,6 +12,7 @@ from ..types import (
     stack_get_logs_params,
     stack_create_and_run_params,
     stack_execute_command_params,
+    stack_wait_for_dev_server_url_params,
 )
 from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, FileTypes, SequenceNotStr, omit, not_given
 from .._utils import extract_files, maybe_transform, strip_not_given, deepcopy_minimal, async_maybe_transform
@@ -31,6 +32,7 @@ from ..types.stack_retrieve_response import StackRetrieveResponse
 from ..types.stack_create_and_run_response import StackCreateAndRunResponse
 from ..types.stack_execute_command_response import StackExecuteCommandResponse
 from ..types.stack_get_network_info_response import StackGetNetworkInfoResponse
+from ..types.stack_wait_for_dev_server_url_response import StackWaitForDevServerURLResponse
 
 __all__ = ["StacksResource", "AsyncStacksResource"]
 
@@ -437,6 +439,57 @@ class StacksResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=StackGetNetworkInfoResponse,
+        )
+
+    def wait_for_dev_server_url(
+        self,
+        id: str,
+        *,
+        interval: str | Omit = omit,
+        api_timeout: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> StackWaitForDevServerURLResponse:
+        """
+        Poll stack logs until a dev server URL is detected or timeout
+
+        Args:
+          id: Stack identifier
+
+          interval: Polling interval in ms
+
+          api_timeout: Timeout in seconds
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._get(
+            f"/v1/stacks/{id}/wait-url",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "interval": interval,
+                        "api_timeout": api_timeout,
+                    },
+                    stack_wait_for_dev_server_url_params.StackWaitForDevServerURLParams,
+                ),
+            ),
+            cast_to=StackWaitForDevServerURLResponse,
         )
 
 
@@ -846,6 +899,57 @@ class AsyncStacksResource(AsyncAPIResource):
             cast_to=StackGetNetworkInfoResponse,
         )
 
+    async def wait_for_dev_server_url(
+        self,
+        id: str,
+        *,
+        interval: str | Omit = omit,
+        api_timeout: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> StackWaitForDevServerURLResponse:
+        """
+        Poll stack logs until a dev server URL is detected or timeout
+
+        Args:
+          id: Stack identifier
+
+          interval: Polling interval in ms
+
+          api_timeout: Timeout in seconds
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._get(
+            f"/v1/stacks/{id}/wait-url",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {
+                        "interval": interval,
+                        "api_timeout": api_timeout,
+                    },
+                    stack_wait_for_dev_server_url_params.StackWaitForDevServerURLParams,
+                ),
+            ),
+            cast_to=StackWaitForDevServerURLResponse,
+        )
+
 
 class StacksResourceWithRawResponse:
     def __init__(self, stacks: StacksResource) -> None:
@@ -874,6 +978,9 @@ class StacksResourceWithRawResponse:
         )
         self.get_network_info = to_raw_response_wrapper(
             stacks.get_network_info,
+        )
+        self.wait_for_dev_server_url = to_raw_response_wrapper(
+            stacks.wait_for_dev_server_url,
         )
 
 
@@ -905,6 +1012,9 @@ class AsyncStacksResourceWithRawResponse:
         self.get_network_info = async_to_raw_response_wrapper(
             stacks.get_network_info,
         )
+        self.wait_for_dev_server_url = async_to_raw_response_wrapper(
+            stacks.wait_for_dev_server_url,
+        )
 
 
 class StacksResourceWithStreamingResponse:
@@ -935,6 +1045,9 @@ class StacksResourceWithStreamingResponse:
         self.get_network_info = to_streamed_response_wrapper(
             stacks.get_network_info,
         )
+        self.wait_for_dev_server_url = to_streamed_response_wrapper(
+            stacks.wait_for_dev_server_url,
+        )
 
 
 class AsyncStacksResourceWithStreamingResponse:
@@ -964,4 +1077,7 @@ class AsyncStacksResourceWithStreamingResponse:
         )
         self.get_network_info = async_to_streamed_response_wrapper(
             stacks.get_network_info,
+        )
+        self.wait_for_dev_server_url = async_to_streamed_response_wrapper(
+            stacks.wait_for_dev_server_url,
         )
