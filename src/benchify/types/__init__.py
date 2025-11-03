@@ -5,8 +5,10 @@ from __future__ import annotations
 from .fixer_run_params import FixerRunParams as FixerRunParams
 from .fixer_run_response import FixerRunResponse as FixerRunResponse
 from .stack_create_params import StackCreateParams as StackCreateParams
+from .stack_update_params import StackUpdateParams as StackUpdateParams
 from .stack_create_response import StackCreateResponse as StackCreateResponse
 from .stack_get_logs_params import StackGetLogsParams as StackGetLogsParams
+from .stack_update_response import StackUpdateResponse as StackUpdateResponse
 from .stack_get_logs_response import StackGetLogsResponse as StackGetLogsResponse
 from .stack_retrieve_response import StackRetrieveResponse as StackRetrieveResponse
 from .stack_create_and_run_params import StackCreateAndRunParams as StackCreateAndRunParams

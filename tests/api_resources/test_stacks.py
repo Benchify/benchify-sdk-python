@@ -11,6 +11,7 @@ from benchify import Benchify, AsyncBenchify
 from tests.utils import assert_matches_type
 from benchify.types import (
     StackCreateResponse,
+    StackUpdateResponse,
     StackGetLogsResponse,
     StackRetrieveResponse,
     StackCreateAndRunResponse,
@@ -116,6 +117,65 @@ class TestStacks:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             client.stacks.with_raw_response.retrieve(
                 "",
+            )
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_update(self, client: Benchify) -> None:
+        stack = client.stacks.update(
+            id="stk_abc123",
+            idempotency_key="key-12345678",
+        )
+        assert_matches_type(StackUpdateResponse, stack, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_update_with_all_params(self, client: Benchify) -> None:
+        stack = client.stacks.update(
+            id="stk_abc123",
+            idempotency_key="key-12345678",
+            bundle=b"raw file contents",
+            manifest=b"raw file contents",
+            ops="ops",
+            base_etag="sha256:abc123...",
+        )
+        assert_matches_type(StackUpdateResponse, stack, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_raw_response_update(self, client: Benchify) -> None:
+        response = client.stacks.with_raw_response.update(
+            id="stk_abc123",
+            idempotency_key="key-12345678",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        stack = response.parse()
+        assert_matches_type(StackUpdateResponse, stack, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_streaming_response_update(self, client: Benchify) -> None:
+        with client.stacks.with_streaming_response.update(
+            id="stk_abc123",
+            idempotency_key="key-12345678",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            stack = response.parse()
+            assert_matches_type(StackUpdateResponse, stack, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_path_params_update(self, client: Benchify) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            client.stacks.with_raw_response.update(
+                id="",
+                idempotency_key="key-12345678",
             )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
@@ -445,6 +505,65 @@ class TestAsyncStacks:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
             await async_client.stacks.with_raw_response.retrieve(
                 "",
+            )
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_update(self, async_client: AsyncBenchify) -> None:
+        stack = await async_client.stacks.update(
+            id="stk_abc123",
+            idempotency_key="key-12345678",
+        )
+        assert_matches_type(StackUpdateResponse, stack, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_update_with_all_params(self, async_client: AsyncBenchify) -> None:
+        stack = await async_client.stacks.update(
+            id="stk_abc123",
+            idempotency_key="key-12345678",
+            bundle=b"raw file contents",
+            manifest=b"raw file contents",
+            ops="ops",
+            base_etag="sha256:abc123...",
+        )
+        assert_matches_type(StackUpdateResponse, stack, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_raw_response_update(self, async_client: AsyncBenchify) -> None:
+        response = await async_client.stacks.with_raw_response.update(
+            id="stk_abc123",
+            idempotency_key="key-12345678",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        stack = await response.parse()
+        assert_matches_type(StackUpdateResponse, stack, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_streaming_response_update(self, async_client: AsyncBenchify) -> None:
+        async with async_client.stacks.with_streaming_response.update(
+            id="stk_abc123",
+            idempotency_key="key-12345678",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            stack = await response.parse()
+            assert_matches_type(StackUpdateResponse, stack, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_path_params_update(self, async_client: AsyncBenchify) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            await async_client.stacks.with_raw_response.update(
+                id="",
+                idempotency_key="key-12345678",
             )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
