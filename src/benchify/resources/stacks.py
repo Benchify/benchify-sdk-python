@@ -8,6 +8,7 @@ import httpx
 
 from ..types import (
     stack_create_params,
+    stack_update_params,
     stack_get_logs_params,
     stack_create_and_run_params,
     stack_execute_command_params,
@@ -24,6 +25,7 @@ from .._response import (
 )
 from .._base_client import make_request_options
 from ..types.stack_create_response import StackCreateResponse
+from ..types.stack_update_response import StackUpdateResponse
 from ..types.stack_get_logs_response import StackGetLogsResponse
 from ..types.stack_retrieve_response import StackRetrieveResponse
 from ..types.stack_create_and_run_response import StackCreateAndRunResponse
@@ -158,6 +160,80 @@ class StacksResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=StackRetrieveResponse,
+        )
+
+    def update(
+        self,
+        id: str,
+        *,
+        idempotency_key: str,
+        bundle: FileTypes | Omit = omit,
+        manifest: FileTypes | Omit = omit,
+        ops: str | Omit = omit,
+        base_etag: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> StackUpdateResponse:
+        """
+        Update stack files using manifest + bundle format and/or individual operations.
+        For multi-service stacks, changes are routed to appropriate services.
+
+        Args:
+          id: Stack identifier
+
+          idempotency_key: Unique key for idempotent requests
+
+          bundle: Optional tar.zst bundle containing changed/added files
+
+          manifest: Optional JSON manifest file with file metadata
+
+          ops: Optional JSON string containing array of patch operations
+
+          base_etag: Current stack etag for conflict detection
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        extra_headers = {
+            **strip_not_given(
+                {
+                    "idempotency-key": idempotency_key,
+                    "base-etag": base_etag,
+                }
+            ),
+            **(extra_headers or {}),
+        }
+        body = deepcopy_minimal(
+            {
+                "bundle": bundle,
+                "manifest": manifest,
+                "ops": ops,
+            }
+        )
+        files = extract_files(cast(Mapping[str, object], body), paths=[["manifest"], ["bundle"]])
+        # It should be noted that the actual Content-Type header that will be
+        # sent to the server will contain a `boundary` parameter, e.g.
+        # multipart/form-data; boundary=---abc--
+        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
+        return self._post(
+            f"/v1/stacks/{id}/patch",
+            body=maybe_transform(body, stack_update_params.StackUpdateParams),
+            files=files,
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=StackUpdateResponse,
         )
 
     def create_and_run(
@@ -491,6 +567,80 @@ class AsyncStacksResource(AsyncAPIResource):
             cast_to=StackRetrieveResponse,
         )
 
+    async def update(
+        self,
+        id: str,
+        *,
+        idempotency_key: str,
+        bundle: FileTypes | Omit = omit,
+        manifest: FileTypes | Omit = omit,
+        ops: str | Omit = omit,
+        base_etag: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> StackUpdateResponse:
+        """
+        Update stack files using manifest + bundle format and/or individual operations.
+        For multi-service stacks, changes are routed to appropriate services.
+
+        Args:
+          id: Stack identifier
+
+          idempotency_key: Unique key for idempotent requests
+
+          bundle: Optional tar.zst bundle containing changed/added files
+
+          manifest: Optional JSON manifest file with file metadata
+
+          ops: Optional JSON string containing array of patch operations
+
+          base_etag: Current stack etag for conflict detection
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        extra_headers = {
+            **strip_not_given(
+                {
+                    "idempotency-key": idempotency_key,
+                    "base-etag": base_etag,
+                }
+            ),
+            **(extra_headers or {}),
+        }
+        body = deepcopy_minimal(
+            {
+                "bundle": bundle,
+                "manifest": manifest,
+                "ops": ops,
+            }
+        )
+        files = extract_files(cast(Mapping[str, object], body), paths=[["manifest"], ["bundle"]])
+        # It should be noted that the actual Content-Type header that will be
+        # sent to the server will contain a `boundary` parameter, e.g.
+        # multipart/form-data; boundary=---abc--
+        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
+        return await self._post(
+            f"/v1/stacks/{id}/patch",
+            body=await async_maybe_transform(body, stack_update_params.StackUpdateParams),
+            files=files,
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=StackUpdateResponse,
+        )
+
     async def create_and_run(
         self,
         *,
@@ -707,6 +857,9 @@ class StacksResourceWithRawResponse:
         self.retrieve = to_raw_response_wrapper(
             stacks.retrieve,
         )
+        self.update = to_raw_response_wrapper(
+            stacks.update,
+        )
         self.create_and_run = to_raw_response_wrapper(
             stacks.create_and_run,
         )
@@ -733,6 +886,9 @@ class AsyncStacksResourceWithRawResponse:
         )
         self.retrieve = async_to_raw_response_wrapper(
             stacks.retrieve,
+        )
+        self.update = async_to_raw_response_wrapper(
+            stacks.update,
         )
         self.create_and_run = async_to_raw_response_wrapper(
             stacks.create_and_run,
@@ -761,6 +917,9 @@ class StacksResourceWithStreamingResponse:
         self.retrieve = to_streamed_response_wrapper(
             stacks.retrieve,
         )
+        self.update = to_streamed_response_wrapper(
+            stacks.update,
+        )
         self.create_and_run = to_streamed_response_wrapper(
             stacks.create_and_run,
         )
@@ -787,6 +946,9 @@ class AsyncStacksResourceWithStreamingResponse:
         )
         self.retrieve = async_to_streamed_response_wrapper(
             stacks.retrieve,
+        )
+        self.update = async_to_streamed_response_wrapper(
+            stacks.update,
         )
         self.create_and_run = async_to_streamed_response_wrapper(
             stacks.create_and_run,
