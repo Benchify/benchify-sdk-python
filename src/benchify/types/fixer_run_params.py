@@ -3,62 +3,55 @@
 from __future__ import annotations
 
 from typing import List, Iterable, Optional
-from typing_extensions import Literal, Required, Annotated, TypedDict
+from typing_extensions import Literal, Required, TypedDict
 
-from .._utils import PropertyInfo
-
-__all__ = ["FixerRunParams", "File", "Fixes", "Meta"]
+__all__ = ["FixerRunParams", "File", "Meta"]
 
 
 class FixerRunParams(TypedDict, total=False):
-    files: Required[Iterable[File]]
-    """List of files to process"""
-
     bundle: bool
     """Whether to bundle the project (experimental)"""
 
-    fix_types: List[Literal["import_export", "string_literals", "css", "tailwind", "ai_fallback", "types"]]
+    event_id: str
+    """Unique identifier for the event"""
+
+    files: Optional[Iterable[File]]
+    """List of files to process (JSON format with inline contents).
+
+    For large projects, use multipart/form-data with manifest + bundle instead.
+    """
+
+    fixes: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]]
     """Configuration for which fix types to apply"""
 
-    fixes: Optional[Fixes]
-    """DEPRECATED: legacy boolean flags for which fixes to apply."""
-
     meta: Optional[Meta]
-    """Meta information for API requests"""
+    """Meta information for the request"""
+
+    mode: Literal["project", "files"]
+    """Fixer operating mode"""
+
+    response_encoding: Literal["json", "multipart"]
+    """
+    Response encoding: "json" for inline file contents in JSON, "multipart" for
+    multipart/form-data with tar.zst bundle + manifest
+    """
 
     response_format: Literal["DIFF", "CHANGED_FILES", "ALL_FILES"]
     """Format for the response (diff, changed_files, or all_files)"""
 
     template_id: Optional[str]
-    """ID of the template to use for the fixer process"""
+    """ID of the template to use"""
+
+    template_path: str
+    """Full path to the template"""
 
 
 class File(TypedDict, total=False):
     contents: Required[str]
-    """Original contents of the file before any modifications"""
+    """File contents"""
 
     path: Required[str]
     """Path to the file"""
-
-
-class Fixes(TypedDict, total=False):
-    css: Optional[bool]
-    """Whether to fix CSS issues"""
-
-    imports: Optional[bool]
-    """Whether to fix import issues"""
-
-    react: Optional[bool]
-    """Whether to fix React issues"""
-
-    string_literals: Annotated[Optional[bool], PropertyInfo(alias="stringLiterals")]
-    """Whether to fix string literal issues"""
-
-    tailwind: Optional[bool]
-    """Whether to fix Tailwind issues"""
-
-    ts_suggestions: Annotated[Optional[bool], PropertyInfo(alias="tsSuggestions")]
-    """Whether to fix TypeScript suggestions"""
 
 
 class Meta(TypedDict, total=False):

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Union, Mapping
+from typing import Any, Mapping
 from typing_extensions import Self, override
 
 import httpx
@@ -11,19 +11,20 @@ import httpx
 from . import _exceptions
 from ._qs import Querystring
 from ._types import (
-    NOT_GIVEN,
     Omit,
+    Headers,
     Timeout,
     NotGiven,
     Transport,
     ProxiesTypes,
     RequestOptions,
+    not_given,
 )
 from ._utils import is_given, get_async_library
 from ._version import __version__
-from .resources import fixer
+from .resources import fixer, stacks, validate_template, fix_string_literals
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
-from ._exceptions import BenchifyError, APIStatusError
+from ._exceptions import APIStatusError
 from ._base_client import (
     DEFAULT_MAX_RETRIES,
     SyncAPIClient,
@@ -44,18 +45,21 @@ __all__ = [
 
 class Benchify(SyncAPIClient):
     fixer: fixer.FixerResource
+    stacks: stacks.StacksResource
+    fix_string_literals: fix_string_literals.FixStringLiteralsResource
+    validate_template: validate_template.ValidateTemplateResource
     with_raw_response: BenchifyWithRawResponse
     with_streaming_response: BenchifyWithStreamedResponse
 
     # client options
-    api_key: str
+    api_key: str | None
 
     def __init__(
         self,
         *,
         api_key: str | None = None,
         base_url: str | httpx.URL | None = None,
-        timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
+        timeout: float | Timeout | None | NotGiven = not_given,
         max_retries: int = DEFAULT_MAX_RETRIES,
         default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
@@ -79,10 +83,6 @@ class Benchify(SyncAPIClient):
         """
         if api_key is None:
             api_key = os.environ.get("BENCHIFY_API_KEY")
-        if api_key is None:
-            raise BenchifyError(
-                "The api_key client option must be set either by passing api_key to the client or by setting the BENCHIFY_API_KEY environment variable"
-            )
         self.api_key = api_key
 
         if base_url is None:
@@ -102,6 +102,9 @@ class Benchify(SyncAPIClient):
         )
 
         self.fixer = fixer.FixerResource(self)
+        self.stacks = stacks.StacksResource(self)
+        self.fix_string_literals = fix_string_literals.FixStringLiteralsResource(self)
+        self.validate_template = validate_template.ValidateTemplateResource(self)
         self.with_raw_response = BenchifyWithRawResponse(self)
         self.with_streaming_response = BenchifyWithStreamedResponse(self)
 
@@ -114,6 +117,8 @@ class Benchify(SyncAPIClient):
     @override
     def auth_headers(self) -> dict[str, str]:
         api_key = self.api_key
+        if api_key is None:
+            return {}
         return {"Authorization": f"Bearer {api_key}"}
 
     @property
@@ -125,14 +130,25 @@ class Benchify(SyncAPIClient):
             **self._custom_headers,
         }
 
+    @override
+    def _validate_headers(self, headers: Headers, custom_headers: Headers) -> None:
+        if self.api_key and headers.get("Authorization"):
+            return
+        if isinstance(custom_headers.get("Authorization"), Omit):
+            return
+
+        raise TypeError(
+            '"Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted"'
+        )
+
     def copy(
         self,
         *,
         api_key: str | None = None,
         base_url: str | httpx.URL | None = None,
-        timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.Client | None = None,
-        max_retries: int | NotGiven = NOT_GIVEN,
+        max_retries: int | NotGiven = not_given,
         default_headers: Mapping[str, str] | None = None,
         set_default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
@@ -212,18 +228,21 @@ class Benchify(SyncAPIClient):
 
 class AsyncBenchify(AsyncAPIClient):
     fixer: fixer.AsyncFixerResource
+    stacks: stacks.AsyncStacksResource
+    fix_string_literals: fix_string_literals.AsyncFixStringLiteralsResource
+    validate_template: validate_template.AsyncValidateTemplateResource
     with_raw_response: AsyncBenchifyWithRawResponse
     with_streaming_response: AsyncBenchifyWithStreamedResponse
 
     # client options
-    api_key: str
+    api_key: str | None
 
     def __init__(
         self,
         *,
         api_key: str | None = None,
         base_url: str | httpx.URL | None = None,
-        timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
+        timeout: float | Timeout | None | NotGiven = not_given,
         max_retries: int = DEFAULT_MAX_RETRIES,
         default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
@@ -247,10 +266,6 @@ class AsyncBenchify(AsyncAPIClient):
         """
         if api_key is None:
             api_key = os.environ.get("BENCHIFY_API_KEY")
-        if api_key is None:
-            raise BenchifyError(
-                "The api_key client option must be set either by passing api_key to the client or by setting the BENCHIFY_API_KEY environment variable"
-            )
         self.api_key = api_key
 
         if base_url is None:
@@ -270,6 +285,9 @@ class AsyncBenchify(AsyncAPIClient):
         )
 
         self.fixer = fixer.AsyncFixerResource(self)
+        self.stacks = stacks.AsyncStacksResource(self)
+        self.fix_string_literals = fix_string_literals.AsyncFixStringLiteralsResource(self)
+        self.validate_template = validate_template.AsyncValidateTemplateResource(self)
         self.with_raw_response = AsyncBenchifyWithRawResponse(self)
         self.with_streaming_response = AsyncBenchifyWithStreamedResponse(self)
 
@@ -282,6 +300,8 @@ class AsyncBenchify(AsyncAPIClient):
     @override
     def auth_headers(self) -> dict[str, str]:
         api_key = self.api_key
+        if api_key is None:
+            return {}
         return {"Authorization": f"Bearer {api_key}"}
 
     @property
@@ -293,14 +313,25 @@ class AsyncBenchify(AsyncAPIClient):
             **self._custom_headers,
         }
 
+    @override
+    def _validate_headers(self, headers: Headers, custom_headers: Headers) -> None:
+        if self.api_key and headers.get("Authorization"):
+            return
+        if isinstance(custom_headers.get("Authorization"), Omit):
+            return
+
+        raise TypeError(
+            '"Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted"'
+        )
+
     def copy(
         self,
         *,
         api_key: str | None = None,
         base_url: str | httpx.URL | None = None,
-        timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.AsyncClient | None = None,
-        max_retries: int | NotGiven = NOT_GIVEN,
+        max_retries: int | NotGiven = not_given,
         default_headers: Mapping[str, str] | None = None,
         set_default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
@@ -381,21 +412,47 @@ class AsyncBenchify(AsyncAPIClient):
 class BenchifyWithRawResponse:
     def __init__(self, client: Benchify) -> None:
         self.fixer = fixer.FixerResourceWithRawResponse(client.fixer)
+        self.stacks = stacks.StacksResourceWithRawResponse(client.stacks)
+        self.fix_string_literals = fix_string_literals.FixStringLiteralsResourceWithRawResponse(
+            client.fix_string_literals
+        )
+        self.validate_template = validate_template.ValidateTemplateResourceWithRawResponse(client.validate_template)
 
 
 class AsyncBenchifyWithRawResponse:
     def __init__(self, client: AsyncBenchify) -> None:
         self.fixer = fixer.AsyncFixerResourceWithRawResponse(client.fixer)
+        self.stacks = stacks.AsyncStacksResourceWithRawResponse(client.stacks)
+        self.fix_string_literals = fix_string_literals.AsyncFixStringLiteralsResourceWithRawResponse(
+            client.fix_string_literals
+        )
+        self.validate_template = validate_template.AsyncValidateTemplateResourceWithRawResponse(
+            client.validate_template
+        )
 
 
 class BenchifyWithStreamedResponse:
     def __init__(self, client: Benchify) -> None:
         self.fixer = fixer.FixerResourceWithStreamingResponse(client.fixer)
+        self.stacks = stacks.StacksResourceWithStreamingResponse(client.stacks)
+        self.fix_string_literals = fix_string_literals.FixStringLiteralsResourceWithStreamingResponse(
+            client.fix_string_literals
+        )
+        self.validate_template = validate_template.ValidateTemplateResourceWithStreamingResponse(
+            client.validate_template
+        )
 
 
 class AsyncBenchifyWithStreamedResponse:
     def __init__(self, client: AsyncBenchify) -> None:
         self.fixer = fixer.AsyncFixerResourceWithStreamingResponse(client.fixer)
+        self.stacks = stacks.AsyncStacksResourceWithStreamingResponse(client.stacks)
+        self.fix_string_literals = fix_string_literals.AsyncFixStringLiteralsResourceWithStreamingResponse(
+            client.fix_string_literals
+        )
+        self.validate_template = validate_template.AsyncValidateTemplateResourceWithStreamingResponse(
+            client.validate_template
+        )
 
 
 Client = Benchify
