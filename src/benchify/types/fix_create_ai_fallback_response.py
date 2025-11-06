@@ -4,80 +4,35 @@ from typing import Dict, List, Optional
 
 from .._models import BaseModel
 
-__all__ = [
-    "FixCreateAIFallbackResponse",
-    "Data",
-    "DataFileResult",
-    "DataSuggestedChanges",
-    "DataSuggestedChangesAllFile",
-    "DataSuggestedChangesChangedFile",
-    "Error",
-    "Meta",
-]
+__all__ = ["FixCreateAIFallbackResponse", "Data", "DataFileResults", "Error", "Meta"]
 
 
-class DataFileResult(BaseModel):
-    confidence_score: float
-    """Confidence score of the fix (0-1)"""
+class DataFileResults(BaseModel):
+    confidence_scores: List[float]
+    """Array of confidence scores for fixes applied"""
 
-    issues_remaining: float
+    fixed_content: str
+    """The fixed file contents"""
+
+    fixes_applied: float
+    """Number of fixes applied"""
+
+    remaining_issues: float
     """Number of issues still remaining"""
 
-    issues_resolved: float
-    """Number of issues resolved"""
-
-    path: str
-    """Path of the file"""
-
-    success: bool
-    """Whether the AI fix was successful"""
-
-    alternative_suggestions: Optional[List[str]] = None
-    """Alternative fix suggestions"""
-
-
-class DataSuggestedChangesAllFile(BaseModel):
-    contents: str
-    """Contents of the file"""
-
-    path: str
-    """Path of the file"""
-
-
-class DataSuggestedChangesChangedFile(BaseModel):
-    contents: str
-    """Contents of the file"""
-
-    path: str
-    """Path of the file"""
-
-
-class DataSuggestedChanges(BaseModel):
-    all_files: Optional[List[DataSuggestedChangesAllFile]] = None
-    """List of all files with their current contents.
-
-    Only present when response_encoding is "json".
-    """
-
-    changed_files: Optional[List[DataSuggestedChangesChangedFile]] = None
-    """List of changed files with their new contents.
-
-    Only present when response_encoding is "json".
-    """
-
-    diff: Optional[str] = None
-    """Unified diff of changes. Only present when response_encoding is "json"."""
+    status: str
+    """Status of the fix operation (e.g., "FIXED", "NO_ISSUES", "FAILED")"""
 
 
 class Data(BaseModel):
-    file_results: List[DataFileResult]
-    """Per-file AI fix results"""
+    execution_time: float
+    """Time taken to execute AI fallback in seconds"""
+
+    file_results: Dict[str, DataFileResults]
+    """Per-file AI fix results keyed by file path"""
 
     files_fixed: float
     """Number of files that were fixed"""
-
-    fixer_version: str
-    """Version of the fixer"""
 
     issues_remaining: float
     """Total number of issues still remaining"""
@@ -88,8 +43,11 @@ class Data(BaseModel):
     success: bool
     """Whether the AI fallback was successful overall"""
 
-    suggested_changes: DataSuggestedChanges
-    """Suggested changes from AI fixes"""
+    ai_suggestions: Optional[str] = None
+    """Additional AI suggestions if available"""
+
+    fixer_version: Optional[str] = None
+    """Version of the fixer"""
 
 
 class Error(BaseModel):

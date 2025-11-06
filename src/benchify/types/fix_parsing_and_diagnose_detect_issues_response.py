@@ -7,6 +7,7 @@ from .._models import BaseModel
 __all__ = [
     "FixParsingAndDiagnoseDetectIssuesResponse",
     "Data",
+    "DataChangedFile",
     "DataDiagnostics",
     "DataDiagnosticsNotRequested",
     "DataDiagnosticsNotRequestedFileToDiagnostic",
@@ -14,10 +15,18 @@ __all__ = [
     "DataDiagnosticsRequested",
     "DataDiagnosticsRequestedFileToDiagnostic",
     "DataDiagnosticsRequestedFileToDiagnosticLocation",
-    "DataStatistics",
+    "DataFixTypesAvailable",
     "Error",
     "Meta",
 ]
+
+
+class DataChangedFile(BaseModel):
+    contents: str
+    """Contents of the file"""
+
+    path: str
+    """Path of the file"""
 
 
 class DataDiagnosticsNotRequestedFileToDiagnosticLocation(BaseModel):
@@ -106,29 +115,53 @@ class DataDiagnostics(BaseModel):
     """Diagnostics that match the requested fix types"""
 
 
-class DataStatistics(BaseModel):
-    by_severity: Dict[str, float]
-    """Count of diagnostics by severity"""
-
-    by_type: Dict[str, float]
-    """Count of diagnostics by type"""
-
-    total_diagnostics: float
-    """Total number of diagnostics found"""
-
-    estimated_fix_time_seconds: Optional[float] = None
+class DataFixTypesAvailable(BaseModel):
+    estimated_time_seconds: float
     """Estimated time to fix in seconds"""
+
+    fix_type: str
+    """The type of fix available"""
+
+    issue_count: float
+    """Number of issues that can be fixed with this type"""
+
+    priority: float
+    """Priority of this fix type (lower is higher priority)"""
 
 
 class Data(BaseModel):
+    changed_files: List[DataChangedFile]
+    """Files that were changed during detection"""
+
+    detection_time: float
+    """Time taken to detect issues in seconds"""
+
+    diagnosis_iterations: float
+    """Number of diagnostic iterations performed"""
+
     diagnostics: DataDiagnostics
     """Diagnostics split into fixable (requested) and other (not_requested) groups"""
 
-    fixer_version: str
-    """Version of the fixer"""
+    estimated_total_fix_time: float
+    """Estimated total time to fix all issues in seconds"""
 
-    statistics: DataStatistics
-    """Statistics about the diagnostics"""
+    files_analyzed: float
+    """Number of files that were analyzed"""
+
+    fix_types_available: List[DataFixTypesAvailable]
+    """Available fix types with metadata"""
+
+    fixable_issues: float
+    """Number of issues that can be fixed"""
+
+    fixes_applied: float
+    """Number of fixes that were applied during detection"""
+
+    total_issues: float
+    """Total number of issues found"""
+
+    fixer_version: Optional[str] = None
+    """Version of the fixer"""
 
 
 class Error(BaseModel):
