@@ -421,8 +421,8 @@ class TestStacks:
     def test_method_wait_for_dev_server_url_with_all_params(self, client: Benchify) -> None:
         stack = client.stacks.wait_for_dev_server_url(
             id="stk_abc123",
-            interval="200",
-            api_timeout="60",
+            interval=200,
+            wait_timeout=60,
         )
         assert_matches_type(StackWaitForDevServerURLResponse, stack, path=["response"])
 
@@ -861,8 +861,8 @@ class TestAsyncStacks:
     async def test_method_wait_for_dev_server_url_with_all_params(self, async_client: AsyncBenchify) -> None:
         stack = await async_client.stacks.wait_for_dev_server_url(
             id="stk_abc123",
-            interval="200",
-            api_timeout="60",
+            interval=200,
+            wait_timeout=60,
         )
         assert_matches_type(StackWaitForDevServerURLResponse, stack, path=["response"])
 

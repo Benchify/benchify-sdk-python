@@ -114,7 +114,7 @@ class FixerResource(SyncAPIResource):
                 "template_path": template_path,
             }
         )
-        extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["manifest"], ["bundle"]])
+        extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files_manifest"], ["files_data"]])
         if extracted_files:
             # It should be noted that the actual Content-Type header that will be
             # sent to the server will contain a `boundary` parameter, e.g.
@@ -221,7 +221,7 @@ class AsyncFixerResource(AsyncAPIResource):
                 "template_path": template_path,
             }
         )
-        extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["manifest"], ["bundle"]])
+        extracted_files = extract_files(cast(Mapping[str, object], body), paths=[["files_manifest"], ["files_data"]])
         if extracted_files:
             # It should be noted that the actual Content-Type header that will be
             # sent to the server will contain a `boundary` parameter, e.g.

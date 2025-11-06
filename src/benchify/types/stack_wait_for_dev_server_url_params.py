@@ -2,16 +2,14 @@
 
 from __future__ import annotations
 
-from typing_extensions import Annotated, TypedDict
-
-from .._utils import PropertyInfo
+from typing_extensions import TypedDict
 
 __all__ = ["StackWaitForDevServerURLParams"]
 
 
 class StackWaitForDevServerURLParams(TypedDict, total=False):
-    interval: str
-    """Polling interval in ms"""
+    interval: float
+    """Polling interval in milliseconds"""
 
-    api_timeout: Annotated[str, PropertyInfo(alias="timeout")]
+    wait_timeout: float
     """Timeout in seconds"""
