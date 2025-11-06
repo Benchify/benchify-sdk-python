@@ -22,7 +22,7 @@ from ._types import (
 )
 from ._utils import is_given, get_async_library
 from ._version import __version__
-from .resources import fixer, stacks, validate_template, fix_string_literals
+from .resources import fix, fixer, stacks, validate_template, fix_string_literals, fix_parsing_and_diagnose
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import APIStatusError
 from ._base_client import (
@@ -48,6 +48,8 @@ class Benchify(SyncAPIClient):
     stacks: stacks.StacksResource
     fix_string_literals: fix_string_literals.FixStringLiteralsResource
     validate_template: validate_template.ValidateTemplateResource
+    fix_parsing_and_diagnose: fix_parsing_and_diagnose.FixParsingAndDiagnoseResource
+    fix: fix.FixResource
     with_raw_response: BenchifyWithRawResponse
     with_streaming_response: BenchifyWithStreamedResponse
 
@@ -105,6 +107,8 @@ class Benchify(SyncAPIClient):
         self.stacks = stacks.StacksResource(self)
         self.fix_string_literals = fix_string_literals.FixStringLiteralsResource(self)
         self.validate_template = validate_template.ValidateTemplateResource(self)
+        self.fix_parsing_and_diagnose = fix_parsing_and_diagnose.FixParsingAndDiagnoseResource(self)
+        self.fix = fix.FixResource(self)
         self.with_raw_response = BenchifyWithRawResponse(self)
         self.with_streaming_response = BenchifyWithStreamedResponse(self)
 
@@ -231,6 +235,8 @@ class AsyncBenchify(AsyncAPIClient):
     stacks: stacks.AsyncStacksResource
     fix_string_literals: fix_string_literals.AsyncFixStringLiteralsResource
     validate_template: validate_template.AsyncValidateTemplateResource
+    fix_parsing_and_diagnose: fix_parsing_and_diagnose.AsyncFixParsingAndDiagnoseResource
+    fix: fix.AsyncFixResource
     with_raw_response: AsyncBenchifyWithRawResponse
     with_streaming_response: AsyncBenchifyWithStreamedResponse
 
@@ -288,6 +294,8 @@ class AsyncBenchify(AsyncAPIClient):
         self.stacks = stacks.AsyncStacksResource(self)
         self.fix_string_literals = fix_string_literals.AsyncFixStringLiteralsResource(self)
         self.validate_template = validate_template.AsyncValidateTemplateResource(self)
+        self.fix_parsing_and_diagnose = fix_parsing_and_diagnose.AsyncFixParsingAndDiagnoseResource(self)
+        self.fix = fix.AsyncFixResource(self)
         self.with_raw_response = AsyncBenchifyWithRawResponse(self)
         self.with_streaming_response = AsyncBenchifyWithStreamedResponse(self)
 
@@ -417,6 +425,10 @@ class BenchifyWithRawResponse:
             client.fix_string_literals
         )
         self.validate_template = validate_template.ValidateTemplateResourceWithRawResponse(client.validate_template)
+        self.fix_parsing_and_diagnose = fix_parsing_and_diagnose.FixParsingAndDiagnoseResourceWithRawResponse(
+            client.fix_parsing_and_diagnose
+        )
+        self.fix = fix.FixResourceWithRawResponse(client.fix)
 
 
 class AsyncBenchifyWithRawResponse:
@@ -429,6 +441,10 @@ class AsyncBenchifyWithRawResponse:
         self.validate_template = validate_template.AsyncValidateTemplateResourceWithRawResponse(
             client.validate_template
         )
+        self.fix_parsing_and_diagnose = fix_parsing_and_diagnose.AsyncFixParsingAndDiagnoseResourceWithRawResponse(
+            client.fix_parsing_and_diagnose
+        )
+        self.fix = fix.AsyncFixResourceWithRawResponse(client.fix)
 
 
 class BenchifyWithStreamedResponse:
@@ -441,6 +457,10 @@ class BenchifyWithStreamedResponse:
         self.validate_template = validate_template.ValidateTemplateResourceWithStreamingResponse(
             client.validate_template
         )
+        self.fix_parsing_and_diagnose = fix_parsing_and_diagnose.FixParsingAndDiagnoseResourceWithStreamingResponse(
+            client.fix_parsing_and_diagnose
+        )
+        self.fix = fix.FixResourceWithStreamingResponse(client.fix)
 
 
 class AsyncBenchifyWithStreamedResponse:
@@ -453,6 +473,12 @@ class AsyncBenchifyWithStreamedResponse:
         self.validate_template = validate_template.AsyncValidateTemplateResourceWithStreamingResponse(
             client.validate_template
         )
+        self.fix_parsing_and_diagnose = (
+            fix_parsing_and_diagnose.AsyncFixParsingAndDiagnoseResourceWithStreamingResponse(
+                client.fix_parsing_and_diagnose
+            )
+        )
+        self.fix = fix.AsyncFixResourceWithStreamingResponse(client.fix)
 
 
 Client = Benchify

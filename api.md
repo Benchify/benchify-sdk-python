@@ -62,3 +62,27 @@ from benchify.types import ValidateTemplateValidateResponse
 Methods:
 
 - <code title="post /v1/validate-template">client.validate_template.<a href="./src/benchify/resources/validate_template.py">validate</a>(\*\*<a href="src/benchify/types/validate_template_validate_params.py">params</a>) -> <a href="./src/benchify/types/validate_template_validate_response.py">ValidateTemplateValidateResponse</a></code>
+
+# FixParsingAndDiagnose
+
+Types:
+
+```python
+from benchify.types import FixParsingAndDiagnoseDetectIssuesResponse
+```
+
+Methods:
+
+- <code title="post /v1/fix-parsing-and-diagnose">client.fix_parsing_and_diagnose.<a href="./src/benchify/resources/fix_parsing_and_diagnose.py">detect_issues</a>(\*\*<a href="src/benchify/types/fix_parsing_and_diagnose_detect_issues_params.py">params</a>) -> <a href="./src/benchify/types/fix_parsing_and_diagnose_detect_issues_response.py">FixParsingAndDiagnoseDetectIssuesResponse</a></code>
+
+# Fix
+
+Types:
+
+```python
+from benchify.types import FixCreateAIFallbackResponse
+```
+
+Methods:
+
+- <code title="post /v1/fix/ai-fallback">client.fix.<a href="./src/benchify/resources/fix.py">create_ai_fallback</a>(\*\*<a href="src/benchify/types/fix_create_ai_fallback_params.py">params</a>) -> <a href="./src/benchify/types/fix_create_ai_fallback_response.py">FixCreateAIFallbackResponse</a></code>
