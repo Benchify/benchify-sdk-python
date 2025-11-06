@@ -1,5 +1,13 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+from .fix import (
+    FixResource,
+    AsyncFixResource,
+    FixResourceWithRawResponse,
+    AsyncFixResourceWithRawResponse,
+    FixResourceWithStreamingResponse,
+    AsyncFixResourceWithStreamingResponse,
+)
 from .fixer import (
     FixerResource,
     AsyncFixerResource,
@@ -32,6 +40,14 @@ from .fix_string_literals import (
     FixStringLiteralsResourceWithStreamingResponse,
     AsyncFixStringLiteralsResourceWithStreamingResponse,
 )
+from .fix_parsing_and_diagnose import (
+    FixParsingAndDiagnoseResource,
+    AsyncFixParsingAndDiagnoseResource,
+    FixParsingAndDiagnoseResourceWithRawResponse,
+    AsyncFixParsingAndDiagnoseResourceWithRawResponse,
+    FixParsingAndDiagnoseResourceWithStreamingResponse,
+    AsyncFixParsingAndDiagnoseResourceWithStreamingResponse,
+)
 
 __all__ = [
     "FixerResource",
@@ -58,4 +74,16 @@ __all__ = [
     "AsyncValidateTemplateResourceWithRawResponse",
     "ValidateTemplateResourceWithStreamingResponse",
     "AsyncValidateTemplateResourceWithStreamingResponse",
+    "FixParsingAndDiagnoseResource",
+    "AsyncFixParsingAndDiagnoseResource",
+    "FixParsingAndDiagnoseResourceWithRawResponse",
+    "AsyncFixParsingAndDiagnoseResourceWithRawResponse",
+    "FixParsingAndDiagnoseResourceWithStreamingResponse",
+    "AsyncFixParsingAndDiagnoseResourceWithStreamingResponse",
+    "FixResource",
+    "AsyncFixResource",
+    "FixResourceWithRawResponse",
+    "AsyncFixResourceWithRawResponse",
+    "FixResourceWithStreamingResponse",
+    "AsyncFixResourceWithStreamingResponse",
 ]
