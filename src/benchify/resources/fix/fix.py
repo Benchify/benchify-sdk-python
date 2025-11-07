@@ -6,24 +6,36 @@ from typing import Iterable, Optional
 
 import httpx
 
-from ..types import fix_create_ai_fallback_params
-from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from .._utils import maybe_transform, async_maybe_transform
-from .._compat import cached_property
-from .._resource import SyncAPIResource, AsyncAPIResource
-from .._response import (
+from ...types import fix_create_ai_fallback_params
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ..._utils import maybe_transform, async_maybe_transform
+from .standard import (
+    StandardResource,
+    AsyncStandardResource,
+    StandardResourceWithRawResponse,
+    AsyncStandardResourceWithRawResponse,
+    StandardResourceWithStreamingResponse,
+    AsyncStandardResourceWithStreamingResponse,
+)
+from ..._compat import cached_property
+from ..._resource import SyncAPIResource, AsyncAPIResource
+from ..._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .._base_client import make_request_options
-from ..types.fix_create_ai_fallback_response import FixCreateAIFallbackResponse
+from ..._base_client import make_request_options
+from ...types.fix_create_ai_fallback_response import FixCreateAIFallbackResponse
 
 __all__ = ["FixResource", "AsyncFixResource"]
 
 
 class FixResource(SyncAPIResource):
+    @cached_property
+    def standard(self) -> StandardResource:
+        return StandardResource(self._client)
+
     @cached_property
     def with_raw_response(self) -> FixResourceWithRawResponse:
         """
@@ -111,6 +123,10 @@ class FixResource(SyncAPIResource):
 
 
 class AsyncFixResource(AsyncAPIResource):
+    @cached_property
+    def standard(self) -> AsyncStandardResource:
+        return AsyncStandardResource(self._client)
+
     @cached_property
     def with_raw_response(self) -> AsyncFixResourceWithRawResponse:
         """
@@ -205,6 +221,10 @@ class FixResourceWithRawResponse:
             fix.create_ai_fallback,
         )
 
+    @cached_property
+    def standard(self) -> StandardResourceWithRawResponse:
+        return StandardResourceWithRawResponse(self._fix.standard)
+
 
 class AsyncFixResourceWithRawResponse:
     def __init__(self, fix: AsyncFixResource) -> None:
@@ -213,6 +233,10 @@ class AsyncFixResourceWithRawResponse:
         self.create_ai_fallback = async_to_raw_response_wrapper(
             fix.create_ai_fallback,
         )
+
+    @cached_property
+    def standard(self) -> AsyncStandardResourceWithRawResponse:
+        return AsyncStandardResourceWithRawResponse(self._fix.standard)
 
 
 class FixResourceWithStreamingResponse:
@@ -223,6 +247,10 @@ class FixResourceWithStreamingResponse:
             fix.create_ai_fallback,
         )
 
+    @cached_property
+    def standard(self) -> StandardResourceWithStreamingResponse:
+        return StandardResourceWithStreamingResponse(self._fix.standard)
+
 
 class AsyncFixResourceWithStreamingResponse:
     def __init__(self, fix: AsyncFixResource) -> None:
@@ -231,3 +259,7 @@ class AsyncFixResourceWithStreamingResponse:
         self.create_ai_fallback = async_to_streamed_response_wrapper(
             fix.create_ai_fallback,
         )
+
+    @cached_property
+    def standard(self) -> AsyncStandardResourceWithStreamingResponse:
+        return AsyncStandardResourceWithStreamingResponse(self._fix.standard)
