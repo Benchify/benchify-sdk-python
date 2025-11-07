@@ -89,4 +89,16 @@ from benchify.types import FixCreateAIFallbackResponse
 
 Methods:
 
-- <code title="post /v1/fix/ai-fallback">client.fix.<a href="./src/benchify/resources/fix.py">create_ai_fallback</a>(\*\*<a href="src/benchify/types/fix_create_ai_fallback_params.py">params</a>) -> <a href="./src/benchify/types/fix_create_ai_fallback_response.py">FixCreateAIFallbackResponse</a></code>
+- <code title="post /v1/fix/ai-fallback">client.fix.<a href="./src/benchify/resources/fix/fix.py">create_ai_fallback</a>(\*\*<a href="src/benchify/types/fix_create_ai_fallback_params.py">params</a>) -> <a href="./src/benchify/types/fix_create_ai_fallback_response.py">FixCreateAIFallbackResponse</a></code>
+
+## Standard
+
+Types:
+
+```python
+from benchify.types.fix import StandardCreateResponse
+```
+
+Methods:
+
+- <code title="post /v1/fix-standard">client.fix.standard.<a href="./src/benchify/resources/fix/standard.py">create</a>(\*\*<a href="src/benchify/types/fix/standard_create_params.py">params</a>) -> <a href="./src/benchify/types/fix/standard_create_response.py">StandardCreateResponse</a></code>
