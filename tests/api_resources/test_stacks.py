@@ -10,6 +10,7 @@ import pytest
 from benchify import Benchify, AsyncBenchify
 from tests.utils import assert_matches_type
 from benchify.types import (
+    StackResetResponse,
     StackCreateResponse,
     StackUpdateResponse,
     StackGetLogsResponse,
@@ -454,6 +455,62 @@ class TestStacks:
             client.stacks.with_raw_response.read_file(
                 id="",
                 path="/workspace/index.html",
+            )
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_reset(self, client: Benchify) -> None:
+        stack = client.stacks.reset(
+            id="stk_abc123",
+            tarball_base64="tarball_base64",
+        )
+        assert_matches_type(StackResetResponse, stack, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_reset_with_all_params(self, client: Benchify) -> None:
+        stack = client.stacks.reset(
+            id="stk_abc123",
+            tarball_base64="tarball_base64",
+            tarball_filename="project.tar.gz",
+        )
+        assert_matches_type(StackResetResponse, stack, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_raw_response_reset(self, client: Benchify) -> None:
+        response = client.stacks.with_raw_response.reset(
+            id="stk_abc123",
+            tarball_base64="tarball_base64",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        stack = response.parse()
+        assert_matches_type(StackResetResponse, stack, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_streaming_response_reset(self, client: Benchify) -> None:
+        with client.stacks.with_streaming_response.reset(
+            id="stk_abc123",
+            tarball_base64="tarball_base64",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            stack = response.parse()
+            assert_matches_type(StackResetResponse, stack, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_path_params_reset(self, client: Benchify) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            client.stacks.with_raw_response.reset(
+                id="",
+                tarball_base64="tarball_base64",
             )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
@@ -990,6 +1047,62 @@ class TestAsyncStacks:
             await async_client.stacks.with_raw_response.read_file(
                 id="",
                 path="/workspace/index.html",
+            )
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_reset(self, async_client: AsyncBenchify) -> None:
+        stack = await async_client.stacks.reset(
+            id="stk_abc123",
+            tarball_base64="tarball_base64",
+        )
+        assert_matches_type(StackResetResponse, stack, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_reset_with_all_params(self, async_client: AsyncBenchify) -> None:
+        stack = await async_client.stacks.reset(
+            id="stk_abc123",
+            tarball_base64="tarball_base64",
+            tarball_filename="project.tar.gz",
+        )
+        assert_matches_type(StackResetResponse, stack, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_raw_response_reset(self, async_client: AsyncBenchify) -> None:
+        response = await async_client.stacks.with_raw_response.reset(
+            id="stk_abc123",
+            tarball_base64="tarball_base64",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        stack = await response.parse()
+        assert_matches_type(StackResetResponse, stack, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_streaming_response_reset(self, async_client: AsyncBenchify) -> None:
+        async with async_client.stacks.with_streaming_response.reset(
+            id="stk_abc123",
+            tarball_base64="tarball_base64",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            stack = await response.parse()
+            assert_matches_type(StackResetResponse, stack, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_path_params_reset(self, async_client: AsyncBenchify) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+            await async_client.stacks.with_raw_response.reset(
+                id="",
+                tarball_base64="tarball_base64",
             )
 
     @pytest.mark.skip(reason="Prism tests are disabled")

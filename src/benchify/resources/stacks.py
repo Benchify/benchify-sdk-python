@@ -7,6 +7,7 @@ from typing import Mapping, cast
 import httpx
 
 from ..types import (
+    stack_reset_params,
     stack_create_params,
     stack_update_params,
     stack_get_logs_params,
@@ -27,6 +28,7 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
+from ..types.stack_reset_response import StackResetResponse
 from ..types.stack_create_response import StackCreateResponse
 from ..types.stack_update_response import StackUpdateResponse
 from ..types.stack_get_logs_response import StackGetLogsResponse
@@ -485,6 +487,56 @@ class StacksResource(SyncAPIResource):
                 query=maybe_transform({"path": path}, stack_read_file_params.StackReadFileParams),
             ),
             cast_to=StackReadFileResponse,
+        )
+
+    def reset(
+        self,
+        id: str,
+        *,
+        tarball_base64: str,
+        tarball_filename: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> StackResetResponse:
+        """Clears /workspace and extracts a new tarball into the sandbox.
+
+        Use
+        tarball_base64 and optional tarball_filename.
+
+        Args:
+          id: Stack identifier
+
+          tarball_base64: Base64-encoded tarball content
+
+          tarball_filename: Optional tarball filename
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/stacks/{id}/reset",
+            body=maybe_transform(
+                {
+                    "tarball_base64": tarball_base64,
+                    "tarball_filename": tarball_filename,
+                },
+                stack_reset_params.StackResetParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=StackResetResponse,
         )
 
     def wait_for_dev_server_url(
@@ -1036,6 +1088,56 @@ class AsyncStacksResource(AsyncAPIResource):
             cast_to=StackReadFileResponse,
         )
 
+    async def reset(
+        self,
+        id: str,
+        *,
+        tarball_base64: str,
+        tarball_filename: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> StackResetResponse:
+        """Clears /workspace and extracts a new tarball into the sandbox.
+
+        Use
+        tarball_base64 and optional tarball_filename.
+
+        Args:
+          id: Stack identifier
+
+          tarball_base64: Base64-encoded tarball content
+
+          tarball_filename: Optional tarball filename
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/stacks/{id}/reset",
+            body=await async_maybe_transform(
+                {
+                    "tarball_base64": tarball_base64,
+                    "tarball_filename": tarball_filename,
+                },
+                stack_reset_params.StackResetParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=StackResetResponse,
+        )
+
     async def wait_for_dev_server_url(
         self,
         id: str,
@@ -1168,6 +1270,9 @@ class StacksResourceWithRawResponse:
         self.read_file = to_raw_response_wrapper(
             stacks.read_file,
         )
+        self.reset = to_raw_response_wrapper(
+            stacks.reset,
+        )
         self.wait_for_dev_server_url = to_raw_response_wrapper(
             stacks.wait_for_dev_server_url,
         )
@@ -1206,6 +1311,9 @@ class AsyncStacksResourceWithRawResponse:
         )
         self.read_file = async_to_raw_response_wrapper(
             stacks.read_file,
+        )
+        self.reset = async_to_raw_response_wrapper(
+            stacks.reset,
         )
         self.wait_for_dev_server_url = async_to_raw_response_wrapper(
             stacks.wait_for_dev_server_url,
@@ -1246,6 +1354,9 @@ class StacksResourceWithStreamingResponse:
         self.read_file = to_streamed_response_wrapper(
             stacks.read_file,
         )
+        self.reset = to_streamed_response_wrapper(
+            stacks.reset,
+        )
         self.wait_for_dev_server_url = to_streamed_response_wrapper(
             stacks.wait_for_dev_server_url,
         )
@@ -1284,6 +1395,9 @@ class AsyncStacksResourceWithStreamingResponse:
         )
         self.read_file = async_to_streamed_response_wrapper(
             stacks.read_file,
+        )
+        self.reset = async_to_streamed_response_wrapper(
+            stacks.reset,
         )
         self.wait_for_dev_server_url = async_to_streamed_response_wrapper(
             stacks.wait_for_dev_server_url,

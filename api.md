@@ -24,6 +24,7 @@ from benchify.types import (
     StackGetLogsResponse,
     StackGetNetworkInfoResponse,
     StackReadFileResponse,
+    StackResetResponse,
     StackWaitForDevServerURLResponse,
     StackWriteFileResponse,
 )
@@ -40,6 +41,7 @@ Methods:
 - <code title="get /v1/stacks/{id}/logs">client.stacks.<a href="./src/benchify/resources/stacks.py">get_logs</a>(id, \*\*<a href="src/benchify/types/stack_get_logs_params.py">params</a>) -> <a href="./src/benchify/types/stack_get_logs_response.py">StackGetLogsResponse</a></code>
 - <code title="get /v1/stacks/{id}/network-info">client.stacks.<a href="./src/benchify/resources/stacks.py">get_network_info</a>(id) -> <a href="./src/benchify/types/stack_get_network_info_response.py">StackGetNetworkInfoResponse</a></code>
 - <code title="get /v1/stacks/{id}/read-file">client.stacks.<a href="./src/benchify/resources/stacks.py">read_file</a>(id, \*\*<a href="src/benchify/types/stack_read_file_params.py">params</a>) -> <a href="./src/benchify/types/stack_read_file_response.py">StackReadFileResponse</a></code>
+- <code title="post /v1/stacks/{id}/reset">client.stacks.<a href="./src/benchify/resources/stacks.py">reset</a>(id, \*\*<a href="src/benchify/types/stack_reset_params.py">params</a>) -> <a href="./src/benchify/types/stack_reset_response.py">StackResetResponse</a></code>
 - <code title="get /v1/stacks/{id}/wait-url">client.stacks.<a href="./src/benchify/resources/stacks.py">wait_for_dev_server_url</a>(id, \*\*<a href="src/benchify/types/stack_wait_for_dev_server_url_params.py">params</a>) -> <a href="./src/benchify/types/stack_wait_for_dev_server_url_response.py">StackWaitForDevServerURLResponse</a></code>
 - <code title="post /v1/stacks/{id}/write-file">client.stacks.<a href="./src/benchify/resources/stacks.py">write_file</a>(id, \*\*<a href="src/benchify/types/stack_write_file_params.py">params</a>) -> <a href="./src/benchify/types/stack_write_file_response.py">StackWriteFileResponse</a></code>
 
