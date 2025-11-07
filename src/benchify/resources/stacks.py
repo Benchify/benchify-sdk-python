@@ -10,6 +10,8 @@ from ..types import (
     stack_create_params,
     stack_update_params,
     stack_get_logs_params,
+    stack_read_file_params,
+    stack_write_file_params,
     stack_create_and_run_params,
     stack_execute_command_params,
     stack_wait_for_dev_server_url_params,
@@ -29,6 +31,8 @@ from ..types.stack_create_response import StackCreateResponse
 from ..types.stack_update_response import StackUpdateResponse
 from ..types.stack_get_logs_response import StackGetLogsResponse
 from ..types.stack_retrieve_response import StackRetrieveResponse
+from ..types.stack_read_file_response import StackReadFileResponse
+from ..types.stack_write_file_response import StackWriteFileResponse
 from ..types.stack_create_and_run_response import StackCreateAndRunResponse
 from ..types.stack_execute_command_response import StackExecuteCommandResponse
 from ..types.stack_get_network_info_response import StackGetNetworkInfoResponse
@@ -441,6 +445,48 @@ class StacksResource(SyncAPIResource):
             cast_to=StackGetNetworkInfoResponse,
         )
 
+    def read_file(
+        self,
+        id: str,
+        *,
+        path: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> StackReadFileResponse:
+        """
+        Reads file content from inside the sandbox (using exec under the hood)
+
+        Args:
+          id: Stack identifier
+
+          path: Absolute path inside the sandbox
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._get(
+            f"/v1/stacks/{id}/read-file",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform({"path": path}, stack_read_file_params.StackReadFileParams),
+            ),
+            cast_to=StackReadFileResponse,
+        )
+
     def wait_for_dev_server_url(
         self,
         id: str,
@@ -490,6 +536,55 @@ class StacksResource(SyncAPIResource):
                 ),
             ),
             cast_to=StackWaitForDevServerURLResponse,
+        )
+
+    def write_file(
+        self,
+        id: str,
+        *,
+        content: str,
+        path: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> StackWriteFileResponse:
+        """
+        Writes file content to a path inside the sandbox (via mount or exec under the
+        hood)
+
+        Args:
+          id: Stack identifier
+
+          content: File contents
+
+          path: Absolute path inside the sandbox
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return self._post(
+            f"/v1/stacks/{id}/write-file",
+            body=maybe_transform(
+                {
+                    "content": content,
+                    "path": path,
+                },
+                stack_write_file_params.StackWriteFileParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=StackWriteFileResponse,
         )
 
 
@@ -899,6 +994,48 @@ class AsyncStacksResource(AsyncAPIResource):
             cast_to=StackGetNetworkInfoResponse,
         )
 
+    async def read_file(
+        self,
+        id: str,
+        *,
+        path: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> StackReadFileResponse:
+        """
+        Reads file content from inside the sandbox (using exec under the hood)
+
+        Args:
+          id: Stack identifier
+
+          path: Absolute path inside the sandbox
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._get(
+            f"/v1/stacks/{id}/read-file",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform({"path": path}, stack_read_file_params.StackReadFileParams),
+            ),
+            cast_to=StackReadFileResponse,
+        )
+
     async def wait_for_dev_server_url(
         self,
         id: str,
@@ -950,6 +1087,55 @@ class AsyncStacksResource(AsyncAPIResource):
             cast_to=StackWaitForDevServerURLResponse,
         )
 
+    async def write_file(
+        self,
+        id: str,
+        *,
+        content: str,
+        path: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> StackWriteFileResponse:
+        """
+        Writes file content to a path inside the sandbox (via mount or exec under the
+        hood)
+
+        Args:
+          id: Stack identifier
+
+          content: File contents
+
+          path: Absolute path inside the sandbox
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not id:
+            raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
+        return await self._post(
+            f"/v1/stacks/{id}/write-file",
+            body=await async_maybe_transform(
+                {
+                    "content": content,
+                    "path": path,
+                },
+                stack_write_file_params.StackWriteFileParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=StackWriteFileResponse,
+        )
+
 
 class StacksResourceWithRawResponse:
     def __init__(self, stacks: StacksResource) -> None:
@@ -979,8 +1165,14 @@ class StacksResourceWithRawResponse:
         self.get_network_info = to_raw_response_wrapper(
             stacks.get_network_info,
         )
+        self.read_file = to_raw_response_wrapper(
+            stacks.read_file,
+        )
         self.wait_for_dev_server_url = to_raw_response_wrapper(
             stacks.wait_for_dev_server_url,
+        )
+        self.write_file = to_raw_response_wrapper(
+            stacks.write_file,
         )
 
 
@@ -1012,8 +1204,14 @@ class AsyncStacksResourceWithRawResponse:
         self.get_network_info = async_to_raw_response_wrapper(
             stacks.get_network_info,
         )
+        self.read_file = async_to_raw_response_wrapper(
+            stacks.read_file,
+        )
         self.wait_for_dev_server_url = async_to_raw_response_wrapper(
             stacks.wait_for_dev_server_url,
+        )
+        self.write_file = async_to_raw_response_wrapper(
+            stacks.write_file,
         )
 
 
@@ -1045,8 +1243,14 @@ class StacksResourceWithStreamingResponse:
         self.get_network_info = to_streamed_response_wrapper(
             stacks.get_network_info,
         )
+        self.read_file = to_streamed_response_wrapper(
+            stacks.read_file,
+        )
         self.wait_for_dev_server_url = to_streamed_response_wrapper(
             stacks.wait_for_dev_server_url,
+        )
+        self.write_file = to_streamed_response_wrapper(
+            stacks.write_file,
         )
 
 
@@ -1078,6 +1282,12 @@ class AsyncStacksResourceWithStreamingResponse:
         self.get_network_info = async_to_streamed_response_wrapper(
             stacks.get_network_info,
         )
+        self.read_file = async_to_streamed_response_wrapper(
+            stacks.read_file,
+        )
         self.wait_for_dev_server_url = async_to_streamed_response_wrapper(
             stacks.wait_for_dev_server_url,
+        )
+        self.write_file = async_to_streamed_response_wrapper(
+            stacks.write_file,
         )

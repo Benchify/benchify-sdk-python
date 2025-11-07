@@ -9,8 +9,12 @@ from .stack_update_params import StackUpdateParams as StackUpdateParams
 from .stack_create_response import StackCreateResponse as StackCreateResponse
 from .stack_get_logs_params import StackGetLogsParams as StackGetLogsParams
 from .stack_update_response import StackUpdateResponse as StackUpdateResponse
+from .stack_read_file_params import StackReadFileParams as StackReadFileParams
 from .stack_get_logs_response import StackGetLogsResponse as StackGetLogsResponse
 from .stack_retrieve_response import StackRetrieveResponse as StackRetrieveResponse
+from .stack_write_file_params import StackWriteFileParams as StackWriteFileParams
+from .stack_read_file_response import StackReadFileResponse as StackReadFileResponse
+from .stack_write_file_response import StackWriteFileResponse as StackWriteFileResponse
 from .stack_create_and_run_params import StackCreateAndRunParams as StackCreateAndRunParams
 from .stack_execute_command_params import StackExecuteCommandParams as StackExecuteCommandParams
 from .fix_create_ai_fallback_params import FixCreateAIFallbackParams as FixCreateAIFallbackParams
