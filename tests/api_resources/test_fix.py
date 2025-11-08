@@ -28,6 +28,7 @@ class TestFix:
                 }
             ],
             remaining_diagnostics={},
+            template_path="benchify/default-template",
         )
         assert_matches_type(FixCreateAIFallbackResponse, fix, path=["response"])
 
@@ -60,11 +61,11 @@ class TestFix:
                     ]
                 }
             },
+            template_path="benchify/default-template",
             event_id="",
             include_context=True,
             max_attempts=3,
             meta={"external_id": "external_id"},
-            template_path="benchify/default-template",
         )
         assert_matches_type(FixCreateAIFallbackResponse, fix, path=["response"])
 
@@ -79,6 +80,7 @@ class TestFix:
                 }
             ],
             remaining_diagnostics={},
+            template_path="benchify/default-template",
         )
 
         assert response.is_closed is True
@@ -97,6 +99,7 @@ class TestFix:
                 }
             ],
             remaining_diagnostics={},
+            template_path="benchify/default-template",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -123,6 +126,7 @@ class TestAsyncFix:
                 }
             ],
             remaining_diagnostics={},
+            template_path="benchify/default-template",
         )
         assert_matches_type(FixCreateAIFallbackResponse, fix, path=["response"])
 
@@ -155,11 +159,11 @@ class TestAsyncFix:
                     ]
                 }
             },
+            template_path="benchify/default-template",
             event_id="",
             include_context=True,
             max_attempts=3,
             meta={"external_id": "external_id"},
-            template_path="benchify/default-template",
         )
         assert_matches_type(FixCreateAIFallbackResponse, fix, path=["response"])
 
@@ -174,6 +178,7 @@ class TestAsyncFix:
                 }
             ],
             remaining_diagnostics={},
+            template_path="benchify/default-template",
         )
 
         assert response.is_closed is True
@@ -192,6 +197,7 @@ class TestAsyncFix:
                 }
             ],
             remaining_diagnostics={},
+            template_path="benchify/default-template",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

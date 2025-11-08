@@ -104,15 +104,3 @@ from benchify.types.fix import StandardCreateResponse
 Methods:
 
 - <code title="post /v1/fix-standard">client.fix.standard.<a href="./src/benchify/resources/fix/standard.py">create</a>(\*\*<a href="src/benchify/types/fix/standard_create_params.py">params</a>) -> <a href="./src/benchify/types/fix/standard_create_response.py">StandardCreateResponse</a></code>
-
-# Test
-
-Types:
-
-```python
-from benchify.types import TestRetrieveResponse
-```
-
-Methods:
-
-- <code title="get /v1/test">client.test.<a href="./src/benchify/resources/test.py">retrieve</a>() -> <a href="./src/benchify/types/test_retrieve_response.py">TestRetrieveResponse</a></code>
