@@ -22,7 +22,7 @@ from ._types import (
 )
 from ._utils import is_given, get_async_library
 from ._version import __version__
-from .resources import fixer, stacks, validate_template, fix_string_literals, fix_parsing_and_diagnose
+from .resources import fixer, validate_template, fix_string_literals, fix_parsing_and_diagnose
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import APIStatusError
 from ._base_client import (
@@ -31,6 +31,7 @@ from ._base_client import (
     AsyncAPIClient,
 )
 from .resources.fix import fix
+from .resources.stacks import stacks
 
 __all__ = [
     "Timeout",
