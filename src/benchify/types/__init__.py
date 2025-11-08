@@ -12,6 +12,7 @@ from .stack_create_response import StackCreateResponse as StackCreateResponse
 from .stack_get_logs_params import StackGetLogsParams as StackGetLogsParams
 from .stack_update_response import StackUpdateResponse as StackUpdateResponse
 from .stack_read_file_params import StackReadFileParams as StackReadFileParams
+from .test_retrieve_response import TestRetrieveResponse as TestRetrieveResponse
 from .stack_get_logs_response import StackGetLogsResponse as StackGetLogsResponse
 from .stack_retrieve_response import StackRetrieveResponse as StackRetrieveResponse
 from .stack_write_file_params import StackWriteFileParams as StackWriteFileParams
