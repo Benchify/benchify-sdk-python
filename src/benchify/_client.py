@@ -22,7 +22,7 @@ from ._types import (
 )
 from ._utils import is_given, get_async_library
 from ._version import __version__
-from .resources import fixer, stacks, validate_template, fix_string_literals, fix_parsing_and_diagnose
+from .resources import test, fixer, stacks, validate_template, fix_string_literals, fix_parsing_and_diagnose
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import APIStatusError
 from ._base_client import (
@@ -51,6 +51,7 @@ class Benchify(SyncAPIClient):
     validate_template: validate_template.ValidateTemplateResource
     fix_parsing_and_diagnose: fix_parsing_and_diagnose.FixParsingAndDiagnoseResource
     fix: fix.FixResource
+    test: test.TestResource
     with_raw_response: BenchifyWithRawResponse
     with_streaming_response: BenchifyWithStreamedResponse
 
@@ -110,6 +111,7 @@ class Benchify(SyncAPIClient):
         self.validate_template = validate_template.ValidateTemplateResource(self)
         self.fix_parsing_and_diagnose = fix_parsing_and_diagnose.FixParsingAndDiagnoseResource(self)
         self.fix = fix.FixResource(self)
+        self.test = test.TestResource(self)
         self.with_raw_response = BenchifyWithRawResponse(self)
         self.with_streaming_response = BenchifyWithStreamedResponse(self)
 
@@ -238,6 +240,7 @@ class AsyncBenchify(AsyncAPIClient):
     validate_template: validate_template.AsyncValidateTemplateResource
     fix_parsing_and_diagnose: fix_parsing_and_diagnose.AsyncFixParsingAndDiagnoseResource
     fix: fix.AsyncFixResource
+    test: test.AsyncTestResource
     with_raw_response: AsyncBenchifyWithRawResponse
     with_streaming_response: AsyncBenchifyWithStreamedResponse
 
@@ -297,6 +300,7 @@ class AsyncBenchify(AsyncAPIClient):
         self.validate_template = validate_template.AsyncValidateTemplateResource(self)
         self.fix_parsing_and_diagnose = fix_parsing_and_diagnose.AsyncFixParsingAndDiagnoseResource(self)
         self.fix = fix.AsyncFixResource(self)
+        self.test = test.AsyncTestResource(self)
         self.with_raw_response = AsyncBenchifyWithRawResponse(self)
         self.with_streaming_response = AsyncBenchifyWithStreamedResponse(self)
 
@@ -430,6 +434,7 @@ class BenchifyWithRawResponse:
             client.fix_parsing_and_diagnose
         )
         self.fix = fix.FixResourceWithRawResponse(client.fix)
+        self.test = test.TestResourceWithRawResponse(client.test)
 
 
 class AsyncBenchifyWithRawResponse:
@@ -446,6 +451,7 @@ class AsyncBenchifyWithRawResponse:
             client.fix_parsing_and_diagnose
         )
         self.fix = fix.AsyncFixResourceWithRawResponse(client.fix)
+        self.test = test.AsyncTestResourceWithRawResponse(client.test)
 
 
 class BenchifyWithStreamedResponse:
@@ -462,6 +468,7 @@ class BenchifyWithStreamedResponse:
             client.fix_parsing_and_diagnose
         )
         self.fix = fix.FixResourceWithStreamingResponse(client.fix)
+        self.test = test.TestResourceWithStreamingResponse(client.test)
 
 
 class AsyncBenchifyWithStreamedResponse:
@@ -480,6 +487,7 @@ class AsyncBenchifyWithStreamedResponse:
             )
         )
         self.fix = fix.AsyncFixResourceWithStreamingResponse(client.fix)
+        self.test = test.AsyncTestResourceWithStreamingResponse(client.test)
 
 
 Client = Benchify

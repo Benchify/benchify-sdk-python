@@ -8,6 +8,14 @@ from .fix import (
     FixResourceWithStreamingResponse,
     AsyncFixResourceWithStreamingResponse,
 )
+from .test import (
+    TestResource,
+    AsyncTestResource,
+    TestResourceWithRawResponse,
+    AsyncTestResourceWithRawResponse,
+    TestResourceWithStreamingResponse,
+    AsyncTestResourceWithStreamingResponse,
+)
 from .fixer import (
     FixerResource,
     AsyncFixerResource,
@@ -86,4 +94,10 @@ __all__ = [
     "AsyncFixResourceWithRawResponse",
     "FixResourceWithStreamingResponse",
     "AsyncFixResourceWithStreamingResponse",
+    "TestResource",
+    "AsyncTestResource",
+    "TestResourceWithRawResponse",
+    "AsyncTestResourceWithRawResponse",
+    "TestResourceWithStreamingResponse",
+    "AsyncTestResourceWithStreamingResponse",
 ]
