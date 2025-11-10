@@ -25,6 +25,9 @@ class StandardCreateParams(TypedDict, total=False):
     bundle: bool
     """Whether to bundle the project after fixes"""
 
+    continuation_event_id: str
+    """Event ID from Step 1 to continue with the same temp directory"""
+
     event_id: str
     """Unique identifier for tracking"""
 
