@@ -22,6 +22,9 @@ class FixCreateAIFallbackParams(TypedDict, total=False):
     remaining_diagnostics: Required[RemainingDiagnostics]
     """Diagnostics that remain after standard fixing"""
 
+    continuation_event_id: str
+    """Event ID from Step 1 to continue with the same temp directory"""
+
     event_id: str
     """Unique identifier for the event"""
 
