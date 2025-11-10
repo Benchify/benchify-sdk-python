@@ -145,6 +145,9 @@ class Data(BaseModel):
     estimated_total_fix_time: float
     """Estimated total time to fix all issues in seconds"""
 
+    event_id: str
+    """Event ID for tracking this operation across steps"""
+
     files_analyzed: float
     """Number of files that were analyzed"""
 
