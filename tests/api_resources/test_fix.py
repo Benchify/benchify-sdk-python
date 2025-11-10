@@ -60,7 +60,6 @@ class TestFix:
                     ]
                 }
             },
-            continuation_event_id="continuation_event_id",
             event_id="",
             include_context=True,
             max_attempts=3,
@@ -156,7 +155,6 @@ class TestAsyncFix:
                     ]
                 }
             },
-            continuation_event_id="continuation_event_id",
             event_id="",
             include_context=True,
             max_attempts=3,

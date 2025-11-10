@@ -69,7 +69,6 @@ class TestStandard:
                 }
             },
             bundle=True,
-            continuation_event_id="continuation_event_id",
             event_id="",
             fix_types=["css", "ui", "dependency", "types"],
             meta={"external_id": "external_id"},
@@ -182,7 +181,6 @@ class TestAsyncStandard:
                 }
             },
             bundle=True,
-            continuation_event_id="continuation_event_id",
             event_id="",
             fix_types=["css", "ui", "dependency", "types"],
             meta={"external_id": "external_id"},

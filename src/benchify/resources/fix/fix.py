@@ -60,7 +60,6 @@ class FixResource(SyncAPIResource):
         *,
         files: Iterable[fix_create_ai_fallback_params.File],
         remaining_diagnostics: fix_create_ai_fallback_params.RemainingDiagnostics,
-        continuation_event_id: str | Omit = omit,
         event_id: str | Omit = omit,
         include_context: bool | Omit = omit,
         max_attempts: float | Omit = omit,
@@ -83,8 +82,6 @@ class FixResource(SyncAPIResource):
           files: List of files (potentially already fixed by standard fixers)
 
           remaining_diagnostics: Diagnostics that remain after standard fixing
-
-          continuation_event_id: Event ID from Step 1 to continue with the same temp directory
 
           event_id: Unique identifier for the event
 
@@ -111,7 +108,6 @@ class FixResource(SyncAPIResource):
                 {
                     "files": files,
                     "remaining_diagnostics": remaining_diagnostics,
-                    "continuation_event_id": continuation_event_id,
                     "event_id": event_id,
                     "include_context": include_context,
                     "max_attempts": max_attempts,
@@ -156,7 +152,6 @@ class AsyncFixResource(AsyncAPIResource):
         *,
         files: Iterable[fix_create_ai_fallback_params.File],
         remaining_diagnostics: fix_create_ai_fallback_params.RemainingDiagnostics,
-        continuation_event_id: str | Omit = omit,
         event_id: str | Omit = omit,
         include_context: bool | Omit = omit,
         max_attempts: float | Omit = omit,
@@ -179,8 +174,6 @@ class AsyncFixResource(AsyncAPIResource):
           files: List of files (potentially already fixed by standard fixers)
 
           remaining_diagnostics: Diagnostics that remain after standard fixing
-
-          continuation_event_id: Event ID from Step 1 to continue with the same temp directory
 
           event_id: Unique identifier for the event
 
@@ -207,7 +200,6 @@ class AsyncFixResource(AsyncAPIResource):
                 {
                     "files": files,
                     "remaining_diagnostics": remaining_diagnostics,
-                    "continuation_event_id": continuation_event_id,
                     "event_id": event_id,
                     "include_context": include_context,
                     "max_attempts": max_attempts,
