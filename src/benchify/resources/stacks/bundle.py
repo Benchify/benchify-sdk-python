@@ -17,8 +17,7 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
-from ...types.stacks import bundle_create_params, bundle_create_files_params
-from ...types.stacks.bundle_create_response import BundleCreateResponse
+from ...types.stacks import bundle_create_files_params
 from ...types.stacks.bundle_create_files_response import BundleCreateFilesResponse
 
 __all__ = ["BundleResource", "AsyncBundleResource"]
@@ -43,48 +42,6 @@ class BundleResource(SyncAPIResource):
         For more information, see https://www.github.com/Benchify/benchify-sdk-python#with_streaming_response
         """
         return BundleResourceWithStreamingResponse(self)
-
-    def create(
-        self,
-        *,
-        entrypoint: str,
-        tarball_base64: str,
-        tarball_filename: str | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> BundleCreateResponse:
-        """
-        Accepts a base64 tarball and forwards to the external Sandbox Manager
-        /sandbox/bundle endpoint.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return self._post(
-            "/v1/stacks/bundle",
-            body=maybe_transform(
-                {
-                    "entrypoint": entrypoint,
-                    "tarball_base64": tarball_base64,
-                    "tarball_filename": tarball_filename,
-                },
-                bundle_create_params.BundleCreateParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=BundleCreateResponse,
-        )
 
     def create_files(
         self,
@@ -151,48 +108,6 @@ class AsyncBundleResource(AsyncAPIResource):
         """
         return AsyncBundleResourceWithStreamingResponse(self)
 
-    async def create(
-        self,
-        *,
-        entrypoint: str,
-        tarball_base64: str,
-        tarball_filename: str | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> BundleCreateResponse:
-        """
-        Accepts a base64 tarball and forwards to the external Sandbox Manager
-        /sandbox/bundle endpoint.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return await self._post(
-            "/v1/stacks/bundle",
-            body=await async_maybe_transform(
-                {
-                    "entrypoint": entrypoint,
-                    "tarball_base64": tarball_base64,
-                    "tarball_filename": tarball_filename,
-                },
-                bundle_create_params.BundleCreateParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=BundleCreateResponse,
-        )
-
     async def create_files(
         self,
         *,
@@ -242,9 +157,6 @@ class BundleResourceWithRawResponse:
     def __init__(self, bundle: BundleResource) -> None:
         self._bundle = bundle
 
-        self.create = to_raw_response_wrapper(
-            bundle.create,
-        )
         self.create_files = to_raw_response_wrapper(
             bundle.create_files,
         )
@@ -254,9 +166,6 @@ class AsyncBundleResourceWithRawResponse:
     def __init__(self, bundle: AsyncBundleResource) -> None:
         self._bundle = bundle
 
-        self.create = async_to_raw_response_wrapper(
-            bundle.create,
-        )
         self.create_files = async_to_raw_response_wrapper(
             bundle.create_files,
         )
@@ -266,9 +175,6 @@ class BundleResourceWithStreamingResponse:
     def __init__(self, bundle: BundleResource) -> None:
         self._bundle = bundle
 
-        self.create = to_streamed_response_wrapper(
-            bundle.create,
-        )
         self.create_files = to_streamed_response_wrapper(
             bundle.create_files,
         )
@@ -278,9 +184,6 @@ class AsyncBundleResourceWithStreamingResponse:
     def __init__(self, bundle: AsyncBundleResource) -> None:
         self._bundle = bundle
 
-        self.create = async_to_streamed_response_wrapper(
-            bundle.create,
-        )
         self.create_files = async_to_streamed_response_wrapper(
             bundle.create_files,
         )

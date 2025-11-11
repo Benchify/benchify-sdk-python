@@ -52,12 +52,11 @@ Methods:
 Types:
 
 ```python
-from benchify.types.stacks import BundleCreateResponse, BundleCreateFilesResponse
+from benchify.types.stacks import BundleCreateFilesResponse
 ```
 
 Methods:
 
-- <code title="post /v1/stacks/bundle">client.stacks.bundle.<a href="./src/benchify/resources/stacks/bundle.py">create</a>(\*\*<a href="src/benchify/types/stacks/bundle_create_params.py">params</a>) -> <a href="./src/benchify/types/stacks/bundle_create_response.py">BundleCreateResponse</a></code>
 - <code title="post /v1/stacks/bundle/files">client.stacks.bundle.<a href="./src/benchify/resources/stacks/bundle.py">create_files</a>(\*\*<a href="src/benchify/types/stacks/bundle_create_files_params.py">params</a>) -> <a href="./src/benchify/types/stacks/bundle_create_files_response.py">BundleCreateFilesResponse</a></code>
 
 # FixStringLiterals
