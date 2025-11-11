@@ -23,6 +23,7 @@ from ...types import (
     stack_write_file_params,
     stack_create_and_run_params,
     stack_execute_command_params,
+    stack_bundle_multipart_params,
     stack_wait_for_dev_server_url_params,
 )
 from ..._types import (
@@ -56,6 +57,7 @@ from ...types.stack_read_file_response import StackReadFileResponse
 from ...types.stack_write_file_response import StackWriteFileResponse
 from ...types.stack_create_and_run_response import StackCreateAndRunResponse
 from ...types.stack_execute_command_response import StackExecuteCommandResponse
+from ...types.stack_bundle_multipart_response import StackBundleMultipartResponse
 from ...types.stack_get_network_info_response import StackGetNetworkInfoResponse
 from ...types.stack_wait_for_dev_server_url_response import StackWaitForDevServerURLResponse
 
@@ -265,6 +267,57 @@ class StacksResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=StackUpdateResponse,
+        )
+
+    def bundle_multipart(
+        self,
+        *,
+        manifest: str,
+        tarball: FileTypes,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> StackBundleMultipartResponse:
+        """
+        Accepts multipart/form-data containing a JSON string manifest (must include
+        entrypoint) and a tarball file, forwards to /sandbox/bundle-multipart, and
+        returns base64 bundle.
+
+        Args:
+          manifest: JSON string containing bundler manifest (must include entrypoint)
+
+          tarball: Tar.zst project archive
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        body = deepcopy_minimal(
+            {
+                "manifest": manifest,
+                "tarball": tarball,
+            }
+        )
+        files = extract_files(cast(Mapping[str, object], body), paths=[["tarball"]])
+        # It should be noted that the actual Content-Type header that will be
+        # sent to the server will contain a `boundary` parameter, e.g.
+        # multipart/form-data; boundary=---abc--
+        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
+        return self._post(
+            "/v1/stacks/bundle-multipart",
+            body=maybe_transform(body, stack_bundle_multipart_params.StackBundleMultipartParams),
+            files=files,
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=StackBundleMultipartResponse,
         )
 
     def create_and_run(
@@ -868,6 +921,57 @@ class AsyncStacksResource(AsyncAPIResource):
             cast_to=StackUpdateResponse,
         )
 
+    async def bundle_multipart(
+        self,
+        *,
+        manifest: str,
+        tarball: FileTypes,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> StackBundleMultipartResponse:
+        """
+        Accepts multipart/form-data containing a JSON string manifest (must include
+        entrypoint) and a tarball file, forwards to /sandbox/bundle-multipart, and
+        returns base64 bundle.
+
+        Args:
+          manifest: JSON string containing bundler manifest (must include entrypoint)
+
+          tarball: Tar.zst project archive
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        body = deepcopy_minimal(
+            {
+                "manifest": manifest,
+                "tarball": tarball,
+            }
+        )
+        files = extract_files(cast(Mapping[str, object], body), paths=[["tarball"]])
+        # It should be noted that the actual Content-Type header that will be
+        # sent to the server will contain a `boundary` parameter, e.g.
+        # multipart/form-data; boundary=---abc--
+        extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
+        return await self._post(
+            "/v1/stacks/bundle-multipart",
+            body=await async_maybe_transform(body, stack_bundle_multipart_params.StackBundleMultipartParams),
+            files=files,
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=StackBundleMultipartResponse,
+        )
+
     async def create_and_run(
         self,
         *,
@@ -1279,6 +1383,9 @@ class StacksResourceWithRawResponse:
         self.update = to_raw_response_wrapper(
             stacks.update,
         )
+        self.bundle_multipart = to_raw_response_wrapper(
+            stacks.bundle_multipart,
+        )
         self.create_and_run = to_raw_response_wrapper(
             stacks.create_and_run,
         )
@@ -1324,6 +1431,9 @@ class AsyncStacksResourceWithRawResponse:
         )
         self.update = async_to_raw_response_wrapper(
             stacks.update,
+        )
+        self.bundle_multipart = async_to_raw_response_wrapper(
+            stacks.bundle_multipart,
         )
         self.create_and_run = async_to_raw_response_wrapper(
             stacks.create_and_run,
@@ -1371,6 +1481,9 @@ class StacksResourceWithStreamingResponse:
         self.update = to_streamed_response_wrapper(
             stacks.update,
         )
+        self.bundle_multipart = to_streamed_response_wrapper(
+            stacks.bundle_multipart,
+        )
         self.create_and_run = to_streamed_response_wrapper(
             stacks.create_and_run,
         )
@@ -1416,6 +1529,9 @@ class AsyncStacksResourceWithStreamingResponse:
         )
         self.update = async_to_streamed_response_wrapper(
             stacks.update,
+        )
+        self.bundle_multipart = async_to_streamed_response_wrapper(
+            stacks.bundle_multipart,
         )
         self.create_and_run = async_to_streamed_response_wrapper(
             stacks.create_and_run,
