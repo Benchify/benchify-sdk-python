@@ -284,7 +284,7 @@ class StacksResource(SyncAPIResource):
         """
         Accepts multipart/form-data containing a JSON string manifest (must include
         entrypoint) and a tarball file, forwards to /sandbox/bundle-multipart, and
-        returns base64 bundle.
+        returns base64 bundle (path + content).
 
         Args:
           manifest: JSON string containing bundler manifest (must include entrypoint)
@@ -936,7 +936,7 @@ class AsyncStacksResource(AsyncAPIResource):
         """
         Accepts multipart/form-data containing a JSON string manifest (must include
         entrypoint) and a tarball file, forwards to /sandbox/bundle-multipart, and
-        returns base64 bundle.
+        returns base64 bundle (path + content).
 
         Args:
           manifest: JSON string containing bundler manifest (must include entrypoint)
