@@ -20,6 +20,7 @@ from benchify.types import (
     StackCreateAndRunResponse,
     StackExecuteCommandResponse,
     StackGetNetworkInfoResponse,
+    StackBundleMultipartResponse,
     StackWaitForDevServerURLResponse,
 )
 
@@ -181,6 +182,43 @@ class TestStacks:
                 id="",
                 idempotency_key="key-12345678",
             )
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_bundle_multipart(self, client: Benchify) -> None:
+        stack = client.stacks.bundle_multipart(
+            manifest='{"entrypoint":"src/index.ts"}',
+            tarball=b"raw file contents",
+        )
+        assert_matches_type(StackBundleMultipartResponse, stack, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_raw_response_bundle_multipart(self, client: Benchify) -> None:
+        response = client.stacks.with_raw_response.bundle_multipart(
+            manifest='{"entrypoint":"src/index.ts"}',
+            tarball=b"raw file contents",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        stack = response.parse()
+        assert_matches_type(StackBundleMultipartResponse, stack, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_streaming_response_bundle_multipart(self, client: Benchify) -> None:
+        with client.stacks.with_streaming_response.bundle_multipart(
+            manifest='{"entrypoint":"src/index.ts"}',
+            tarball=b"raw file contents",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            stack = response.parse()
+            assert_matches_type(StackBundleMultipartResponse, stack, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -773,6 +811,43 @@ class TestAsyncStacks:
                 id="",
                 idempotency_key="key-12345678",
             )
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_bundle_multipart(self, async_client: AsyncBenchify) -> None:
+        stack = await async_client.stacks.bundle_multipart(
+            manifest='{"entrypoint":"src/index.ts"}',
+            tarball=b"raw file contents",
+        )
+        assert_matches_type(StackBundleMultipartResponse, stack, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_raw_response_bundle_multipart(self, async_client: AsyncBenchify) -> None:
+        response = await async_client.stacks.with_raw_response.bundle_multipart(
+            manifest='{"entrypoint":"src/index.ts"}',
+            tarball=b"raw file contents",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        stack = await response.parse()
+        assert_matches_type(StackBundleMultipartResponse, stack, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_streaming_response_bundle_multipart(self, async_client: AsyncBenchify) -> None:
+        async with async_client.stacks.with_streaming_response.bundle_multipart(
+            manifest='{"entrypoint":"src/index.ts"}',
+            tarball=b"raw file contents",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            stack = await response.parse()
+            assert_matches_type(StackBundleMultipartResponse, stack, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
