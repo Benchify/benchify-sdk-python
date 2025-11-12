@@ -19,6 +19,7 @@ from benchify.types import (
     StackCreateResponse,
     StackRetrieveResponse,
     StackUpdateResponse,
+    StackBundleMultipartResponse,
     StackCreateAndRunResponse,
     StackExecuteCommandResponse,
     StackGetLogsResponse,
@@ -32,18 +33,31 @@ from benchify.types import (
 
 Methods:
 
-- <code title="post /v1/stacks">client.stacks.<a href="./src/benchify/resources/stacks.py">create</a>(\*\*<a href="src/benchify/types/stack_create_params.py">params</a>) -> <a href="./src/benchify/types/stack_create_response.py">StackCreateResponse</a></code>
-- <code title="get /v1/stacks/{id}">client.stacks.<a href="./src/benchify/resources/stacks.py">retrieve</a>(id) -> <a href="./src/benchify/types/stack_retrieve_response.py">StackRetrieveResponse</a></code>
-- <code title="post /v1/stacks/{id}/patch">client.stacks.<a href="./src/benchify/resources/stacks.py">update</a>(id, \*\*<a href="src/benchify/types/stack_update_params.py">params</a>) -> <a href="./src/benchify/types/stack_update_response.py">StackUpdateResponse</a></code>
-- <code title="post /v1/stacks/create-and-run">client.stacks.<a href="./src/benchify/resources/stacks.py">create_and_run</a>(\*\*<a href="src/benchify/types/stack_create_and_run_params.py">params</a>) -> <a href="./src/benchify/types/stack_create_and_run_response.py">StackCreateAndRunResponse</a></code>
-- <code title="delete /v1/stacks/{id}">client.stacks.<a href="./src/benchify/resources/stacks.py">destroy</a>(id) -> None</code>
-- <code title="post /v1/stacks/{id}/exec">client.stacks.<a href="./src/benchify/resources/stacks.py">execute_command</a>(id, \*\*<a href="src/benchify/types/stack_execute_command_params.py">params</a>) -> <a href="./src/benchify/types/stack_execute_command_response.py">StackExecuteCommandResponse</a></code>
-- <code title="get /v1/stacks/{id}/logs">client.stacks.<a href="./src/benchify/resources/stacks.py">get_logs</a>(id, \*\*<a href="src/benchify/types/stack_get_logs_params.py">params</a>) -> <a href="./src/benchify/types/stack_get_logs_response.py">StackGetLogsResponse</a></code>
-- <code title="get /v1/stacks/{id}/network-info">client.stacks.<a href="./src/benchify/resources/stacks.py">get_network_info</a>(id) -> <a href="./src/benchify/types/stack_get_network_info_response.py">StackGetNetworkInfoResponse</a></code>
-- <code title="get /v1/stacks/{id}/read-file">client.stacks.<a href="./src/benchify/resources/stacks.py">read_file</a>(id, \*\*<a href="src/benchify/types/stack_read_file_params.py">params</a>) -> <a href="./src/benchify/types/stack_read_file_response.py">StackReadFileResponse</a></code>
-- <code title="post /v1/stacks/{id}/reset">client.stacks.<a href="./src/benchify/resources/stacks.py">reset</a>(id, \*\*<a href="src/benchify/types/stack_reset_params.py">params</a>) -> <a href="./src/benchify/types/stack_reset_response.py">StackResetResponse</a></code>
-- <code title="get /v1/stacks/{id}/wait-url">client.stacks.<a href="./src/benchify/resources/stacks.py">wait_for_dev_server_url</a>(id, \*\*<a href="src/benchify/types/stack_wait_for_dev_server_url_params.py">params</a>) -> <a href="./src/benchify/types/stack_wait_for_dev_server_url_response.py">StackWaitForDevServerURLResponse</a></code>
-- <code title="post /v1/stacks/{id}/write-file">client.stacks.<a href="./src/benchify/resources/stacks.py">write_file</a>(id, \*\*<a href="src/benchify/types/stack_write_file_params.py">params</a>) -> <a href="./src/benchify/types/stack_write_file_response.py">StackWriteFileResponse</a></code>
+- <code title="post /v1/stacks">client.stacks.<a href="./src/benchify/resources/stacks/stacks.py">create</a>(\*\*<a href="src/benchify/types/stack_create_params.py">params</a>) -> <a href="./src/benchify/types/stack_create_response.py">StackCreateResponse</a></code>
+- <code title="get /v1/stacks/{id}">client.stacks.<a href="./src/benchify/resources/stacks/stacks.py">retrieve</a>(id) -> <a href="./src/benchify/types/stack_retrieve_response.py">StackRetrieveResponse</a></code>
+- <code title="post /v1/stacks/{id}/patch">client.stacks.<a href="./src/benchify/resources/stacks/stacks.py">update</a>(id, \*\*<a href="src/benchify/types/stack_update_params.py">params</a>) -> <a href="./src/benchify/types/stack_update_response.py">StackUpdateResponse</a></code>
+- <code title="post /v1/stacks/bundle-multipart">client.stacks.<a href="./src/benchify/resources/stacks/stacks.py">bundle_multipart</a>(\*\*<a href="src/benchify/types/stack_bundle_multipart_params.py">params</a>) -> <a href="./src/benchify/types/stack_bundle_multipart_response.py">StackBundleMultipartResponse</a></code>
+- <code title="post /v1/stacks/create-and-run">client.stacks.<a href="./src/benchify/resources/stacks/stacks.py">create_and_run</a>(\*\*<a href="src/benchify/types/stack_create_and_run_params.py">params</a>) -> <a href="./src/benchify/types/stack_create_and_run_response.py">StackCreateAndRunResponse</a></code>
+- <code title="delete /v1/stacks/{id}">client.stacks.<a href="./src/benchify/resources/stacks/stacks.py">destroy</a>(id) -> None</code>
+- <code title="post /v1/stacks/{id}/exec">client.stacks.<a href="./src/benchify/resources/stacks/stacks.py">execute_command</a>(id, \*\*<a href="src/benchify/types/stack_execute_command_params.py">params</a>) -> <a href="./src/benchify/types/stack_execute_command_response.py">StackExecuteCommandResponse</a></code>
+- <code title="get /v1/stacks/{id}/logs">client.stacks.<a href="./src/benchify/resources/stacks/stacks.py">get_logs</a>(id, \*\*<a href="src/benchify/types/stack_get_logs_params.py">params</a>) -> <a href="./src/benchify/types/stack_get_logs_response.py">StackGetLogsResponse</a></code>
+- <code title="get /v1/stacks/{id}/network-info">client.stacks.<a href="./src/benchify/resources/stacks/stacks.py">get_network_info</a>(id) -> <a href="./src/benchify/types/stack_get_network_info_response.py">StackGetNetworkInfoResponse</a></code>
+- <code title="get /v1/stacks/{id}/read-file">client.stacks.<a href="./src/benchify/resources/stacks/stacks.py">read_file</a>(id, \*\*<a href="src/benchify/types/stack_read_file_params.py">params</a>) -> <a href="./src/benchify/types/stack_read_file_response.py">StackReadFileResponse</a></code>
+- <code title="post /v1/stacks/{id}/reset">client.stacks.<a href="./src/benchify/resources/stacks/stacks.py">reset</a>(id, \*\*<a href="src/benchify/types/stack_reset_params.py">params</a>) -> <a href="./src/benchify/types/stack_reset_response.py">StackResetResponse</a></code>
+- <code title="get /v1/stacks/{id}/wait-url">client.stacks.<a href="./src/benchify/resources/stacks/stacks.py">wait_for_dev_server_url</a>(id, \*\*<a href="src/benchify/types/stack_wait_for_dev_server_url_params.py">params</a>) -> <a href="./src/benchify/types/stack_wait_for_dev_server_url_response.py">StackWaitForDevServerURLResponse</a></code>
+- <code title="post /v1/stacks/{id}/write-file">client.stacks.<a href="./src/benchify/resources/stacks/stacks.py">write_file</a>(id, \*\*<a href="src/benchify/types/stack_write_file_params.py">params</a>) -> <a href="./src/benchify/types/stack_write_file_response.py">StackWriteFileResponse</a></code>
+
+## Bundle
+
+Types:
+
+```python
+from benchify.types.stacks import BundleCreateFilesResponse
+```
+
+Methods:
+
+- <code title="post /v1/stacks/bundle/files">client.stacks.bundle.<a href="./src/benchify/resources/stacks/bundle.py">create_files</a>(\*\*<a href="src/benchify/types/stacks/bundle_create_files_params.py">params</a>) -> <a href="./src/benchify/types/stacks/bundle_create_files_response.py">BundleCreateFilesResponse</a></code>
 
 # FixStringLiterals
 

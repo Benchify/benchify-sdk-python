@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.8.0 (2025-11-12)
+
+Full Changelog: [v0.7.0...v0.8.0](https://github.com/Benchify/benchify-sdk-python/compare/v0.7.0...v0.8.0)
+
+### Features
+
+* **api:** api update ([988433a](https://github.com/Benchify/benchify-sdk-python/commit/988433adb17c6723785fcc79d112d1235864858e))
+* **api:** api update ([acbdbdd](https://github.com/Benchify/benchify-sdk-python/commit/acbdbddbfc8a6bf0c32339b4a68635500cf7bb73))
+* **api:** api update ([3a56790](https://github.com/Benchify/benchify-sdk-python/commit/3a56790797c67b357047e2cf3ffcc857490e28ea))
+* **api:** api update ([b42ea01](https://github.com/Benchify/benchify-sdk-python/commit/b42ea01495e0b0b68712d3845933a1fd16964e1c))
+* **api:** api update ([db0f873](https://github.com/Benchify/benchify-sdk-python/commit/db0f87365147f7478889d69bf6e14807a878c30a))
+* **api:** manual updates ([c3106c7](https://github.com/Benchify/benchify-sdk-python/commit/c3106c7a605a7dc8711ca81f96863a5e20ae81be))
+* **api:** manual updates ([4e28d49](https://github.com/Benchify/benchify-sdk-python/commit/4e28d49d08c13027bf89b728d8139bf6f8a8e1d4))
+* **api:** manual updates ([9d3bc91](https://github.com/Benchify/benchify-sdk-python/commit/9d3bc91b39de22ee755e7afb125665ac7d62d7c7))
+* **api:** manual updates ([86d3bcd](https://github.com/Benchify/benchify-sdk-python/commit/86d3bcd4b43249e2a7e86723184968be5ac435ae))
+* **api:** manual updates ([676a40a](https://github.com/Benchify/benchify-sdk-python/commit/676a40a70134370ecdca261c9804bbe8939e8d9b))
+
+
+### Bug Fixes
+
+* compat with Python 3.14 ([75b948d](https://github.com/Benchify/benchify-sdk-python/commit/75b948d1aa8d9bc26eef28b9a71e39ba8b9b2c9a))
+* **compat:** update signatures of `model_dump` and `model_dump_json` for Pydantic v1 ([096f67b](https://github.com/Benchify/benchify-sdk-python/commit/096f67bad9d1d7f8e55987ec4a1a15e3a41f224a))
+
+
+### Chores
+
+* **package:** drop Python 3.8 support ([f5b1d6b](https://github.com/Benchify/benchify-sdk-python/commit/f5b1d6b16383e15a84a2d3a974d8fa5380a7a676))
+
 ## 0.7.0 (2025-11-07)
 
 Full Changelog: [v0.6.0...v0.7.0](https://github.com/Benchify/benchify-sdk-python/compare/v0.6.0...v0.7.0)
