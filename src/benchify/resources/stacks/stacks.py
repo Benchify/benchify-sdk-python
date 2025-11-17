@@ -6,14 +6,6 @@ from typing import Mapping, cast
 
 import httpx
 
-from .bundle import (
-    BundleResource,
-    AsyncBundleResource,
-    BundleResourceWithRawResponse,
-    AsyncBundleResourceWithRawResponse,
-    BundleResourceWithStreamingResponse,
-    AsyncBundleResourceWithStreamingResponse,
-)
 from ...types import (
     stack_reset_params,
     stack_create_params,
@@ -21,7 +13,6 @@ from ...types import (
     stack_get_logs_params,
     stack_read_file_params,
     stack_write_file_params,
-    stack_create_and_run_params,
     stack_execute_command_params,
     stack_bundle_multipart_params,
     stack_wait_for_dev_server_url_params,
@@ -55,7 +46,6 @@ from ...types.stack_get_logs_response import StackGetLogsResponse
 from ...types.stack_retrieve_response import StackRetrieveResponse
 from ...types.stack_read_file_response import StackReadFileResponse
 from ...types.stack_write_file_response import StackWriteFileResponse
-from ...types.stack_create_and_run_response import StackCreateAndRunResponse
 from ...types.stack_execute_command_response import StackExecuteCommandResponse
 from ...types.stack_bundle_multipart_response import StackBundleMultipartResponse
 from ...types.stack_get_network_info_response import StackGetNetworkInfoResponse
@@ -65,10 +55,6 @@ __all__ = ["StacksResource", "AsyncStacksResource"]
 
 
 class StacksResource(SyncAPIResource):
-    @cached_property
-    def bundle(self) -> BundleResource:
-        return BundleResource(self._client)
-
     @cached_property
     def with_raw_response(self) -> StacksResourceWithRawResponse:
         """
@@ -318,57 +304,6 @@ class StacksResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=StackBundleMultipartResponse,
-        )
-
-    def create_and_run(
-        self,
-        *,
-        command: SequenceNotStr[str],
-        image: str,
-        ttl_seconds: float | Omit = omit,
-        wait: bool | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> StackCreateAndRunResponse:
-        """
-        Create a simple container sandbox with a custom image and command
-
-        Args:
-          command: Command to run
-
-          image: Docker image to use
-
-          ttl_seconds: Time to live in seconds
-
-          wait: Wait for container to be ready
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return self._post(
-            "/v1/stacks/create-and-run",
-            body=maybe_transform(
-                {
-                    "command": command,
-                    "image": image,
-                    "ttl_seconds": ttl_seconds,
-                    "wait": wait,
-                },
-                stack_create_and_run_params.StackCreateAndRunParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=StackCreateAndRunResponse,
         )
 
     def destroy(
@@ -718,10 +653,6 @@ class StacksResource(SyncAPIResource):
 
 class AsyncStacksResource(AsyncAPIResource):
     @cached_property
-    def bundle(self) -> AsyncBundleResource:
-        return AsyncBundleResource(self._client)
-
-    @cached_property
     def with_raw_response(self) -> AsyncStacksResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
@@ -970,57 +901,6 @@ class AsyncStacksResource(AsyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=StackBundleMultipartResponse,
-        )
-
-    async def create_and_run(
-        self,
-        *,
-        command: SequenceNotStr[str],
-        image: str,
-        ttl_seconds: float | Omit = omit,
-        wait: bool | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> StackCreateAndRunResponse:
-        """
-        Create a simple container sandbox with a custom image and command
-
-        Args:
-          command: Command to run
-
-          image: Docker image to use
-
-          ttl_seconds: Time to live in seconds
-
-          wait: Wait for container to be ready
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return await self._post(
-            "/v1/stacks/create-and-run",
-            body=await async_maybe_transform(
-                {
-                    "command": command,
-                    "image": image,
-                    "ttl_seconds": ttl_seconds,
-                    "wait": wait,
-                },
-                stack_create_and_run_params.StackCreateAndRunParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=StackCreateAndRunResponse,
         )
 
     async def destroy(
@@ -1386,9 +1266,6 @@ class StacksResourceWithRawResponse:
         self.bundle_multipart = to_raw_response_wrapper(
             stacks.bundle_multipart,
         )
-        self.create_and_run = to_raw_response_wrapper(
-            stacks.create_and_run,
-        )
         self.destroy = to_raw_response_wrapper(
             stacks.destroy,
         )
@@ -1414,10 +1291,6 @@ class StacksResourceWithRawResponse:
             stacks.write_file,
         )
 
-    @cached_property
-    def bundle(self) -> BundleResourceWithRawResponse:
-        return BundleResourceWithRawResponse(self._stacks.bundle)
-
 
 class AsyncStacksResourceWithRawResponse:
     def __init__(self, stacks: AsyncStacksResource) -> None:
@@ -1434,9 +1307,6 @@ class AsyncStacksResourceWithRawResponse:
         )
         self.bundle_multipart = async_to_raw_response_wrapper(
             stacks.bundle_multipart,
-        )
-        self.create_and_run = async_to_raw_response_wrapper(
-            stacks.create_and_run,
         )
         self.destroy = async_to_raw_response_wrapper(
             stacks.destroy,
@@ -1463,10 +1333,6 @@ class AsyncStacksResourceWithRawResponse:
             stacks.write_file,
         )
 
-    @cached_property
-    def bundle(self) -> AsyncBundleResourceWithRawResponse:
-        return AsyncBundleResourceWithRawResponse(self._stacks.bundle)
-
 
 class StacksResourceWithStreamingResponse:
     def __init__(self, stacks: StacksResource) -> None:
@@ -1483,9 +1349,6 @@ class StacksResourceWithStreamingResponse:
         )
         self.bundle_multipart = to_streamed_response_wrapper(
             stacks.bundle_multipart,
-        )
-        self.create_and_run = to_streamed_response_wrapper(
-            stacks.create_and_run,
         )
         self.destroy = to_streamed_response_wrapper(
             stacks.destroy,
@@ -1512,10 +1375,6 @@ class StacksResourceWithStreamingResponse:
             stacks.write_file,
         )
 
-    @cached_property
-    def bundle(self) -> BundleResourceWithStreamingResponse:
-        return BundleResourceWithStreamingResponse(self._stacks.bundle)
-
 
 class AsyncStacksResourceWithStreamingResponse:
     def __init__(self, stacks: AsyncStacksResource) -> None:
@@ -1532,9 +1391,6 @@ class AsyncStacksResourceWithStreamingResponse:
         )
         self.bundle_multipart = async_to_streamed_response_wrapper(
             stacks.bundle_multipart,
-        )
-        self.create_and_run = async_to_streamed_response_wrapper(
-            stacks.create_and_run,
         )
         self.destroy = async_to_streamed_response_wrapper(
             stacks.destroy,
@@ -1560,7 +1416,3 @@ class AsyncStacksResourceWithStreamingResponse:
         self.write_file = async_to_streamed_response_wrapper(
             stacks.write_file,
         )
-
-    @cached_property
-    def bundle(self) -> AsyncBundleResourceWithStreamingResponse:
-        return AsyncBundleResourceWithStreamingResponse(self._stacks.bundle)
