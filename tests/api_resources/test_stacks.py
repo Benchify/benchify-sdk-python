@@ -17,7 +17,6 @@ from benchify.types import (
     StackReadFileResponse,
     StackRetrieveResponse,
     StackWriteFileResponse,
-    StackCreateAndRunResponse,
     StackExecuteCommandResponse,
     StackGetNetworkInfoResponse,
     StackBundleMultipartResponse,
@@ -217,54 +216,6 @@ class TestStacks:
 
             stack = response.parse()
             assert_matches_type(StackBundleMultipartResponse, stack, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_method_create_and_run(self, client: Benchify) -> None:
-        stack = client.stacks.create_and_run(
-            command=["sleep", "3600"],
-            image="curlimages/curl:latest",
-        )
-        assert_matches_type(StackCreateAndRunResponse, stack, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_method_create_and_run_with_all_params(self, client: Benchify) -> None:
-        stack = client.stacks.create_and_run(
-            command=["sleep", "3600"],
-            image="curlimages/curl:latest",
-            ttl_seconds=3600,
-            wait=False,
-        )
-        assert_matches_type(StackCreateAndRunResponse, stack, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_raw_response_create_and_run(self, client: Benchify) -> None:
-        response = client.stacks.with_raw_response.create_and_run(
-            command=["sleep", "3600"],
-            image="curlimages/curl:latest",
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        stack = response.parse()
-        assert_matches_type(StackCreateAndRunResponse, stack, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_streaming_response_create_and_run(self, client: Benchify) -> None:
-        with client.stacks.with_streaming_response.create_and_run(
-            command=["sleep", "3600"],
-            image="curlimages/curl:latest",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            stack = response.parse()
-            assert_matches_type(StackCreateAndRunResponse, stack, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -846,54 +797,6 @@ class TestAsyncStacks:
 
             stack = await response.parse()
             assert_matches_type(StackBundleMultipartResponse, stack, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_method_create_and_run(self, async_client: AsyncBenchify) -> None:
-        stack = await async_client.stacks.create_and_run(
-            command=["sleep", "3600"],
-            image="curlimages/curl:latest",
-        )
-        assert_matches_type(StackCreateAndRunResponse, stack, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_method_create_and_run_with_all_params(self, async_client: AsyncBenchify) -> None:
-        stack = await async_client.stacks.create_and_run(
-            command=["sleep", "3600"],
-            image="curlimages/curl:latest",
-            ttl_seconds=3600,
-            wait=False,
-        )
-        assert_matches_type(StackCreateAndRunResponse, stack, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_raw_response_create_and_run(self, async_client: AsyncBenchify) -> None:
-        response = await async_client.stacks.with_raw_response.create_and_run(
-            command=["sleep", "3600"],
-            image="curlimages/curl:latest",
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        stack = await response.parse()
-        assert_matches_type(StackCreateAndRunResponse, stack, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_streaming_response_create_and_run(self, async_client: AsyncBenchify) -> None:
-        async with async_client.stacks.with_streaming_response.create_and_run(
-            command=["sleep", "3600"],
-            image="curlimages/curl:latest",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            stack = await response.parse()
-            assert_matches_type(StackCreateAndRunResponse, stack, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
