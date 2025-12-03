@@ -79,6 +79,7 @@ pip install benchify[aiohttp]
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
 
 ```python
+import os
 import asyncio
 from benchify import DefaultAioHttpClient
 from benchify import AsyncBenchify
@@ -86,7 +87,7 @@ from benchify import AsyncBenchify
 
 async def main() -> None:
     async with AsyncBenchify(
-        api_key="My API Key",
+        api_key=os.environ.get("BENCHIFY_API_KEY"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
         response = await client.fixer.run()
