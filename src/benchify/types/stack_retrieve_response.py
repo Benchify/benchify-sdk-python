@@ -11,6 +11,8 @@ __all__ = ["StackRetrieveResponse"]
 
 
 class StackRetrieveResponse(BaseModel):
+    """Stack status response"""
+
     id: str
     """Stack identifier"""
 

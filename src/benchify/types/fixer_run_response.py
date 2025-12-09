@@ -35,6 +35,8 @@ __all__ = [
 
 
 class DataStatus(BaseModel):
+    """Final per-file status after fixing"""
+
     composite_status: Literal[
         "FIXED_EVERYTHING", "FIXED_REQUESTED", "PARTIALLY_FIXED", "NO_REQUESTED_ISSUES", "NO_ISSUES", "FAILED"
     ]
@@ -68,6 +70,8 @@ class DataSuggestedChangesChangedFile(BaseModel):
 
 
 class DataSuggestedChanges(BaseModel):
+    """Suggested changes to fix the issues"""
+
     all_files: Optional[List[DataSuggestedChangesAllFile]] = None
     """List of all files with their current contents.
 
@@ -93,6 +97,8 @@ class DataBundleFile(BaseModel):
 
 
 class DataBundle(BaseModel):
+    """Bundle information if bundling was requested"""
+
     build_system: str
 
     status: Literal["SUCCESS", "FAILED", "NOT_ATTEMPTED", "PARTIAL_SUCCESS"]
@@ -117,6 +123,8 @@ class DataFileToStrategyStatistic(BaseModel):
 
 
 class DataFinalDiagnosticsNotRequestedFileToDiagnosticLocation(BaseModel):
+    """Location of the diagnostic"""
+
     column: Optional[float] = None
     """Column number (1-based)"""
 
@@ -151,11 +159,15 @@ class DataFinalDiagnosticsNotRequestedFileToDiagnostic(BaseModel):
 
 
 class DataFinalDiagnosticsNotRequested(BaseModel):
+    """Diagnostics that do not match the requested fix types"""
+
     file_to_diagnostics: Optional[Dict[str, List[DataFinalDiagnosticsNotRequestedFileToDiagnostic]]] = None
     """Diagnostics grouped by file"""
 
 
 class DataFinalDiagnosticsRequestedFileToDiagnosticLocation(BaseModel):
+    """Location of the diagnostic"""
+
     column: Optional[float] = None
     """Column number (1-based)"""
 
@@ -190,11 +202,17 @@ class DataFinalDiagnosticsRequestedFileToDiagnostic(BaseModel):
 
 
 class DataFinalDiagnosticsRequested(BaseModel):
+    """Diagnostics that match the requested fix types"""
+
     file_to_diagnostics: Optional[Dict[str, List[DataFinalDiagnosticsRequestedFileToDiagnostic]]] = None
     """Diagnostics grouped by file"""
 
 
 class DataFinalDiagnostics(BaseModel):
+    """
+    Diagnostics after fixing, split into relevant vs other based on requested fix types
+    """
+
     not_requested: Optional[DataFinalDiagnosticsNotRequested] = None
     """Diagnostics that do not match the requested fix types"""
 
@@ -203,6 +221,8 @@ class DataFinalDiagnostics(BaseModel):
 
 
 class DataInitialDiagnosticsNotRequestedFileToDiagnosticLocation(BaseModel):
+    """Location of the diagnostic"""
+
     column: Optional[float] = None
     """Column number (1-based)"""
 
@@ -237,11 +257,15 @@ class DataInitialDiagnosticsNotRequestedFileToDiagnostic(BaseModel):
 
 
 class DataInitialDiagnosticsNotRequested(BaseModel):
+    """Diagnostics that do not match the requested fix types"""
+
     file_to_diagnostics: Optional[Dict[str, List[DataInitialDiagnosticsNotRequestedFileToDiagnostic]]] = None
     """Diagnostics grouped by file"""
 
 
 class DataInitialDiagnosticsRequestedFileToDiagnosticLocation(BaseModel):
+    """Location of the diagnostic"""
+
     column: Optional[float] = None
     """Column number (1-based)"""
 
@@ -276,11 +300,17 @@ class DataInitialDiagnosticsRequestedFileToDiagnostic(BaseModel):
 
 
 class DataInitialDiagnosticsRequested(BaseModel):
+    """Diagnostics that match the requested fix types"""
+
     file_to_diagnostics: Optional[Dict[str, List[DataInitialDiagnosticsRequestedFileToDiagnostic]]] = None
     """Diagnostics grouped by file"""
 
 
 class DataInitialDiagnostics(BaseModel):
+    """
+    Diagnostics before fixing, split into relevant vs other based on requested fix types
+    """
+
     not_requested: Optional[DataInitialDiagnosticsNotRequested] = None
     """Diagnostics that do not match the requested fix types"""
 
@@ -289,6 +319,8 @@ class DataInitialDiagnostics(BaseModel):
 
 
 class Data(BaseModel):
+    """The actual response data"""
+
     fixer_version: str
     """Version of the fixer"""
 
@@ -321,6 +353,8 @@ class Data(BaseModel):
 
 
 class Error(BaseModel):
+    """The error from the API query"""
+
     code: str
     """The error code"""
 
@@ -332,6 +366,8 @@ class Error(BaseModel):
 
 
 class Meta(BaseModel):
+    """Meta information"""
+
     external_id: Optional[str] = None
     """Customer tracking identifier"""
 

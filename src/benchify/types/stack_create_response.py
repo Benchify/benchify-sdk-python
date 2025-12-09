@@ -11,6 +11,8 @@ __all__ = ["StackCreateResponse", "BuildStatus", "Service"]
 
 
 class BuildStatus(BaseModel):
+    """Build status information"""
+
     phase: Literal["pending", "running", "completed", "failed"]
     """Build phase states"""
 
@@ -25,6 +27,8 @@ class BuildStatus(BaseModel):
 
 
 class Service(BaseModel):
+    """Information about a service in the stack"""
+
     id: str
     """Service identifier"""
 
@@ -45,6 +49,8 @@ class Service(BaseModel):
 
 
 class StackCreateResponse(BaseModel):
+    """Response after creating a new stack"""
+
     id: str
     """Stack identifier"""
 
