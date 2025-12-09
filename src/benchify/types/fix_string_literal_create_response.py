@@ -19,6 +19,8 @@ class DataStrategyStatistic(BaseModel):
 
 
 class Data(BaseModel):
+    """The actual response data"""
+
     contents: str
     """The file contents (original or fixed)"""
 
@@ -36,6 +38,8 @@ class Data(BaseModel):
 
 
 class Error(BaseModel):
+    """The error from the API query"""
+
     code: str
     """The error code"""
 
@@ -47,6 +51,8 @@ class Error(BaseModel):
 
 
 class Meta(BaseModel):
+    """Meta information"""
+
     external_id: Optional[str] = None
     """Customer tracking identifier"""
 

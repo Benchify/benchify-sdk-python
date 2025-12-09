@@ -55,5 +55,7 @@ class File(TypedDict, total=False):
 
 
 class Meta(TypedDict, total=False):
+    """Meta information for the request"""
+
     external_id: Optional[str]
     """Customer tracking identifier"""

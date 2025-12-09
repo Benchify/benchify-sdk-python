@@ -25,6 +25,8 @@ class DataFileResults(BaseModel):
 
 
 class Data(BaseModel):
+    """The actual response data"""
+
     execution_time: float
     """Time taken to execute AI fallback in seconds"""
 
@@ -51,6 +53,8 @@ class Data(BaseModel):
 
 
 class Error(BaseModel):
+    """The error from the API query"""
+
     code: str
     """The error code"""
 
@@ -62,6 +66,8 @@ class Error(BaseModel):
 
 
 class Meta(BaseModel):
+    """Meta information"""
+
     external_id: Optional[str] = None
     """Customer tracking identifier"""
 

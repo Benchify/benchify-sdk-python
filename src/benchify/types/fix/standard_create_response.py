@@ -27,6 +27,8 @@ class DataChangedFile(BaseModel):
 
 
 class DataRemainingDiagnosticsFileToDiagnosticLocation(BaseModel):
+    """Location of the diagnostic"""
+
     column: Optional[float] = None
     """Column number (1-based)"""
 
@@ -61,6 +63,8 @@ class DataRemainingDiagnosticsFileToDiagnostic(BaseModel):
 
 
 class DataRemainingDiagnostics(BaseModel):
+    """Remaining diagnostics after standard fixes"""
+
     file_to_diagnostics: Optional[Dict[str, List[DataRemainingDiagnosticsFileToDiagnostic]]] = None
     """Diagnostics grouped by file"""
 
@@ -74,6 +78,8 @@ class DataBundledFile(BaseModel):
 
 
 class Data(BaseModel):
+    """The actual response data"""
+
     changed_files: List[DataChangedFile]
     """Files that were modified during fixing"""
 
@@ -103,6 +109,8 @@ class Data(BaseModel):
 
 
 class Error(BaseModel):
+    """The error from the API query"""
+
     code: str
     """The error code"""
 
@@ -114,6 +122,8 @@ class Error(BaseModel):
 
 
 class Meta(BaseModel):
+    """Meta information"""
+
     external_id: Optional[str] = None
     """Customer tracking identifier"""
 

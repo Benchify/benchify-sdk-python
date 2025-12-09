@@ -11,6 +11,8 @@ __all__ = ["StackGetLogsResponse", "Service"]
 
 
 class Service(BaseModel):
+    """Logs from a single service"""
+
     id: str
     """Service ID"""
 
@@ -28,6 +30,8 @@ class Service(BaseModel):
 
 
 class StackGetLogsResponse(BaseModel):
+    """Structured logs response from stack"""
+
     id: str
     """Stack ID"""
 

@@ -53,6 +53,8 @@ class File(TypedDict, total=False):
 
 
 class RemainingDiagnosticsFileToDiagnosticLocation(TypedDict, total=False):
+    """Location of the diagnostic"""
+
     column: Required[Optional[float]]
     """Column number (1-based)"""
 
@@ -87,10 +89,14 @@ class RemainingDiagnosticsFileToDiagnostic(TypedDict, total=False):
 
 
 class RemainingDiagnostics(TypedDict, total=False):
+    """Diagnostics to fix (output from step 1 or previous fixes)"""
+
     file_to_diagnostics: Dict[str, Iterable[RemainingDiagnosticsFileToDiagnostic]]
     """Diagnostics grouped by file"""
 
 
 class Meta(TypedDict, total=False):
+    """Meta information for the request"""
+
     external_id: Optional[str]
     """Customer tracking identifier"""
