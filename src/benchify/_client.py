@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Mapping
+from typing import TYPE_CHECKING, Any, Mapping
 from typing_extensions import Self, override
 
 import httpx
@@ -21,8 +21,8 @@ from ._types import (
     not_given,
 )
 from ._utils import is_given, get_async_library
+from ._compat import cached_property
 from ._version import __version__
-from .resources import fixer, validate_template, fix_string_literals, fix_parsing_and_diagnose
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import APIStatusError
 from ._base_client import (
@@ -30,8 +30,15 @@ from ._base_client import (
     SyncAPIClient,
     AsyncAPIClient,
 )
-from .resources.fix import fix
-from .resources.stacks import stacks
+
+if TYPE_CHECKING:
+    from .resources import fix, fixer, stacks, validate_template, fix_string_literals, fix_parsing_and_diagnose
+    from .resources.fixer import FixerResource, AsyncFixerResource
+    from .resources.fix.fix import FixResource, AsyncFixResource
+    from .resources.stacks.stacks import StacksResource, AsyncStacksResource
+    from .resources.validate_template import ValidateTemplateResource, AsyncValidateTemplateResource
+    from .resources.fix_string_literals import FixStringLiteralsResource, AsyncFixStringLiteralsResource
+    from .resources.fix_parsing_and_diagnose import FixParsingAndDiagnoseResource, AsyncFixParsingAndDiagnoseResource
 
 __all__ = [
     "Timeout",
@@ -46,15 +53,6 @@ __all__ = [
 
 
 class Benchify(SyncAPIClient):
-    fixer: fixer.FixerResource
-    stacks: stacks.StacksResource
-    fix_string_literals: fix_string_literals.FixStringLiteralsResource
-    validate_template: validate_template.ValidateTemplateResource
-    fix_parsing_and_diagnose: fix_parsing_and_diagnose.FixParsingAndDiagnoseResource
-    fix: fix.FixResource
-    with_raw_response: BenchifyWithRawResponse
-    with_streaming_response: BenchifyWithStreamedResponse
-
     # client options
     api_key: str | None
 
@@ -105,14 +103,49 @@ class Benchify(SyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
-        self.fixer = fixer.FixerResource(self)
-        self.stacks = stacks.StacksResource(self)
-        self.fix_string_literals = fix_string_literals.FixStringLiteralsResource(self)
-        self.validate_template = validate_template.ValidateTemplateResource(self)
-        self.fix_parsing_and_diagnose = fix_parsing_and_diagnose.FixParsingAndDiagnoseResource(self)
-        self.fix = fix.FixResource(self)
-        self.with_raw_response = BenchifyWithRawResponse(self)
-        self.with_streaming_response = BenchifyWithStreamedResponse(self)
+    @cached_property
+    def fixer(self) -> FixerResource:
+        from .resources.fixer import FixerResource
+
+        return FixerResource(self)
+
+    @cached_property
+    def stacks(self) -> StacksResource:
+        from .resources.stacks import StacksResource
+
+        return StacksResource(self)
+
+    @cached_property
+    def fix_string_literals(self) -> FixStringLiteralsResource:
+        from .resources.fix_string_literals import FixStringLiteralsResource
+
+        return FixStringLiteralsResource(self)
+
+    @cached_property
+    def validate_template(self) -> ValidateTemplateResource:
+        from .resources.validate_template import ValidateTemplateResource
+
+        return ValidateTemplateResource(self)
+
+    @cached_property
+    def fix_parsing_and_diagnose(self) -> FixParsingAndDiagnoseResource:
+        from .resources.fix_parsing_and_diagnose import FixParsingAndDiagnoseResource
+
+        return FixParsingAndDiagnoseResource(self)
+
+    @cached_property
+    def fix(self) -> FixResource:
+        from .resources.fix import FixResource
+
+        return FixResource(self)
+
+    @cached_property
+    def with_raw_response(self) -> BenchifyWithRawResponse:
+        return BenchifyWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> BenchifyWithStreamedResponse:
+        return BenchifyWithStreamedResponse(self)
 
     @property
     @override
@@ -233,15 +266,6 @@ class Benchify(SyncAPIClient):
 
 
 class AsyncBenchify(AsyncAPIClient):
-    fixer: fixer.AsyncFixerResource
-    stacks: stacks.AsyncStacksResource
-    fix_string_literals: fix_string_literals.AsyncFixStringLiteralsResource
-    validate_template: validate_template.AsyncValidateTemplateResource
-    fix_parsing_and_diagnose: fix_parsing_and_diagnose.AsyncFixParsingAndDiagnoseResource
-    fix: fix.AsyncFixResource
-    with_raw_response: AsyncBenchifyWithRawResponse
-    with_streaming_response: AsyncBenchifyWithStreamedResponse
-
     # client options
     api_key: str | None
 
@@ -292,14 +316,49 @@ class AsyncBenchify(AsyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
-        self.fixer = fixer.AsyncFixerResource(self)
-        self.stacks = stacks.AsyncStacksResource(self)
-        self.fix_string_literals = fix_string_literals.AsyncFixStringLiteralsResource(self)
-        self.validate_template = validate_template.AsyncValidateTemplateResource(self)
-        self.fix_parsing_and_diagnose = fix_parsing_and_diagnose.AsyncFixParsingAndDiagnoseResource(self)
-        self.fix = fix.AsyncFixResource(self)
-        self.with_raw_response = AsyncBenchifyWithRawResponse(self)
-        self.with_streaming_response = AsyncBenchifyWithStreamedResponse(self)
+    @cached_property
+    def fixer(self) -> AsyncFixerResource:
+        from .resources.fixer import AsyncFixerResource
+
+        return AsyncFixerResource(self)
+
+    @cached_property
+    def stacks(self) -> AsyncStacksResource:
+        from .resources.stacks import AsyncStacksResource
+
+        return AsyncStacksResource(self)
+
+    @cached_property
+    def fix_string_literals(self) -> AsyncFixStringLiteralsResource:
+        from .resources.fix_string_literals import AsyncFixStringLiteralsResource
+
+        return AsyncFixStringLiteralsResource(self)
+
+    @cached_property
+    def validate_template(self) -> AsyncValidateTemplateResource:
+        from .resources.validate_template import AsyncValidateTemplateResource
+
+        return AsyncValidateTemplateResource(self)
+
+    @cached_property
+    def fix_parsing_and_diagnose(self) -> AsyncFixParsingAndDiagnoseResource:
+        from .resources.fix_parsing_and_diagnose import AsyncFixParsingAndDiagnoseResource
+
+        return AsyncFixParsingAndDiagnoseResource(self)
+
+    @cached_property
+    def fix(self) -> AsyncFixResource:
+        from .resources.fix import AsyncFixResource
+
+        return AsyncFixResource(self)
+
+    @cached_property
+    def with_raw_response(self) -> AsyncBenchifyWithRawResponse:
+        return AsyncBenchifyWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> AsyncBenchifyWithStreamedResponse:
+        return AsyncBenchifyWithStreamedResponse(self)
 
     @property
     @override
@@ -420,67 +479,177 @@ class AsyncBenchify(AsyncAPIClient):
 
 
 class BenchifyWithRawResponse:
+    _client: Benchify
+
     def __init__(self, client: Benchify) -> None:
-        self.fixer = fixer.FixerResourceWithRawResponse(client.fixer)
-        self.stacks = stacks.StacksResourceWithRawResponse(client.stacks)
-        self.fix_string_literals = fix_string_literals.FixStringLiteralsResourceWithRawResponse(
-            client.fix_string_literals
-        )
-        self.validate_template = validate_template.ValidateTemplateResourceWithRawResponse(client.validate_template)
-        self.fix_parsing_and_diagnose = fix_parsing_and_diagnose.FixParsingAndDiagnoseResourceWithRawResponse(
-            client.fix_parsing_and_diagnose
-        )
-        self.fix = fix.FixResourceWithRawResponse(client.fix)
+        self._client = client
+
+    @cached_property
+    def fixer(self) -> fixer.FixerResourceWithRawResponse:
+        from .resources.fixer import FixerResourceWithRawResponse
+
+        return FixerResourceWithRawResponse(self._client.fixer)
+
+    @cached_property
+    def stacks(self) -> stacks.StacksResourceWithRawResponse:
+        from .resources.stacks import StacksResourceWithRawResponse
+
+        return StacksResourceWithRawResponse(self._client.stacks)
+
+    @cached_property
+    def fix_string_literals(self) -> fix_string_literals.FixStringLiteralsResourceWithRawResponse:
+        from .resources.fix_string_literals import FixStringLiteralsResourceWithRawResponse
+
+        return FixStringLiteralsResourceWithRawResponse(self._client.fix_string_literals)
+
+    @cached_property
+    def validate_template(self) -> validate_template.ValidateTemplateResourceWithRawResponse:
+        from .resources.validate_template import ValidateTemplateResourceWithRawResponse
+
+        return ValidateTemplateResourceWithRawResponse(self._client.validate_template)
+
+    @cached_property
+    def fix_parsing_and_diagnose(self) -> fix_parsing_and_diagnose.FixParsingAndDiagnoseResourceWithRawResponse:
+        from .resources.fix_parsing_and_diagnose import FixParsingAndDiagnoseResourceWithRawResponse
+
+        return FixParsingAndDiagnoseResourceWithRawResponse(self._client.fix_parsing_and_diagnose)
+
+    @cached_property
+    def fix(self) -> fix.FixResourceWithRawResponse:
+        from .resources.fix import FixResourceWithRawResponse
+
+        return FixResourceWithRawResponse(self._client.fix)
 
 
 class AsyncBenchifyWithRawResponse:
+    _client: AsyncBenchify
+
     def __init__(self, client: AsyncBenchify) -> None:
-        self.fixer = fixer.AsyncFixerResourceWithRawResponse(client.fixer)
-        self.stacks = stacks.AsyncStacksResourceWithRawResponse(client.stacks)
-        self.fix_string_literals = fix_string_literals.AsyncFixStringLiteralsResourceWithRawResponse(
-            client.fix_string_literals
-        )
-        self.validate_template = validate_template.AsyncValidateTemplateResourceWithRawResponse(
-            client.validate_template
-        )
-        self.fix_parsing_and_diagnose = fix_parsing_and_diagnose.AsyncFixParsingAndDiagnoseResourceWithRawResponse(
-            client.fix_parsing_and_diagnose
-        )
-        self.fix = fix.AsyncFixResourceWithRawResponse(client.fix)
+        self._client = client
+
+    @cached_property
+    def fixer(self) -> fixer.AsyncFixerResourceWithRawResponse:
+        from .resources.fixer import AsyncFixerResourceWithRawResponse
+
+        return AsyncFixerResourceWithRawResponse(self._client.fixer)
+
+    @cached_property
+    def stacks(self) -> stacks.AsyncStacksResourceWithRawResponse:
+        from .resources.stacks import AsyncStacksResourceWithRawResponse
+
+        return AsyncStacksResourceWithRawResponse(self._client.stacks)
+
+    @cached_property
+    def fix_string_literals(self) -> fix_string_literals.AsyncFixStringLiteralsResourceWithRawResponse:
+        from .resources.fix_string_literals import AsyncFixStringLiteralsResourceWithRawResponse
+
+        return AsyncFixStringLiteralsResourceWithRawResponse(self._client.fix_string_literals)
+
+    @cached_property
+    def validate_template(self) -> validate_template.AsyncValidateTemplateResourceWithRawResponse:
+        from .resources.validate_template import AsyncValidateTemplateResourceWithRawResponse
+
+        return AsyncValidateTemplateResourceWithRawResponse(self._client.validate_template)
+
+    @cached_property
+    def fix_parsing_and_diagnose(self) -> fix_parsing_and_diagnose.AsyncFixParsingAndDiagnoseResourceWithRawResponse:
+        from .resources.fix_parsing_and_diagnose import AsyncFixParsingAndDiagnoseResourceWithRawResponse
+
+        return AsyncFixParsingAndDiagnoseResourceWithRawResponse(self._client.fix_parsing_and_diagnose)
+
+    @cached_property
+    def fix(self) -> fix.AsyncFixResourceWithRawResponse:
+        from .resources.fix import AsyncFixResourceWithRawResponse
+
+        return AsyncFixResourceWithRawResponse(self._client.fix)
 
 
 class BenchifyWithStreamedResponse:
+    _client: Benchify
+
     def __init__(self, client: Benchify) -> None:
-        self.fixer = fixer.FixerResourceWithStreamingResponse(client.fixer)
-        self.stacks = stacks.StacksResourceWithStreamingResponse(client.stacks)
-        self.fix_string_literals = fix_string_literals.FixStringLiteralsResourceWithStreamingResponse(
-            client.fix_string_literals
-        )
-        self.validate_template = validate_template.ValidateTemplateResourceWithStreamingResponse(
-            client.validate_template
-        )
-        self.fix_parsing_and_diagnose = fix_parsing_and_diagnose.FixParsingAndDiagnoseResourceWithStreamingResponse(
-            client.fix_parsing_and_diagnose
-        )
-        self.fix = fix.FixResourceWithStreamingResponse(client.fix)
+        self._client = client
+
+    @cached_property
+    def fixer(self) -> fixer.FixerResourceWithStreamingResponse:
+        from .resources.fixer import FixerResourceWithStreamingResponse
+
+        return FixerResourceWithStreamingResponse(self._client.fixer)
+
+    @cached_property
+    def stacks(self) -> stacks.StacksResourceWithStreamingResponse:
+        from .resources.stacks import StacksResourceWithStreamingResponse
+
+        return StacksResourceWithStreamingResponse(self._client.stacks)
+
+    @cached_property
+    def fix_string_literals(self) -> fix_string_literals.FixStringLiteralsResourceWithStreamingResponse:
+        from .resources.fix_string_literals import FixStringLiteralsResourceWithStreamingResponse
+
+        return FixStringLiteralsResourceWithStreamingResponse(self._client.fix_string_literals)
+
+    @cached_property
+    def validate_template(self) -> validate_template.ValidateTemplateResourceWithStreamingResponse:
+        from .resources.validate_template import ValidateTemplateResourceWithStreamingResponse
+
+        return ValidateTemplateResourceWithStreamingResponse(self._client.validate_template)
+
+    @cached_property
+    def fix_parsing_and_diagnose(self) -> fix_parsing_and_diagnose.FixParsingAndDiagnoseResourceWithStreamingResponse:
+        from .resources.fix_parsing_and_diagnose import FixParsingAndDiagnoseResourceWithStreamingResponse
+
+        return FixParsingAndDiagnoseResourceWithStreamingResponse(self._client.fix_parsing_and_diagnose)
+
+    @cached_property
+    def fix(self) -> fix.FixResourceWithStreamingResponse:
+        from .resources.fix import FixResourceWithStreamingResponse
+
+        return FixResourceWithStreamingResponse(self._client.fix)
 
 
 class AsyncBenchifyWithStreamedResponse:
+    _client: AsyncBenchify
+
     def __init__(self, client: AsyncBenchify) -> None:
-        self.fixer = fixer.AsyncFixerResourceWithStreamingResponse(client.fixer)
-        self.stacks = stacks.AsyncStacksResourceWithStreamingResponse(client.stacks)
-        self.fix_string_literals = fix_string_literals.AsyncFixStringLiteralsResourceWithStreamingResponse(
-            client.fix_string_literals
-        )
-        self.validate_template = validate_template.AsyncValidateTemplateResourceWithStreamingResponse(
-            client.validate_template
-        )
-        self.fix_parsing_and_diagnose = (
-            fix_parsing_and_diagnose.AsyncFixParsingAndDiagnoseResourceWithStreamingResponse(
-                client.fix_parsing_and_diagnose
-            )
-        )
-        self.fix = fix.AsyncFixResourceWithStreamingResponse(client.fix)
+        self._client = client
+
+    @cached_property
+    def fixer(self) -> fixer.AsyncFixerResourceWithStreamingResponse:
+        from .resources.fixer import AsyncFixerResourceWithStreamingResponse
+
+        return AsyncFixerResourceWithStreamingResponse(self._client.fixer)
+
+    @cached_property
+    def stacks(self) -> stacks.AsyncStacksResourceWithStreamingResponse:
+        from .resources.stacks import AsyncStacksResourceWithStreamingResponse
+
+        return AsyncStacksResourceWithStreamingResponse(self._client.stacks)
+
+    @cached_property
+    def fix_string_literals(self) -> fix_string_literals.AsyncFixStringLiteralsResourceWithStreamingResponse:
+        from .resources.fix_string_literals import AsyncFixStringLiteralsResourceWithStreamingResponse
+
+        return AsyncFixStringLiteralsResourceWithStreamingResponse(self._client.fix_string_literals)
+
+    @cached_property
+    def validate_template(self) -> validate_template.AsyncValidateTemplateResourceWithStreamingResponse:
+        from .resources.validate_template import AsyncValidateTemplateResourceWithStreamingResponse
+
+        return AsyncValidateTemplateResourceWithStreamingResponse(self._client.validate_template)
+
+    @cached_property
+    def fix_parsing_and_diagnose(
+        self,
+    ) -> fix_parsing_and_diagnose.AsyncFixParsingAndDiagnoseResourceWithStreamingResponse:
+        from .resources.fix_parsing_and_diagnose import AsyncFixParsingAndDiagnoseResourceWithStreamingResponse
+
+        return AsyncFixParsingAndDiagnoseResourceWithStreamingResponse(self._client.fix_parsing_and_diagnose)
+
+    @cached_property
+    def fix(self) -> fix.AsyncFixResourceWithStreamingResponse:
+        from .resources.fix import AsyncFixResourceWithStreamingResponse
+
+        return AsyncFixResourceWithStreamingResponse(self._client.fix)
 
 
 Client = Benchify
