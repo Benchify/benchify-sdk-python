@@ -34,8 +34,8 @@ from ._base_client import (
 if TYPE_CHECKING:
     from .resources import fix, fixer, stacks, validate_template, fix_string_literals, fix_parsing_and_diagnose
     from .resources.fixer import FixerResource, AsyncFixerResource
+    from .resources.stacks import StacksResource, AsyncStacksResource
     from .resources.fix.fix import FixResource, AsyncFixResource
-    from .resources.stacks.stacks import StacksResource, AsyncStacksResource
     from .resources.validate_template import ValidateTemplateResource, AsyncValidateTemplateResource
     from .resources.fix_string_literals import FixStringLiteralsResource, AsyncFixStringLiteralsResource
     from .resources.fix_parsing_and_diagnose import FixParsingAndDiagnoseResource, AsyncFixParsingAndDiagnoseResource
