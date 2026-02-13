@@ -6,7 +6,7 @@ from typing import Mapping, cast
 
 import httpx
 
-from ...types import (
+from ..types import (
     stack_reset_params,
     stack_create_params,
     stack_update_params,
@@ -17,39 +17,28 @@ from ...types import (
     stack_bundle_multipart_params,
     stack_wait_for_dev_server_url_params,
 )
-from ..._types import (
-    Body,
-    Omit,
-    Query,
-    Headers,
-    NoneType,
-    NotGiven,
-    FileTypes,
-    SequenceNotStr,
-    omit,
-    not_given,
-)
-from ..._utils import extract_files, maybe_transform, strip_not_given, deepcopy_minimal, async_maybe_transform
-from ..._compat import cached_property
-from ..._resource import SyncAPIResource, AsyncAPIResource
-from ..._response import (
+from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, FileTypes, SequenceNotStr, omit, not_given
+from .._utils import extract_files, maybe_transform, strip_not_given, deepcopy_minimal, async_maybe_transform
+from .._compat import cached_property
+from .._resource import SyncAPIResource, AsyncAPIResource
+from .._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..._base_client import make_request_options
-from ...types.stack_reset_response import StackResetResponse
-from ...types.stack_create_response import StackCreateResponse
-from ...types.stack_update_response import StackUpdateResponse
-from ...types.stack_get_logs_response import StackGetLogsResponse
-from ...types.stack_retrieve_response import StackRetrieveResponse
-from ...types.stack_read_file_response import StackReadFileResponse
-from ...types.stack_write_file_response import StackWriteFileResponse
-from ...types.stack_execute_command_response import StackExecuteCommandResponse
-from ...types.stack_bundle_multipart_response import StackBundleMultipartResponse
-from ...types.stack_get_network_info_response import StackGetNetworkInfoResponse
-from ...types.stack_wait_for_dev_server_url_response import StackWaitForDevServerURLResponse
+from .._base_client import make_request_options
+from ..types.stack_reset_response import StackResetResponse
+from ..types.stack_create_response import StackCreateResponse
+from ..types.stack_update_response import StackUpdateResponse
+from ..types.stack_get_logs_response import StackGetLogsResponse
+from ..types.stack_retrieve_response import StackRetrieveResponse
+from ..types.stack_read_file_response import StackReadFileResponse
+from ..types.stack_write_file_response import StackWriteFileResponse
+from ..types.stack_execute_command_response import StackExecuteCommandResponse
+from ..types.stack_bundle_multipart_response import StackBundleMultipartResponse
+from ..types.stack_get_network_info_response import StackGetNetworkInfoResponse
+from ..types.stack_wait_for_dev_server_url_response import StackWaitForDevServerURLResponse
 
 __all__ = ["StacksResource", "AsyncStacksResource"]
 
