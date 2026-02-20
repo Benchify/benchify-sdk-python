@@ -17,7 +17,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestStandard:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create(self, client: Benchify) -> None:
         standard = client.fix.standard.create(
@@ -35,7 +35,7 @@ class TestStandard:
         )
         assert_matches_type(StandardCreateResponse, standard, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create_with_all_params(self, client: Benchify) -> None:
         standard = client.fix.standard.create(
@@ -78,7 +78,7 @@ class TestStandard:
         )
         assert_matches_type(StandardCreateResponse, standard, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_create(self, client: Benchify) -> None:
         response = client.fix.standard.with_raw_response.create(
@@ -100,7 +100,7 @@ class TestStandard:
         standard = response.parse()
         assert_matches_type(StandardCreateResponse, standard, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_create(self, client: Benchify) -> None:
         with client.fix.standard.with_streaming_response.create(
@@ -130,7 +130,7 @@ class TestAsyncStandard:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create(self, async_client: AsyncBenchify) -> None:
         standard = await async_client.fix.standard.create(
@@ -148,7 +148,7 @@ class TestAsyncStandard:
         )
         assert_matches_type(StandardCreateResponse, standard, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncBenchify) -> None:
         standard = await async_client.fix.standard.create(
@@ -191,7 +191,7 @@ class TestAsyncStandard:
         )
         assert_matches_type(StandardCreateResponse, standard, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncBenchify) -> None:
         response = await async_client.fix.standard.with_raw_response.create(
@@ -213,7 +213,7 @@ class TestAsyncStandard:
         standard = await response.parse()
         assert_matches_type(StandardCreateResponse, standard, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncBenchify) -> None:
         async with async_client.fix.standard.with_streaming_response.create(
