@@ -1,5 +1,65 @@
 # Changelog
 
+## 0.8.0 (2026-02-25)
+
+Full Changelog: [v0.7.0...v0.8.0](https://github.com/Benchify/benchify-sdk-python/compare/v0.7.0...v0.8.0)
+
+### Features
+
+* **api:** api update ([f17bb88](https://github.com/Benchify/benchify-sdk-python/commit/f17bb881929a54d56e181167942b29966e6239e1))
+* **api:** api update ([988433a](https://github.com/Benchify/benchify-sdk-python/commit/988433adb17c6723785fcc79d112d1235864858e))
+* **api:** api update ([acbdbdd](https://github.com/Benchify/benchify-sdk-python/commit/acbdbddbfc8a6bf0c32339b4a68635500cf7bb73))
+* **api:** api update ([3a56790](https://github.com/Benchify/benchify-sdk-python/commit/3a56790797c67b357047e2cf3ffcc857490e28ea))
+* **api:** api update ([b42ea01](https://github.com/Benchify/benchify-sdk-python/commit/b42ea01495e0b0b68712d3845933a1fd16964e1c))
+* **api:** api update ([db0f873](https://github.com/Benchify/benchify-sdk-python/commit/db0f87365147f7478889d69bf6e14807a878c30a))
+* **api:** manual updates ([c3106c7](https://github.com/Benchify/benchify-sdk-python/commit/c3106c7a605a7dc8711ca81f96863a5e20ae81be))
+* **api:** manual updates ([4e28d49](https://github.com/Benchify/benchify-sdk-python/commit/4e28d49d08c13027bf89b728d8139bf6f8a8e1d4))
+* **api:** manual updates ([9d3bc91](https://github.com/Benchify/benchify-sdk-python/commit/9d3bc91b39de22ee755e7afb125665ac7d62d7c7))
+* **api:** manual updates ([86d3bcd](https://github.com/Benchify/benchify-sdk-python/commit/86d3bcd4b43249e2a7e86723184968be5ac435ae))
+* **api:** manual updates ([676a40a](https://github.com/Benchify/benchify-sdk-python/commit/676a40a70134370ecdca261c9804bbe8939e8d9b))
+* **client:** add custom JSON encoder for extended type support ([11383dd](https://github.com/Benchify/benchify-sdk-python/commit/11383dd4f5806a594f3131f423c4e27c150e3200))
+* **client:** add support for binary request streaming ([2c35482](https://github.com/Benchify/benchify-sdk-python/commit/2c35482f9d7fc168d95dc23b7eff85503739b369))
+
+
+### Bug Fixes
+
+* **client:** loosen auth header validation ([8c22a38](https://github.com/Benchify/benchify-sdk-python/commit/8c22a38c0969909e0aa24b5a856b59a6f506ba9b))
+* compat with Python 3.14 ([75b948d](https://github.com/Benchify/benchify-sdk-python/commit/75b948d1aa8d9bc26eef28b9a71e39ba8b9b2c9a))
+* **compat:** update signatures of `model_dump` and `model_dump_json` for Pydantic v1 ([096f67b](https://github.com/Benchify/benchify-sdk-python/commit/096f67bad9d1d7f8e55987ec4a1a15e3a41f224a))
+* **docs:** fix mcp installation instructions for remote servers ([378d782](https://github.com/Benchify/benchify-sdk-python/commit/378d7822f3073a570ddbf64f4a4521a210f0fdf9))
+* ensure streams are always closed ([04ce4dc](https://github.com/Benchify/benchify-sdk-python/commit/04ce4dc454aab185e59aec577c12eb89252045f7))
+* **types:** allow pyright to infer TypedDict types within SequenceNotStr ([fae18b6](https://github.com/Benchify/benchify-sdk-python/commit/fae18b6333d3697845bbf233ea20f55c96202561))
+* use async_to_httpx_files in patch method ([7732f70](https://github.com/Benchify/benchify-sdk-python/commit/7732f705f48dd431880c8ed65708a4cf5b8eff06))
+
+
+### Chores
+
+* add missing docstrings ([2564e8d](https://github.com/Benchify/benchify-sdk-python/commit/2564e8dbd691cd3ca3d47ed56dcdb21c96ef249f))
+* add Python 3.14 classifier and testing ([dc5218c](https://github.com/Benchify/benchify-sdk-python/commit/dc5218cfd1712d7b2bf5671b2985ae12eae6d4b7))
+* **ci:** upgrade `actions/github-script` ([b0d0279](https://github.com/Benchify/benchify-sdk-python/commit/b0d0279c1f1b22a6ff09802fb1d04dd66dd1c0a4))
+* **deps:** mypy 1.18.1 has a regression, pin to 1.17 ([69a5933](https://github.com/Benchify/benchify-sdk-python/commit/69a5933b2a0671dd5c4d8a50bfa15e0af49d0a9c))
+* **docs:** use environment variables for authentication in code snippets ([0a45222](https://github.com/Benchify/benchify-sdk-python/commit/0a45222f9cbf46b0319c20b382c4d6bf593c148b))
+* format all `api.md` files ([711513d](https://github.com/Benchify/benchify-sdk-python/commit/711513df3f25b7a222c6d6a98843c5a6d9fc1e9c))
+* **internal:** add `--fix` argument to lint script ([3cfbbf7](https://github.com/Benchify/benchify-sdk-python/commit/3cfbbf79912010c381c10a4ec25c0b96eac0a5f9))
+* **internal:** add missing files argument to base client ([d16ba69](https://github.com/Benchify/benchify-sdk-python/commit/d16ba6962962dd2feb5c5d5d9ef6d102f9f6c576))
+* **internal:** add request options to SSE classes ([354018a](https://github.com/Benchify/benchify-sdk-python/commit/354018a24317362a1b089ecfc05cb054bf50fe98))
+* **internal:** bump dependencies ([6681cdf](https://github.com/Benchify/benchify-sdk-python/commit/6681cdf5dde39dcadfd2006194277931dc785d0e))
+* **internal:** codegen related update ([9c77b1b](https://github.com/Benchify/benchify-sdk-python/commit/9c77b1bc44be11429ef47d60004997ac38ec1daa))
+* **internal:** fix lint error on Python 3.14 ([4f8e8e8](https://github.com/Benchify/benchify-sdk-python/commit/4f8e8e8735c4e156faa4d9dba479ca5ad42bf92a))
+* **internal:** make `test_proxy_environment_variables` more resilient ([46524de](https://github.com/Benchify/benchify-sdk-python/commit/46524de6bbe962ba385dd851f14bad6724a727f0))
+* **internal:** make `test_proxy_environment_variables` more resilient to env ([3e63088](https://github.com/Benchify/benchify-sdk-python/commit/3e630889266a7141a7c55608e9a82a0a9ba356da))
+* **internal:** remove mock server code ([10a1f64](https://github.com/Benchify/benchify-sdk-python/commit/10a1f64f9e861aba06f334c933e9ef716b1ea141))
+* **internal:** update `actions/checkout` version ([1450fbd](https://github.com/Benchify/benchify-sdk-python/commit/1450fbd5b449481749a518d3b8c1410ba8473b05))
+* **package:** drop Python 3.8 support ([f5b1d6b](https://github.com/Benchify/benchify-sdk-python/commit/f5b1d6b16383e15a84a2d3a974d8fa5380a7a676))
+* speedup initial import ([3791761](https://github.com/Benchify/benchify-sdk-python/commit/37917619e0f6b6506afa8251aaa3cb0760907886))
+* update lockfile ([9a95a83](https://github.com/Benchify/benchify-sdk-python/commit/9a95a832a4bf7a3b456c8919e5b28adab0666f90))
+* update mock server docs ([8c7ae7b](https://github.com/Benchify/benchify-sdk-python/commit/8c7ae7b7ef535ee037dcccd0f074348dd21b7ea1))
+
+
+### Documentation
+
+* prominently feature MCP server setup in root SDK readmes ([73251c3](https://github.com/Benchify/benchify-sdk-python/commit/73251c34c556b8010d7c18d8f200930a9e3b1a87))
+
 ## 0.7.0 (2025-11-07)
 
 Full Changelog: [v0.6.0...v0.7.0](https://github.com/Benchify/benchify-sdk-python/compare/v0.6.0...v0.7.0)

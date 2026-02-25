@@ -30,6 +30,8 @@ class DataChangedFile(BaseModel):
 
 
 class DataDiagnosticsNotRequestedFileToDiagnosticLocation(BaseModel):
+    """Location of the diagnostic"""
+
     column: Optional[float] = None
     """Column number (1-based)"""
 
@@ -64,11 +66,15 @@ class DataDiagnosticsNotRequestedFileToDiagnostic(BaseModel):
 
 
 class DataDiagnosticsNotRequested(BaseModel):
+    """Diagnostics that do not match the requested fix types"""
+
     file_to_diagnostics: Optional[Dict[str, List[DataDiagnosticsNotRequestedFileToDiagnostic]]] = None
     """Diagnostics grouped by file"""
 
 
 class DataDiagnosticsRequestedFileToDiagnosticLocation(BaseModel):
+    """Location of the diagnostic"""
+
     column: Optional[float] = None
     """Column number (1-based)"""
 
@@ -103,11 +109,15 @@ class DataDiagnosticsRequestedFileToDiagnostic(BaseModel):
 
 
 class DataDiagnosticsRequested(BaseModel):
+    """Diagnostics that match the requested fix types"""
+
     file_to_diagnostics: Optional[Dict[str, List[DataDiagnosticsRequestedFileToDiagnostic]]] = None
     """Diagnostics grouped by file"""
 
 
 class DataDiagnostics(BaseModel):
+    """Diagnostics split into fixable (requested) and other (not_requested) groups"""
+
     not_requested: Optional[DataDiagnosticsNotRequested] = None
     """Diagnostics that do not match the requested fix types"""
 
@@ -130,6 +140,8 @@ class DataFixTypesAvailable(BaseModel):
 
 
 class Data(BaseModel):
+    """The actual response data"""
+
     changed_files: List[DataChangedFile]
     """Files that were changed during detection"""
 
@@ -144,6 +156,9 @@ class Data(BaseModel):
 
     estimated_total_fix_time: float
     """Estimated total time to fix all issues in seconds"""
+
+    event_id: str
+    """Event ID for tracking this operation across steps"""
 
     files_analyzed: float
     """Number of files that were analyzed"""
@@ -165,6 +180,8 @@ class Data(BaseModel):
 
 
 class Error(BaseModel):
+    """The error from the API query"""
+
     code: str
     """The error code"""
 
@@ -176,6 +193,8 @@ class Error(BaseModel):
 
 
 class Meta(BaseModel):
+    """Meta information"""
+
     external_id: Optional[str] = None
     """Customer tracking identifier"""
 

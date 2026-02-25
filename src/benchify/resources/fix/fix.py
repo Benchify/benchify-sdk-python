@@ -60,11 +60,12 @@ class FixResource(SyncAPIResource):
         *,
         files: Iterable[fix_create_ai_fallback_params.File],
         remaining_diagnostics: fix_create_ai_fallback_params.RemainingDiagnostics,
-        template_path: str,
+        continuation_event_id: str | Omit = omit,
         event_id: str | Omit = omit,
         include_context: bool | Omit = omit,
         max_attempts: float | Omit = omit,
         meta: Optional[fix_create_ai_fallback_params.Meta] | Omit = omit,
+        template_path: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -83,7 +84,7 @@ class FixResource(SyncAPIResource):
 
           remaining_diagnostics: Diagnostics that remain after standard fixing
 
-          template_path: Full path to the template
+          continuation_event_id: Event ID from Step 1 to continue with the same temp directory
 
           event_id: Unique identifier for the event
 
@@ -92,6 +93,9 @@ class FixResource(SyncAPIResource):
           max_attempts: Maximum number of AI fix attempts
 
           meta: Meta information for the request
+
+          template_path: Template path for project context (defaults to benchify/default-template if not
+              provided)
 
           extra_headers: Send extra headers
 
@@ -107,11 +111,12 @@ class FixResource(SyncAPIResource):
                 {
                     "files": files,
                     "remaining_diagnostics": remaining_diagnostics,
-                    "template_path": template_path,
+                    "continuation_event_id": continuation_event_id,
                     "event_id": event_id,
                     "include_context": include_context,
                     "max_attempts": max_attempts,
                     "meta": meta,
+                    "template_path": template_path,
                 },
                 fix_create_ai_fallback_params.FixCreateAIFallbackParams,
             ),
@@ -151,11 +156,12 @@ class AsyncFixResource(AsyncAPIResource):
         *,
         files: Iterable[fix_create_ai_fallback_params.File],
         remaining_diagnostics: fix_create_ai_fallback_params.RemainingDiagnostics,
-        template_path: str,
+        continuation_event_id: str | Omit = omit,
         event_id: str | Omit = omit,
         include_context: bool | Omit = omit,
         max_attempts: float | Omit = omit,
         meta: Optional[fix_create_ai_fallback_params.Meta] | Omit = omit,
+        template_path: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -174,7 +180,7 @@ class AsyncFixResource(AsyncAPIResource):
 
           remaining_diagnostics: Diagnostics that remain after standard fixing
 
-          template_path: Full path to the template
+          continuation_event_id: Event ID from Step 1 to continue with the same temp directory
 
           event_id: Unique identifier for the event
 
@@ -183,6 +189,9 @@ class AsyncFixResource(AsyncAPIResource):
           max_attempts: Maximum number of AI fix attempts
 
           meta: Meta information for the request
+
+          template_path: Template path for project context (defaults to benchify/default-template if not
+              provided)
 
           extra_headers: Send extra headers
 
@@ -198,11 +207,12 @@ class AsyncFixResource(AsyncAPIResource):
                 {
                     "files": files,
                     "remaining_diagnostics": remaining_diagnostics,
-                    "template_path": template_path,
+                    "continuation_event_id": continuation_event_id,
                     "event_id": event_id,
                     "include_context": include_context,
                     "max_attempts": max_attempts,
                     "meta": meta,
+                    "template_path": template_path,
                 },
                 fix_create_ai_fallback_params.FixCreateAIFallbackParams,
             ),

@@ -17,7 +17,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestFix:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create_ai_fallback(self, client: Benchify) -> None:
         fix = client.fix.create_ai_fallback(
@@ -28,11 +28,10 @@ class TestFix:
                 }
             ],
             remaining_diagnostics={},
-            template_path="benchify/default-template",
         )
         assert_matches_type(FixCreateAIFallbackResponse, fix, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create_ai_fallback_with_all_params(self, client: Benchify) -> None:
         fix = client.fix.create_ai_fallback(
@@ -61,15 +60,16 @@ class TestFix:
                     ]
                 }
             },
-            template_path="benchify/default-template",
+            continuation_event_id="continuation_event_id",
             event_id="",
             include_context=True,
             max_attempts=3,
             meta={"external_id": "external_id"},
+            template_path="benchify/default-template",
         )
         assert_matches_type(FixCreateAIFallbackResponse, fix, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_create_ai_fallback(self, client: Benchify) -> None:
         response = client.fix.with_raw_response.create_ai_fallback(
@@ -80,7 +80,6 @@ class TestFix:
                 }
             ],
             remaining_diagnostics={},
-            template_path="benchify/default-template",
         )
 
         assert response.is_closed is True
@@ -88,7 +87,7 @@ class TestFix:
         fix = response.parse()
         assert_matches_type(FixCreateAIFallbackResponse, fix, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_create_ai_fallback(self, client: Benchify) -> None:
         with client.fix.with_streaming_response.create_ai_fallback(
@@ -99,7 +98,6 @@ class TestFix:
                 }
             ],
             remaining_diagnostics={},
-            template_path="benchify/default-template",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -115,7 +113,7 @@ class TestAsyncFix:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create_ai_fallback(self, async_client: AsyncBenchify) -> None:
         fix = await async_client.fix.create_ai_fallback(
@@ -126,11 +124,10 @@ class TestAsyncFix:
                 }
             ],
             remaining_diagnostics={},
-            template_path="benchify/default-template",
         )
         assert_matches_type(FixCreateAIFallbackResponse, fix, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create_ai_fallback_with_all_params(self, async_client: AsyncBenchify) -> None:
         fix = await async_client.fix.create_ai_fallback(
@@ -159,15 +156,16 @@ class TestAsyncFix:
                     ]
                 }
             },
-            template_path="benchify/default-template",
+            continuation_event_id="continuation_event_id",
             event_id="",
             include_context=True,
             max_attempts=3,
             meta={"external_id": "external_id"},
+            template_path="benchify/default-template",
         )
         assert_matches_type(FixCreateAIFallbackResponse, fix, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_create_ai_fallback(self, async_client: AsyncBenchify) -> None:
         response = await async_client.fix.with_raw_response.create_ai_fallback(
@@ -178,7 +176,6 @@ class TestAsyncFix:
                 }
             ],
             remaining_diagnostics={},
-            template_path="benchify/default-template",
         )
 
         assert response.is_closed is True
@@ -186,7 +183,7 @@ class TestAsyncFix:
         fix = await response.parse()
         assert_matches_type(FixCreateAIFallbackResponse, fix, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_create_ai_fallback(self, async_client: AsyncBenchify) -> None:
         async with async_client.fix.with_streaming_response.create_ai_fallback(
@@ -197,7 +194,6 @@ class TestAsyncFix:
                 }
             ],
             remaining_diagnostics={},
-            template_path="benchify/default-template",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

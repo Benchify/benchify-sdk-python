@@ -22,8 +22,8 @@ class FixCreateAIFallbackParams(TypedDict, total=False):
     remaining_diagnostics: Required[RemainingDiagnostics]
     """Diagnostics that remain after standard fixing"""
 
-    template_path: Required[str]
-    """Full path to the template"""
+    continuation_event_id: str
+    """Event ID from Step 1 to continue with the same temp directory"""
 
     event_id: str
     """Unique identifier for the event"""
@@ -37,6 +37,12 @@ class FixCreateAIFallbackParams(TypedDict, total=False):
     meta: Optional[Meta]
     """Meta information for the request"""
 
+    template_path: str
+    """
+    Template path for project context (defaults to benchify/default-template if not
+    provided)
+    """
+
 
 class File(TypedDict, total=False):
     contents: Required[str]
@@ -47,6 +53,8 @@ class File(TypedDict, total=False):
 
 
 class RemainingDiagnosticsFileToDiagnosticLocation(TypedDict, total=False):
+    """Location of the diagnostic"""
+
     column: Required[Optional[float]]
     """Column number (1-based)"""
 
@@ -81,10 +89,14 @@ class RemainingDiagnosticsFileToDiagnostic(TypedDict, total=False):
 
 
 class RemainingDiagnostics(TypedDict, total=False):
+    """Diagnostics that remain after standard fixing"""
+
     file_to_diagnostics: Dict[str, Iterable[RemainingDiagnosticsFileToDiagnostic]]
     """Diagnostics grouped by file"""
 
 
 class Meta(TypedDict, total=False):
+    """Meta information for the request"""
+
     external_id: Optional[str]
     """Customer tracking identifier"""

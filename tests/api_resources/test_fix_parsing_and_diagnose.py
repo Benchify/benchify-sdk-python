@@ -17,13 +17,13 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestFixParsingAndDiagnose:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_detect_issues(self, client: Benchify) -> None:
         fix_parsing_and_diagnose = client.fix_parsing_and_diagnose.detect_issues()
         assert_matches_type(FixParsingAndDiagnoseDetectIssuesResponse, fix_parsing_and_diagnose, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_detect_issues_with_all_params(self, client: Benchify) -> None:
         fix_parsing_and_diagnose = client.fix_parsing_and_diagnose.detect_issues(
@@ -43,7 +43,7 @@ class TestFixParsingAndDiagnose:
         )
         assert_matches_type(FixParsingAndDiagnoseDetectIssuesResponse, fix_parsing_and_diagnose, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_detect_issues(self, client: Benchify) -> None:
         response = client.fix_parsing_and_diagnose.with_raw_response.detect_issues()
@@ -53,7 +53,7 @@ class TestFixParsingAndDiagnose:
         fix_parsing_and_diagnose = response.parse()
         assert_matches_type(FixParsingAndDiagnoseDetectIssuesResponse, fix_parsing_and_diagnose, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_detect_issues(self, client: Benchify) -> None:
         with client.fix_parsing_and_diagnose.with_streaming_response.detect_issues() as response:
@@ -71,13 +71,13 @@ class TestAsyncFixParsingAndDiagnose:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_detect_issues(self, async_client: AsyncBenchify) -> None:
         fix_parsing_and_diagnose = await async_client.fix_parsing_and_diagnose.detect_issues()
         assert_matches_type(FixParsingAndDiagnoseDetectIssuesResponse, fix_parsing_and_diagnose, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_detect_issues_with_all_params(self, async_client: AsyncBenchify) -> None:
         fix_parsing_and_diagnose = await async_client.fix_parsing_and_diagnose.detect_issues(
@@ -97,7 +97,7 @@ class TestAsyncFixParsingAndDiagnose:
         )
         assert_matches_type(FixParsingAndDiagnoseDetectIssuesResponse, fix_parsing_and_diagnose, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_detect_issues(self, async_client: AsyncBenchify) -> None:
         response = await async_client.fix_parsing_and_diagnose.with_raw_response.detect_issues()
@@ -107,7 +107,7 @@ class TestAsyncFixParsingAndDiagnose:
         fix_parsing_and_diagnose = await response.parse()
         assert_matches_type(FixParsingAndDiagnoseDetectIssuesResponse, fix_parsing_and_diagnose, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_detect_issues(self, async_client: AsyncBenchify) -> None:
         async with async_client.fix_parsing_and_diagnose.with_streaming_response.detect_issues() as response:

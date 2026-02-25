@@ -50,6 +50,7 @@ class StandardResource(SyncAPIResource):
         files: Iterable[standard_create_params.File],
         remaining_diagnostics: standard_create_params.RemainingDiagnostics,
         bundle: bool | Omit = omit,
+        continuation_event_id: str | Omit = omit,
         event_id: str | Omit = omit,
         fix_types: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]] | Omit = omit,
         meta: Optional[standard_create_params.Meta] | Omit = omit,
@@ -76,6 +77,8 @@ class StandardResource(SyncAPIResource):
 
           bundle: Whether to bundle the project after fixes
 
+          continuation_event_id: Event ID from Step 1 to continue with the same temp directory
+
           event_id: Unique identifier for tracking
 
           fix_types: Types of standard fixes to apply
@@ -101,6 +104,7 @@ class StandardResource(SyncAPIResource):
                     "files": files,
                     "remaining_diagnostics": remaining_diagnostics,
                     "bundle": bundle,
+                    "continuation_event_id": continuation_event_id,
                     "event_id": event_id,
                     "fix_types": fix_types,
                     "meta": meta,
@@ -142,6 +146,7 @@ class AsyncStandardResource(AsyncAPIResource):
         files: Iterable[standard_create_params.File],
         remaining_diagnostics: standard_create_params.RemainingDiagnostics,
         bundle: bool | Omit = omit,
+        continuation_event_id: str | Omit = omit,
         event_id: str | Omit = omit,
         fix_types: List[Literal["dependency", "parsing", "css", "ai_fallback", "types", "ui", "sql"]] | Omit = omit,
         meta: Optional[standard_create_params.Meta] | Omit = omit,
@@ -168,6 +173,8 @@ class AsyncStandardResource(AsyncAPIResource):
 
           bundle: Whether to bundle the project after fixes
 
+          continuation_event_id: Event ID from Step 1 to continue with the same temp directory
+
           event_id: Unique identifier for tracking
 
           fix_types: Types of standard fixes to apply
@@ -193,6 +200,7 @@ class AsyncStandardResource(AsyncAPIResource):
                     "files": files,
                     "remaining_diagnostics": remaining_diagnostics,
                     "bundle": bundle,
+                    "continuation_event_id": continuation_event_id,
                     "event_id": event_id,
                     "fix_types": fix_types,
                     "meta": meta,

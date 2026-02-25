@@ -11,6 +11,8 @@ __all__ = ["StackUpdateResponse"]
 
 
 class StackUpdateResponse(BaseModel):
+    """Response after patching a stack"""
+
     id: str
     """Stack identifier"""
 

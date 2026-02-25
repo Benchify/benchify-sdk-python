@@ -20,6 +20,8 @@ class FixStringLiteralCreateParams(TypedDict, total=False):
 
 
 class File(TypedDict, total=False):
+    """File to process"""
+
     contents: Required[str]
     """File contents"""
 
@@ -28,5 +30,7 @@ class File(TypedDict, total=False):
 
 
 class Meta(TypedDict, total=False):
+    """Meta information for the request"""
+
     external_id: Optional[str]
     """Customer tracking identifier"""
